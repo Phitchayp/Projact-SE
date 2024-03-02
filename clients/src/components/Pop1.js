@@ -59,8 +59,15 @@ const Pop = ({ onClose }) => {
         {
         email: email,
         fullName:fullName
+        
       },
       ]);
+      setEmail('');
+      setFullName('');
+
+      // ปิด popup
+      onClose();
+      window.location.reload()
     });
   };
 

@@ -72,6 +72,7 @@ const Pop = ({ onClose }) => {
 
       // ปิด popup
       onClose();
+      window.location.reload()
     });
   };
 
