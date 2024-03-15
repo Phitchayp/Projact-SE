@@ -4,6 +4,7 @@ import { FaFileLines } from "react-icons/fa6";
 import { Link } from 'react-router-dom'; // เพิ่มการนำเข้า Link ที่นี่
 import UploadEdu from '../Wawa/Upload/UploadEdu';
 import InputEdu from '../Wawa/Input/InputEdu';
+import CourseList from './getopencourse';
 
 
 function handleClick(event) {
@@ -138,75 +139,21 @@ function BoxImportCourse() {
                             <div className='test'>
 
                             </div>
-                            <p style={{ color: '#8C3941' }}>รายวิชาที่เปิดสอน</p>
+
+                            <div style={{ marginTop:'100px'}}>
+
+                            <h3 style={{ color: '#8C3941'}}>รายวิชาที่เปิดสอน</h3>
+                            </div>
 
                         </div> {/* เพิ่มกล่องสี่เหลี่ยม */}
 
-                        <div className="course-table">
-                            <div className="column">
-                                <p>หลักสูตร</p>
-                                {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                            </div>
-                            <div className="column">
-                                <div>
-                                    <p>รายวิชาที่เปิดสอน</p>
-                                </div>
-                                {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                            </div>
+                        <div class="ListCourse-NewBox">
+                            <CourseList></CourseList>
+                        
                         </div>
 
 
-                        {/* เพิ่มตารางอีก 3 ตาราง */}
-                        <div className="course-table1">
-                            <div className="column1">
-                                <p>2566</p>
-                                {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                            </div>
-                            <div className="column2">
-                                <Link to="/หลักสูตรปี_66" className="file-button" onClick={handleClick}>
-                                    <FaFileLines style={{ fontSize: '35px', color: 'black', marginLeft: '110px' }} />
-                                </Link>
-                                {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                            </div>
-                        </div>
-
-                        <div className="course-table2">
-                            <div className="column3">
-                                <p>2565</p>
-                                {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                            </div>
-                            <div className="column4">
-                                <Link to="/หลักสูตรปี_65" className="file-button" onClick={handleClick}>
-                                    <FaFileLines style={{ fontSize: '35px', color: 'black', marginLeft: '110px' }} />
-                                </Link>
-                                {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                            </div>
-                        </div>
-
-                        <div className="course-table3">
-                            <div className="column5">
-                                <k>2564</k>
-                                {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                            </div>
-                            <div className="column6">
-                                <Link to="/หลักสูตรปี_64" className="file-button" onClick={handleClick}>
-                                    <FaFileLines style={{ fontSize: '35px', color: 'black', marginLeft: '110px' }} />
-                                </Link>
-                                {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                            </div>
-                        </div>
-                        <div className="course-table4">
-                            <div className="column7">
-                                <p>2563</p>
-                                {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                            </div>
-                            <div className="column8">
-                                <Link to="/หลักสูตรปี_63" className="file-button" onClick={handleClick}>
-                                    <FaFileLines style={{ fontSize: '35px', color: 'black', marginLeft: '110px' }} />
-                                </Link>
-                                {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                            </div>
-                        </div>
+                        
                     </div>
 
                 </div>

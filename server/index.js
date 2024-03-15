@@ -7,16 +7,16 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  // host: '127.0.0.1',
-  // user: 'root',
-  // password: '123456',
-  // database: 'databasese',
-  // port: '3306'
-
-  host: 'localhost',
+  host: '127.0.0.1',
   user: 'root',
-  password: '',
-  database: 'project_se',
+  password: '123456',
+  database: 'databasese',
+  port: '3306'
+
+  // host: 'localhost',
+  // user: 'root',
+  // password: '',
+  // database: 'project_se',
 
   // host: 'localhost',
   // user: 'root',
