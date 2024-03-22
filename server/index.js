@@ -13,10 +13,10 @@ const db = mysql.createConnection({
   // database: 'databasese',
   // port: '3306'
  //pond
-  host: 'localhost',
-  user: 'root',
-  password: '12345678',
-  database: 'dbtest',
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
+  // database: 'dbtest',
 
 
   // host: 'localhost',
@@ -25,15 +25,10 @@ const db = mysql.createConnection({
   // database: 'project_se',
 
 
-  // host: 'localhost',
-  // user: 'root',
-  // password: '12345678',
-  // database: 'project_se'
-
-  // host: 'localhost',
-  // user: 'root',
-  // password: '12345678',
-  // database: 'project_se',
+  host: 'localhost',
+  user: 'root',
+  password: '12345678',
+  database: 'project_se'
 })
 
 db.connect((err)=>{
@@ -322,14 +317,32 @@ app.get('/time', (req, res) => {
     });
   });
 
-  app.post('/time1', (req, res) => {
+  app.post('/timeT', (req, res) => {
     const { dayS, timeS, dayF, timeF } = req.body;
 
     if(!dayS || !timeS || !dayF || !timeF){
       return res.status(400).json({ error: 'error'});
     }
   
-    db.query("INSERT INTO time (`id`, `dayS`, `timeS`, `dayF`, `timeF`) VALUES (NULL, ? , ? ,? , ?)", [dayS, timeS, dayF, timeF], (err, result) => {
+    db.query("INSERT INTO timeteacher (`id`, `dayS`, `timeS`, `dayF`, `timeF`) VALUES (NULL, ? , ? ,? , ?)", [dayS, timeS, dayF, timeF], (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        res.json({ success: true, message: 'Data saved successfully' });
+        console.log("บันทึกสำเร็จ")
+      }
+    });
+  });
+
+  app.post('/timeEdu', (req, res) => {
+    const { dayS, timeS, dayF, timeF } = req.body;
+
+    if(!dayS || !timeS || !dayF || !timeF){
+      return res.status(400).json({ error: 'error'});
+    }
+  
+    db.query("INSERT INTO timeedu (`id`, `dayS`, `timeS`, `dayF`, `timeF`) VALUES (NULL, ? , ? ,? , ?)", [dayS, timeS, dayF, timeF], (err, result) => {
       if (err) {
         console.log(err);
         res.status(500).json({ error: 'Internal Server Error' });

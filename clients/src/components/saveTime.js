@@ -10,7 +10,7 @@ const SaveTime = ({onClick}) => {
       <button
         onClick={onClick}
         className='btn'
-        style={{ backgroundColor: '#127151', color: 'white' }}
+        style={{ backgroundColor: '#127151', color: 'white' ,borderRadius:'5px'}}
       >
         <FaRegSave style={{ fontSize: '20px', marginRight: '3px'}} />
         SAVE
