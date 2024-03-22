@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CheckboxOpenCourse.css';
 import CourseList from './getsubject';
 import BoxShow from './BoxsTableShowsub';
+import Axios from 'axios';
 
 function CheckboxOpenCourse() {
     const [isChecked, setIsChecked] = useState(false);
@@ -29,6 +30,46 @@ function CheckboxOpenCourse() {
         }
     };
 
+    const [courses, setCourses] = useState([]);
+
+    useEffect(() => {
+        Axios.get("http://127.0.0.1:3001/getsub")
+            .then((response) => {
+                setCourses(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching course data:', error);
+            });
+    }, []);
+
+
+    const [myyear, setYear] = useState("");
+
+    const search =() => {
+        if(myyear===""){
+            alert("กรุณา")
+        
+        }else{
+            Axios.get("http://127.0.0.1:3001/getsubsearch/"+ myyear)
+            .then((response) => {
+                setCourses(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching course data:', error);
+            });
+
+            
+        } 
+    
+    }
+
+
+    const [listCheck, setListCheck] = useState([]);
+
+
+    useEffect(() => {
+        console.log("listCheck has been changed:", listCheck);
+      }, [listCheck]);
 
 
 
@@ -43,7 +84,7 @@ function CheckboxOpenCourse() {
             <div className='CheckboxOpenCourse-box'>
                 <div className='CheckboxOpenCourse-dropdown' >
                     <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>หลักสูตร</p>
-                    <select>
+                    <select value={myyear} onChange={(e)=>{setYear(e.target.value)}}>
                         <option value=""></option>
                         <option value="2569">2569</option>
                         <option value="2568">2568</option>
@@ -62,7 +103,7 @@ function CheckboxOpenCourse() {
                         <option value="2555">2555</option>
                     </select>
 
-                    <button className='CheckboxOpenCourse-button'>เลือก</button>
+                    <button onClick={()=>{search()}} className='CheckboxOpenCourse-button'>เลือก</button>
 
 
 
@@ -78,7 +119,7 @@ function CheckboxOpenCourse() {
                         </div>
 
                         <div class="CheckboxOpenCourse-NewBox">
-                            <CourseList></CourseList>
+                            <CourseList courses={courses} setListCheck={setListCheck}></CourseList>
 
                             {/* <div>
                                     <div className='CheckboxOpenCourse-Item'>

@@ -12,19 +12,23 @@ const db = mysql.createConnection({
   // password: '123456',
   // database: 'databasese',
   // port: '3306'
+ //pond
+  host: 'localhost',
+  user: 'root',
+  password: '12345678',
+  database: 'dbtest',
 
-  // host: 'localhost',
-  // user: 'root',
-  // password: '12345678',
-  // database: 'dbtest',
+
   // host: 'localhost',
   // user: 'root',
   // password: '',
   // database: 'project_se',
-  host: 'localhost',
-  user: 'root',
-  password: '12345678',
-  database: 'project_se'
+
+
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
+  // database: 'project_se'
 
   // host: 'localhost',
   // user: 'root',
@@ -213,6 +217,19 @@ app.get('/getsub', (req, res) => {
     }
   });
 });
+
+app.get('/getsubsearch/:year', (req, res) => {
+  const {year} =req.params;
+  db.query("SELECT * FROM course where course_year = ? ORDER BY courseid",[year],(err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+
 app.post("/uploaded", (req, res) => {
   const excelData = req.body.excelData;
   const selectedValue1 = req.body.selectedValue1;
