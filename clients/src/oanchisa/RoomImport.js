@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FaFileLines } from "react-icons/fa6";
 import { Link } from 'react-router-dom'; // เพิ่มการนำเข้า Link ที่นี่
 import UploadRoom from '../Wawa/Upload/UploadRoom';
+import RoomList from '../components/getRoom';
 
 function handleClick(event) {
   const button = event.currentTarget;
@@ -69,27 +70,10 @@ function RoomImport() {
       <div>
         <UploadRoom />
       </div>
-      <div className="course-table">
-        <div className="column">
-          <p>ปีการศึกษา/ภาคเรียน</p>
-        </div>
-        <div className="column">
-          <div>
-            <p>ห้องเรียน</p>
-          </div>
-        </div>
-      </div>
+      <h3 style={{ marginTop:'100px' ,color: '#8C3941' }}>ห้องเรียนที่เปิดสอน</h3>
 
-      <div className="course-table1">
-        <div className="column1">
-          <p>2566</p>
-        </div>
-        <div className="column2">
-          {/* ใช้ Link เพื่อเปลี่ยนหน้า */}
-          <Link to="/2566_ต้น" className="file-button" onClick={handleClick}>
-            <FaFileLines style={{ fontSize: '35px', color: 'black',marginLeft:'110px'}} />
-          </Link>
-        </div>
+      <div class="ListCourse-NewBox">
+        <RoomList/>
       </div>
     </div>
   );

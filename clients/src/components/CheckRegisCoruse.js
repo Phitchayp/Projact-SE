@@ -1,5 +1,6 @@
 import React from 'react';
 import './CheckRegisCoruse.css'; // Import CSS file for table styling
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 
 class CheckRegisCoruse extends React.Component {
@@ -9,8 +10,14 @@ class CheckRegisCoruse extends React.Component {
       <div className='CheckRegisCoruse-right'>
         {/* ตารางผลการลงทะเบียน */}
         <header className="CheckRegisCoruse-Texthead">
-
-          <table className="CheckRegisCoruse-bordered-table">
+        <ReactHTMLTableToExcel
+                    id="test-table-xls-button"
+                    className="download-table-xls-button btn btn-success mb-3"
+                    table="table-to-xls"
+                    filename="tablexls"
+                    sheet="tablexls"
+                    buttonText="EXPORT TO EXCEL"/>
+          <table className="CheckRegisCoruse-bordered-table" id="table-to-xls">
             <thead>
               <tr>
                 <th>No.</th>
@@ -83,6 +90,7 @@ class CheckRegisCoruse extends React.Component {
                 <td className="CheckRegisCoruse-blue-text">Mon</td>
                 <td>8-9</td>
                 <td>lab15</td>
+
               </tr>
             </tbody>
           </table>

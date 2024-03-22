@@ -68,12 +68,14 @@
 .text-header{
   font-family: 'Kanit';
   font-size: 13px;
-  color: rgb(255, 255, 255);
-  background: #127151;
+  color: #127151;
+  background: #ffffff;
   padding: 2px 5px;
   top: 205px;
   left: 395px;
   border-radius: 5px;
+  border-color: #127151;
+  border-style: dashed;
  
 
 
@@ -90,9 +92,10 @@
 
 .line {
   width: 60%;
-  height: 1px;
+  height: 2px;
   background-color:  #CBC8C8;
-  margin-top: 20px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 
 }
 

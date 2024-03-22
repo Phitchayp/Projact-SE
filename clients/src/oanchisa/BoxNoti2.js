@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import plus from '../assets/plus.svg';
 import './BoxNoti.css';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function BoxNoti2() {
     const [isPopupVisible, setPopupVisible] = useState(false);
