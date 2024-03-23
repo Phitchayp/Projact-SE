@@ -4,10 +4,6 @@ import { FaUserCircle } from "react-icons/fa";
 import Google from './google';
 
 const Login = () => {
-    const handleButtonLogin = () => {
-        //รอเชื่อมปุ่มlogin
-        console.log('hello');
-    };
     return (
         <div className='body-login'>
             {/* <img   src='https://www.eng.src.ku.ac.th/wp-content/uploads/2022/08/banner_Robot_1024x480_edit-01-1024x480.jpg'/> */}
@@ -31,7 +27,6 @@ const Login = () => {
 
                         <FaUserCircle className='imgUser-login' />
                         <p className='textlogin'>ระบบจัดตารางสอน</p>
-                        {/* <button className='btnLogin' onClick={handleButtonLogin} >Sign in with Google</button> */}
                         <Google/>
                     </div>
 

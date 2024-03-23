@@ -8,6 +8,7 @@ import {Link} from 'react-router-dom'
 
 
 const NavbarTeacher = () => {
+  const name = sessionStorage.getItem("name")
   const [selectItem,setSelectItem] = useState(null);
 
   const handleItemClick = (index) => {
@@ -17,43 +18,43 @@ const NavbarTeacher = () => {
     <nav className="navbar">
       <div className="navbar-left">
         <img src="profile.png" alt="" />
-        <span>อาจารย์<br />: สมเกียรติ ใจดี</span>
+        <span>อาจารย์<br />: {name}</span>
       </div>
       <div className='nav-left'>
         <ul className="navbar-nav">
         <li className={`nav-item ${selectItem === 0 ? 'selected' : ''}` }onClick={() => handleItemClick(0)}>
             <img src="index.png" style={{ marginLeft: "20px" }}  alt="index" />
-            <Link to ="/" className="nav-link" >
+            <Link to ="/TeacherNoti" className="nav-link" >
               ประกาศ
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 1 ? 'selected' : ''}` }onClick={() => handleItemClick(1)}>
           <img src={pen} style={{ marginLeft: "20px" }}  alt="pen" />
-            <Link to ="/ลงทะเบียนรายวิชา" className="nav-link">
+            <Link to ="/RegisCourse" className="nav-link">
               ลงทะเบียนรายวิชา
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 2 ? 'selected' : ''}` }onClick={() => handleItemClick(2)}>
             <img src="resu.jpg" style={{ marginLeft: "20px" }}  alt="user" />
-            <Link to ="/ผลการลงทะเบียนอาจารย์" className="nav-link">
+            <Link to ="/RegisResultsTeacher" className="nav-link">
               ผลการลงทะเบียน
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 3 ? 'selected' : ''}` }onClick={() => handleItemClick(3)}>
             <img src="subject.jpg" style={{ marginLeft: "20px" }}  alt="user" />
-            <Link to ="/รายวิชาที่สามารถเปิดสอน" className="nav-link">
+            <Link to ="/CoursesTaughtTeacher" className="nav-link">
               รายวิชาที่สามารถเปิดสอน
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 4 ? 'selected' : ''}` }onClick={() => handleItemClick(4)}>
             <img src="room.jpg" style={{ marginLeft: "20px" }}  alt="user" />
-            <Link to ="/ห้องเรียนทั้งหมดอาจารย์" className="nav-link">
+            <Link to ="/AllRoomTeacher" className="nav-link">
               ห้องเรียนทั้งหมด
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 5 ? 'selected' : ''}` }onClick={() => handleItemClick(5)}>
           <img src={glass} style={{ marginLeft: "20px" }}  alt="glass" />
-            <Link to ="/ตรวจสอบผลการลงทะเบียน" className="nav-link">
+            <Link to ="/CheckRegisResults" className="nav-link">
               ตรวจสอบผลการลงทะเบียน
             </Link>
           </li>
