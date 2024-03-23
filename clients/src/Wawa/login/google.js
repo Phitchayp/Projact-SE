@@ -1,43 +1,55 @@
-import { GoogleLogin} from 'react-google-login';
-import { gapi } from 'gapi-script';
+import { GoogleLogin } from 'react-google-login';
 import { useState, useEffect } from 'react';
 import './login.css'
-//import reactLogo from './assets/react.svg'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-function Google() {
-
+const Google = () => {
   const clientId = "903970944042-27p6mntuucj32e4nftg2v0ob9k5q2807.apps.googleusercontent.com"
-  
-  const [count, setCount] = useState(0)
+  const nav = useNavigate();
 
-  useEffect(( ) => {
-    const initClient = () => {
-      gapi.client.init({
-        clientId: clientId,
-        scope: ''
-      })
+  const responseGoogle = async (response) => {
+    try {
+      const userEmail = response.profileObj.email;
+      const res = await axios.get(`http://localhost:3001/checkUserRole?emailUser=${userEmail}`);
+
+      sessionStorage.setItem("role", res.data.role);
+      sessionStorage.setItem("email", res.data.email);
+      sessionStorage.setItem("name", res.data.fullname);
+
+      if (res.data.role === 'admin') {
+        nav("/AdminNoti");
+        window.location.reload();
+      } else if (res.data.role === 'edu') {
+        nav("/EduNoti");
+        window.location.reload();
+      } else if (res.data.role === 'teacher') {
+        nav("/TeacherNoti");
+        window.location.reload();
+      }
+    } catch (err) {
+      if (err.response) {
+        if (err.response.status === 404) {
+          alert('ไม่พบผู้ใช้งาน กรุณา Login ใหม่อีกครั้ง');
+        } else if (err.response.status === 408) {
+          alert('ขออภัยการร้องขอใช้งานหมดเวลา กรุณาลองอีกครั้งในภายหลัง');
+        } else {
+          alert('เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่ภายหลัง');
+        }
+      } else {
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่ภายหลัง');
+      }
     }
-    gapi.load("client:auth2", initClient)
-  }, [])
+  };
 
-  const onSucess = (res) => {
-    console.log('success', res)
-  }
-
-  const onFailure = (res) => {
-    console.log('failed', res)
-  }
-
-  return (
-    <GoogleLogin 
-    clientId={clientId}
-    buttonText="Sign in with Google"
-    onSucess={onSucess}
-    onFailure={onFailure}
-    cookiePolicy={'single_host_origin'}
-    isSignedIn={true}
-    />
-  );
-}
-
-export default Google;
+    return (
+      <GoogleLogin
+        clientId={clientId}
+        buttonText="Sign in with Google"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={'single_host_origin'}
+      />
+    );
+  };
+  export default Google;

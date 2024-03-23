@@ -28,7 +28,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '12345678',
-  database: 'project_se'
+  database: 'project_se',
 })
 
 db.connect((err)=>{
@@ -493,7 +493,28 @@ app.get('/course-sections/:courseId', (req, res) => {
   });
 });
 
+app.get('/checkUserRole', (req, res) => {
+  const { emailUser } = req.query;
 
+  // ค้นหาในตาราง allusers โดยใช้ email
+  db.query('SELECT * FROM allusers WHERE email = ?', [emailUser], (err, userResult) => {
+    if (err) throw err;
+    if (userResult.length > 0) {
+      const { id, fullname, email } = userResult[0];
+      if (id === 1) {
+        res.json({ role: 'admin', fullname, email });
+      } else if (id === 2) {
+        res.json({ role: 'teacher', fullname, email });
+      } else if (id === 3) {
+        res.json({ role: 'edu', fullname, email });
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  });
+});
 
 app.listen("3001", () => {
     console.log('Server is running on port 3001');

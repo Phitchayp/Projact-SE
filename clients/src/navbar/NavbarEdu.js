@@ -3,6 +3,7 @@ import './NavbarEdu.css';
 import {Link} from 'react-router-dom'
 
 const NavbarEdu = () => {
+  const name = sessionStorage.getItem("name")
   const [selectItem,setSelectItem] = useState(null);
 
   const handleItemClick = (index) => {
@@ -13,25 +14,25 @@ const NavbarEdu = () => {
     <nav className="navbar">
       <div className="navbar-left">
         <img src="profile.png" alt="" />
-        <span>ฝ่ายการศึกษา<br />: ######</span>
+        <span>ฝ่ายการศึกษา<br />: {name}</span>
       </div>
       <div className='nav-left'>
         <ul className="navbar-nav">
           <li className={`nav-item ${selectItem === 0 ? 'selected' : ''}` }onClick={() => handleItemClick(0)}>
             <img src="index.png" style={{ marginLeft: "20px" }} alt="index" />
-            <Link to ="/" className="nav-link">
+            <Link to ="/EduNoti" className="nav-link">
               ประกาศ
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 1 ? 'selected' : ''}` }onClick={() => handleItemClick(1)}>
             <img src="resu.jpg" style={{ marginLeft: "20px" }}  alt="time" />
-            <Link to="/ผลการลงทะเบียน" className="nav-link">
+            <Link to="/RegisResults" className="nav-link">
               ผลการลงทะเบียน
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 2 ? 'selected' : ''}` }onClick={() => handleItemClick(2)}>
             <img src="subject.jpg" style={{ marginLeft: "20px" }}  alt="user" />
-            <Link to="/รายวิชาที่เปิดสอน" className="nav-link">
+            <Link to="/CoursesTaught" className="nav-link">
               นำเข้ารายวิชา
             </Link>
           </li>
@@ -43,7 +44,7 @@ const NavbarEdu = () => {
           </li>
           <li className={`nav-item ${selectItem === 4 ? 'selected' : ''}` }onClick={() => handleItemClick(4)}>
             <img src="room.jpg" style={{ marginLeft: "20px" }}  alt="user" />
-            <Link to="/ห้องเรียนทั้งหมด" className="nav-link">
+            <Link to="/AllRoom" className="nav-link">
               ห้องเรียนทั้งหมด
             </Link>
           </li>
