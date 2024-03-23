@@ -6,41 +6,82 @@ import { useNavigate } from 'react-router-dom';
 
 const Google = () => {
   const clientId = "903970944042-27p6mntuucj32e4nftg2v0ob9k5q2807.apps.googleusercontent.com"
+  const [error, setError] = useState('');
   const nav = useNavigate();
-
-  const responseGoogle = async (response) => {
-    try {
-      const userEmail = response.profileObj.email;
-      const res = await axios.get(`http://localhost:3001/checkUserRole?emailUser=${userEmail}`);
-
-      sessionStorage.setItem("role", res.data.role);
-      sessionStorage.setItem("email", res.data.email);
-      sessionStorage.setItem("name", res.data.fullname);
-
-      if (res.data.role === 'admin') {
-        nav("/AdminNoti");
-        window.location.reload();
-      } else if (res.data.role === 'edu') {
-        nav("/EduNoti");
-        window.location.reload();
-      } else if (res.data.role === 'teacher') {
-        nav("/TeacherNoti");
-        window.location.reload();
-      }
-    } catch (err) {
-      if (err.response) {
-        if (err.response.status === 404) {
-          alert('ไม่พบผู้ใช้งาน กรุณา Login ใหม่อีกครั้ง');
-        } else if (err.response.status === 408) {
-          alert('ขออภัยการร้องขอใช้งานหมดเวลา กรุณาลองอีกครั้งในภายหลัง');
+  
+  const responseGoogle = (response) => {
+    console.log('Response from Google:', response);
+    
+    // const userEmail = response.profileObj.email;
+    axios.get(`http://localhost:3001/checkUserRole?emailUser=${response.profileObj.email}`)
+      .then(res => {
+        sessionStorage.setItem("role", res.data.role)
+        sessionStorage.setItem("email", res.data.email)
+        sessionStorage.setItem("name", res.data.fullname)
+        // if (err) throw err;
+        if (res.data.role === 'admin') {
+          console.log("ADMIN")
+          nav("/AdminNoti");
+          window.location.reload()
+        } else if (res.data.role === 'edu') {
+          console.log("EDU")
+          nav("/EduNoti");
+          window.location.reload()
+        } else if (res.data.role === 'teacher') {
+          console.log("Teacher")
+          nav("/TeacherNoti");
+          window.location.reload()
         } else {
-          alert('เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่ภายหลัง');
+          setError('User not found in the database.');
+          // res.status(404).json({ error: 'User not found' }); // You don't need to handle status here
         }
-      } else {
-        alert('เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่ภายหลัง');
-      }
+      })
+      .catch(err => {
+        setError(err.response.data.error);
+        // alert(`${err}`)
+      });
+
+    
     }
-  };
+    
+// ยังerrorอยู่
+// const Google = () => {
+//   const clientId = "903970944042-27p6mntuucj32e4nftg2v0ob9k5q2807.apps.googleusercontent.com"
+//   const nav = useNavigate();
+
+//   const responseGoogle = async (response) => {
+//     try {
+//       const userEmail = response.profileObj.email;
+//       const res = await axios.get(`http://localhost:3001/checkUserRole?emailUser=${userEmail}`);
+
+//       sessionStorage.setItem("role", res.data.role);
+//       sessionStorage.setItem("email", res.data.email);
+//       sessionStorage.setItem("name", res.data.fullname);
+
+//       if (res.data.role === 'admin') {
+//         nav("/AdminNoti");
+//         window.location.reload();
+//       } else if (res.data.role === 'edu') {
+//         nav("/EduNoti");
+//         window.location.reload();
+//       } else if (res.data.role === 'teacher') {
+//         nav("/TeacherNoti");
+//         window.location.reload();
+//       }
+//     } catch (err) {
+//       if (err.response) {
+//         if (err.response.status === 404) {
+//           alert('ไม่พบผู้ใช้งาน กรุณา Login ใหม่อีกครั้ง');
+//         } else if (err.response.status === 408) {
+//           alert('ขออภัยการร้องขอใช้งานหมดเวลา กรุณาลองอีกครั้งในภายหลัง');
+//         } else {
+//           alert('เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่ภายหลัง');
+//         }
+//       } else {
+//         alert('เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่ภายหลัง');
+//       }
+//     }
+//   };
 
     return (
       <GoogleLogin
