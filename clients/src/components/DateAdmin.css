@@ -110,3 +110,6 @@
   margin-top: 128px;
 }
 
+.ant-picker-suffix {
+  display: none;
+}

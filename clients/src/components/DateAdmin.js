@@ -9,6 +9,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { TimePicker } from 'antd';
 import SaveTime from './saveTime';
 import Axios from 'axios';
+import Swal from 'sweetalert2';
 
 dayjs.extend(customParseFormat);
 
@@ -31,15 +32,38 @@ function DateAdmin() {
     const [timeFEdu, setTimeFEdu] = useState("");
 
     const handleButtonSaveTeacher = () => {
+        if (!dayS || !dayF || !timeS || !timeF) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'โปรดเลือกวันที่และเวลาให้ครบถ้วน',
+            });;
+            return;
+        }
         // ตรวจสอบว่าวันที่เริ่มต้นไม่น้อยกว่าวันที่สิ้นสุด
-        if (dayS && dayF && dayS > dayF) {
-            if (timeS === timeF) {
-                // ถ้าเวลาเริ่มต้นเท่ากับเวลาสิ้นสุด
-                alert("เวลาเริ่มต้นและเวลาสิ้นสุดต้องไม่เท่ากัน");
+        if (dayS && dayF) {
+            // เงื่อนไขที่ 1: วันที่สิ้นสุดห้ามมาก่อนวันที่เริ่มต้น
+            if (dayS > dayF) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'วันที่สิ้นสุดห้ามมาก่อนวันที่เริ่มต้น',
+                });;
                 return;
             }
-            alert("วันที่สิ้นสุดห้ามมาก่อนวันที่เริ่มต้น");
-            return;
+        
+            // เงื่อนไขที่ 2: ถ้าเป็นวันเดียวกัน แต่เวลาเริ่มต้นไม่น้อยกว่าเวลาสิ้นสุด
+            if (dayS === dayF) {
+                // ถ้าเป็นวันเดียวกันและเวลาเริ่มต้นไม่น้อยกว่าเวลาสิ้นสุด
+                if (timeS >= timeF) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'วันเดียวกัน',
+                        text: 'เวลาเริ่มต้นต้องมาก่อนเวลาสิ้นสุด และเวลาห้ามเท่ากัน',
+                    });
+                    return;
+                }
+            }
         }
         
         Axios.post("http://localhost:3001/timeT", {
@@ -58,14 +82,20 @@ function DateAdmin() {
             setTimeS("");
             setDayF("");
             setTimeF("");
-            alert("บันทึกเวลาเรียบร้อยแล้ว");
-            window.location.reload();
-
-        })
-        .catch(error => {
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'บันทึกเวลาเรียบร้อยแล้ว',
+            })
+        }).catch(error => {
             console.error(error);
 
-            alert("ข้อมูลไม่ถูกต้อง");
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'ข้อมูลไม่ถูกต้อง',
+            });
         });
         console.log("save");
         console.log(dayS);
@@ -77,10 +107,38 @@ function DateAdmin() {
     };
 
     const handleButtonSaveEdu = () => {
-        // ตรวจสอบว่าวันที่เริ่มต้นไม่น้อยกว่าวันที่สิ้นสุด
-        if (daySEdu && dayFEdu && daySEdu > dayFEdu) {
-            alert("วันที่สิ้นสุดห้ามมาก่อนวันที่เริ่มต้น");
+        if (!daySEdu || !dayFEdu || !timeSEdu || !timeFEdu) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'โปรดเลือกวันที่และเวลาให้ครบถ้วน',
+            });;
             return;
+        }
+        // ตรวจสอบว่าวันที่เริ่มต้นไม่น้อยกว่าวันที่สิ้นสุด
+        if (daySEdu && dayFEdu) {
+            // เงื่อนไขที่ 1: วันที่สิ้นสุดห้ามมาก่อนวันที่เริ่มต้น
+            if (daySEdu > dayFEdu) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'วันที่สิ้นสุดห้ามมาก่อนวันที่เริ่มต้น',
+                });;
+                return;
+            }
+        
+            // เงื่อนไขที่ 2: ถ้าเป็นวันเดียวกัน แต่เวลาเริ่มต้นไม่น้อยกว่าเวลาสิ้นสุด
+            if (daySEdu === dayFEdu) {
+                // ถ้าเป็นวันเดียวกันและเวลาเริ่มต้นไม่น้อยกว่าเวลาสิ้นสุด
+                if (timeSEdu >= timeFEdu) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'วันเดียวกัน',
+                        text: 'เวลาเริ่มต้นต้องมาก่อนเวลาสิ้นสุด และเวลาห้ามเท่ากัน',
+                    });
+                    return;
+                }
+            }
         }
         Axios.post("http://localhost:3001/timeEdu", {
           dayS: daySEdu,
@@ -98,13 +156,21 @@ function DateAdmin() {
             setTimeSEdu("");
             setDayFEdu("");
             setTimeFEdu("");
-            alert("บันทึกเวลาเรียบร้อยแล้ว");
-            window.location.reload();
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'บันทึกเวลาเรียบร้อยแล้ว',
+            })
         })
         .catch(error => {
             console.error(error);
 
-            alert("ข้อมูลไม่ถูกต้อง");
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'ข้อมูลไม่ถูกต้อง',
+            });
         });
         console.log("save");
         console.log(daySEdu);
@@ -126,13 +192,25 @@ function DateAdmin() {
     };
     
     const handleStartTimeChange = (time) => {
-        setStartTime(time);
-        setTimeS(dayjs(time).format("HH:mm:ss"));
+        if (time) {
+            setStartTime(time);
+            setTimeS(dayjs(time).format("HH:mm:ss"));
+        } else {
+            // ถ้าค่าที่เลือกว่างเปล่า กำหนดค่าว่างให้กับตัวแปร
+            setStartTime(null);
+            setTimeS("");
+        }
     };
     
     const handleEndTimeChange = (time) => {
-        setEndTime(time);
-        setTimeF(dayjs(time).format("HH:mm:ss"));
+        if (time) {
+            setEndTime(time);
+            setTimeF(dayjs(time).format("HH:mm:ss"));
+        } else {
+            // ถ้าค่าที่เลือกว่างเปล่า กำหนดค่าว่างให้กับตัวแปร
+            setEndTime(null);
+            setTimeF("");
+        }
     };
 
     const handleStartDateChangeEdu = (date) => {
@@ -146,13 +224,25 @@ function DateAdmin() {
     };
     
     const handleStartTimeChangeEdu = (time) => {
-        setStartTimeEdu(time);
-        setTimeSEdu(dayjs(time).format("HH:mm:ss"));
+        if (time) {
+            setStartTimeEdu(time);
+            setTimeSEdu(dayjs(time).format("HH:mm:ss"));
+        } else {
+            // ถ้าค่าที่เลือกว่างเปล่า กำหนดค่าว่างให้กับตัวแปร
+            setStartTimeEdu(null);
+            setTimeSEdu("");
+        }
     };
     
     const handleEndTimeChangeEdu = (time) => {
-        setEndTimeEdu(time);
-        setTimeFEdu(dayjs(time).format("HH:mm:ss"));
+        if (time) {
+            setEndTimeEdu(time);
+            setTimeFEdu(dayjs(time).format("HH:mm:ss"));
+        } else {
+            // ถ้าค่าที่เลือกว่างเปล่า กำหนดค่าว่างให้กับตัวแปร
+            setEndTimeEdu(null);
+            setTimeFEdu("");
+        }
     };
     return (
         <div className='turnleft-all'>
@@ -210,10 +300,12 @@ function DateAdmin() {
                                     <TimePicker
                                         selected={startTime}
                                         onChange={handleStartTimeChange}
+                                        value={startTime}
                                         defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
                                         showNow={false}
                                         format="HH:mm:ss"
-                                        suffixIcon={<i className="fas fa-wifi" />}
+                                        use12Hours={false}
+                                        // suffixIcon={<i className="fas fa-wifi" />}
                                         className="custom-time-picker"
                                     />
                                 </div>
@@ -225,10 +317,12 @@ function DateAdmin() {
                                     <TimePicker
                                         selected={endTime}
                                         onChange={handleEndTimeChange}
+                                        value={endTime}
                                         defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
                                         showNow={false}
                                         format="HH:mm:ss"
-                                        suffixIcon={<i className="fas fa-wifi" />}
+                                        use12Hours={false}
+                                        // suffixIcon={<i className="fas fa-wifi" />}
                                         className="custom-time-picker"
                                     />
                                 </div>
@@ -294,11 +388,14 @@ function DateAdmin() {
                                     <TimePicker
                                         selected={startTimeEdu}
                                         onChange={handleStartTimeChangeEdu}
+                                        value={startTimeEdu}
                                         defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
                                         showNow={false}
                                         format="HH:mm:ss"
-                                        suffixIcon={<i className="fas fa-wifi" />}
+                                        use12Hours={false}
+                                        // suffixIcon={<i className="fas fa-wifi" />}
                                         className="custom-time-picker"
+                                        clearIcon={null}
                                     />
                                 </div>
                                 <div className='Down-picker'>
@@ -309,11 +406,14 @@ function DateAdmin() {
                                     <TimePicker
                                         selected={endTimeEdu}
                                         onChange={handleEndTimeChangeEdu}
+                                        value={endTimeEdu}
                                         defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
                                         showNow={false}
                                         format="HH:mm:ss"
-                                        suffixIcon={<i className="fas fa-wifi" />}
+                                        use12Hours={false}
+                                        // suffixIcon={<i className="fas fa-wifi" />}
                                         className="custom-time-picker"
+                                        clearIcon={null}
                                     />
                                 </div>
                             </div>
