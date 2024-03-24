@@ -30,9 +30,16 @@ function ResultRegisEdu() {
   const [selectedValue13, setSelectedValue13] = useState("");
 
   const handleAdvancedSearch = () => {
-    setSearching(true);
-    console.log("Advanced Searching...");
-    // รหัสอื่นๆที่คุณต้องการทำ
+    // Validate ว่าทุก dropdown และช่องค้นหาถูกกรอกหรือเลือกค่าหรือไม่
+    if (selectedValue10 && selectedValue11 && selectedValue12 && selectedValue13 && searchText.trim() !== "") {
+      // กรณีที่ข้อมูลครบถ้วน ทำการค้นหา
+      searchCourses();
+      setSearching(true);
+      console.log("Advanced Searching...");
+    } else {
+      // กรณีที่ข้อมูลไม่ครบถ้วน แสดงข้อความแจ้งเตือน
+      alert("กรุณากรอกหรือเลือกข้อมูลให้ครบถ้วน");
+    }
   };
   document.addEventListener("DOMContentLoaded", function () {
     // เพิ่มโค้ดที่ต้องการให้ทำงานหลังจากการโหลดหน้าเว็บเสร็จสมบูรณ์ที่นี่
@@ -56,11 +63,16 @@ function ResultRegisEdu() {
   });
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  
   const searchCourses = async () => {
     try {
       const response = await Axios.get(
         `http://localhost:3001/search-courses?query=${searchText}`
       );
+      if (response.data.length === 0) {
+        // แสดงข้อความเมื่อไม่พบข้อมูล
+        alert("ไม่พบข้อมูลชื่อผู้ใช้นี้หรือรายวิชานี้");
+      }
       setSearchResults(response.data); // อัปเดต state ด้วยข้อมูลผลการค้นหา
     } catch (error) {
       console.error("Error searching courses:", error);
