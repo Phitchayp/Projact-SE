@@ -498,3 +498,27 @@ app.get('/course-sections/:courseId', (req, res) => {
 app.listen("3001", () => {
     console.log('Server is running on port 3001');
 })
+
+app.get('/search-nameajarn', (req, res) => {
+  const { query } = req.query; // รับคำค้นหาจาก query string
+  const sql = 'SELECT * FROM usersaj WHERE name LIKE ?';
+  db.query(sql, [`%${query}%`, `%${query}%`], (err, results) => {
+    if (err) {
+      console.error('Error searching name_ajarn:', err);
+      return res.status(500).send('Error searching name_ajarn');
+    }
+    res.json(results); 
+  });
+});
+
+app.get('/search-nameEdu', (req, res) => {
+  const { query } = req.query; // รับคำค้นหาจาก query string
+  const sql = 'SELECT * FROM usersed WHERE name LIKE ?';
+  db.query(sql, [`%${query}%`, `%${query}%`], (err, results) => {
+    if (err) {
+      console.error('Error searching name_edu:', err);
+      return res.status(500).send('Error searching name_edu');
+    }
+    res.json(results); 
+  });
+});
