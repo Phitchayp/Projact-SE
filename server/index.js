@@ -19,16 +19,16 @@ const db = mysql.createConnection({
   // database: 'dbtest',
 
 
-  // host: 'localhost',
-  // user: 'root',
-  // password: '',
-  // database: 'project_se',
-
-
   host: 'localhost',
   user: 'root',
-  password: '12345678',
+  password: '',
   database: 'project_se',
+
+
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
+  // database: 'project_se',
 })
 
 db.connect((err)=>{

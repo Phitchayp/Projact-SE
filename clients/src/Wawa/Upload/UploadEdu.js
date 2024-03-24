@@ -53,6 +53,10 @@ const UploadEdu = ({selectedValue1}) => {
   //     }
   // };
   const handleButtonClick = () => {
+    if (!selectedValue1) {
+      window.alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+      return; // ไม่ทำงานต่อไปหาก selectedValue1 ว่าง
+    }
     Axios.post("http://localhost:3001/uploaded", {
         excelData: excelData,
         selectedValue1: selectedValue1,
@@ -65,6 +69,7 @@ const UploadEdu = ({selectedValue1}) => {
                 // selectedValue1: selectedValue1,
             },
         ]);
+        
     }).catch(error => {
         console.error('Error saving data:', error);
         window.alert('ข้อมูลไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่');
@@ -114,7 +119,7 @@ const UploadEdu = ({selectedValue1}) => {
             <div style={{ display: 'flex', justifyContent: 'end', marginTop: 'auto' }}>
               {/* <pre>{JSON.stringify(excelData, null, 2)}</pre> */}
 
-              <button onClick={handleButtonClick} className='btn'>
+              <button onClick={handleButtonClick} className='btn-Edu'>
                 <FaRegSave style={{ fontFamily: 'Kanit' ,fontSize: '15px', marginRight: '3px' ,paddingTop:'5px'}} />
                 SAVE
               </button>

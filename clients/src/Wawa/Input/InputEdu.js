@@ -7,28 +7,27 @@ import * as XLSX from 'xlsx';
 import Axios from "axios";
 
 
-const InputEdu = ({ selectedValue2, selectedValue3, selectedValue4 }) => {
+const InputEdu = ({ selectedValue2, selectedValue3, selectedValue4, reloadPage }) => {
     const [idSubject, setIdSubject] = useState('');
     const [subjectName, setSubjectName] = useState('');
     const [subjectList, setsubjectList] = useState([]);
-    // // const match = selectedValue4.match(/\(([^)]+)\)/);
-    // const regex = /(\d+)\((\d+)-(\d+)-(\d+)\)/;
-
-    // const match =selectedValue4.match(regex);
-    
-    // if (match) {
-    //   const dataList = match.slice(1).map(Number);
-    
-    //   console.log("Data List:", dataList);
-    // } else {
-    //   console.log("ไม่พบข้อมูลที่ต้องการ");
-    // }
-    // const [selectedValue2, setSelectedValue2] = useState(null);
-    // const [selectedValue3, setSelectedValue3] = useState(null);
-    // const [selectedValue4, setSelectedValue4] = useState(null);
+   
 
     const handleButtonAdd = () => {
-        window.alert('เพิ่มข้อมูลวิชาเข้าสู่ระบบสำเร็จ');
+        
+        if (!selectedValue2 || !idSubject || !subjectName || !selectedValue3 || !selectedValue4) {
+            window.alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+            return; // ไม่ทำงานต่อไปหากข้อมูลในตัวแปรใดตัวหนึ่งว่าง
+        }
+        if (!/^\d{1,8}$/.test(idSubject)) {
+            window.alert('กรุณากรอกรหัสวิชาเป็นตัวเลขและไม่เกิน 8 ตัว');
+            return; // ไม่ทำงานต่อไปหากค่า idSubject ไม่เป็นจำนวนเต็มหรือเกิน 8 ตัว
+        }
+        if (!/^[\wก-๙-]+$/.test(subjectName)) {
+            window.alert('กรุณากรอกชื่อวิชาให้ถูกต้อง');
+            return; // ไม่ทำงานต่อไปหาก subjectName ไม่ถูกต้อง
+        }
+        window.alert('เพิ่มข้อมูลรายวิชาสำเร็จ')
         Axios.post("http://127.0.0.1:3001/addsub", {
             selectedValue2: selectedValue2,
             idSubject: idSubject,
@@ -48,6 +47,8 @@ const InputEdu = ({ selectedValue2, selectedValue3, selectedValue4 }) => {
             ]);
             setIdSubject('');
             setSubjectName('');
+            reloadPage();
+           
         }).catch(error => {
             console.error('Error adding subject:', error);
             window.alert('เกิดข้อผิดพลาดในการเพิ่มวิชา');
