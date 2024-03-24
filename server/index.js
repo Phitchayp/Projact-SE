@@ -306,7 +306,7 @@ app.post('/box1', (req, res) => {
 
 
 app.get('/time', (req, res) => {
-    db.query("SELECT * FROM time", (err, result) => {
+    db.query("SELECT * FROM time ", (err, result) => {
       if (err) {
         console.log(err);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -324,13 +324,22 @@ app.get('/time', (req, res) => {
       return res.status(400).json({ error: 'error'});
     }
   
-    db.query("INSERT INTO timeteacher (`id`, `dayS`, `timeS`, `dayF`, `timeF`) VALUES (NULL, ? , ? ,? , ?)", [dayS, timeS, dayF, timeF], (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).json({ error: 'Internal Server Error' });
+    db.query("DELETE FROM timeteacher WHERE state = 1", (deleteErr, deleteResult) => {
+      if (deleteErr) {
+        console.log(deleteErr);
+        return res.status(500).json({ error: 'Internal Server Error (Delete)' });
       } else {
-        res.json({ success: true, message: 'Data saved successfully' });
-        console.log("บันทึกสำเร็จ")
+        console.log("Deleted records successfully");
+        // หลังจากลบข้อมูลแล้ว ทำการแทรกข้อมูลใหม่
+        db.query("INSERT INTO timeteacher (`id`, `dayS`, `timeS`, `dayF`, `timeF`,`state`) VALUES (NULL, ? , ? ,? , ? ,1 )", [dayS, timeS, dayF, timeF], (insertErr, insertResult) => {
+          if (insertErr) {
+            console.log(insertErr);
+            return res.status(500).json({ error: 'Internal Server Error (Insert)' });
+          } else {
+            console.log("บันทึกสำเร็จ");
+            return res.json({ success: true, message: 'Data saved successfully' });
+          }
+        });
       }
     });
   });
@@ -342,16 +351,26 @@ app.get('/time', (req, res) => {
       return res.status(400).json({ error: 'error'});
     }
   
-    db.query("INSERT INTO timeedu (`id`, `dayS`, `timeS`, `dayF`, `timeF`) VALUES (NULL, ? , ? ,? , ?)", [dayS, timeS, dayF, timeF], (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).json({ error: 'Internal Server Error' });
+    db.query("DELETE FROM timeedu WHERE state = 1", (deleteErr, deleteResult) => {
+      if (deleteErr) {
+        console.log(deleteErr);
+        return res.status(500).json({ error: 'Internal Server Error (Delete)' });
       } else {
-        res.json({ success: true, message: 'Data saved successfully' });
-        console.log("บันทึกสำเร็จ")
+        console.log("Deleted records successfully");
+        // หลังจากลบข้อมูลแล้ว ทำการแทรกข้อมูลใหม่
+        db.query("INSERT INTO timeedu (`id`, `dayS`, `timeS`, `dayF`, `timeF`,`state`) VALUES (NULL, ? , ? ,? , ? ,1 )", [dayS, timeS, dayF, timeF], (insertErr, insertResult) => {
+          if (insertErr) {
+            console.log(insertErr);
+            return res.status(500).json({ error: 'Internal Server Error (Insert)' });
+          } else {
+            console.log("บันทึกสำเร็จ");
+            return res.json({ success: true, message: 'Data saved successfully' });
+          }
+        });
       }
     });
-  });
+});
+
 
   app.delete('/box1/:boxId', (req, res) => {
     const boxId = req.params.boxId;
