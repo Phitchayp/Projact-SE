@@ -50,9 +50,10 @@ const Pop = ({ onClose }) => {
 
       },
       ]);
-    });
-
-    console.log(excelData);
+    }).catch(error => {
+      console.error('Error saving data:', error);
+      window.alert('ข้อมูลไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่');
+  });
   };
 
   const handleButtonAdd = () => {
@@ -64,27 +65,36 @@ const Pop = ({ onClose }) => {
       alert('กรุณากรอกข้อมูลให้ครบถ้วน');
       return;
     }
-    Axios.post("http://127.0.0.1:3001/create",{
+  
+    Axios.post("http://127.0.0.1:3001/creates", {
       email: email,
-      fullName:fullName,
-      
-    }).then(() => {
+      fullName: fullName,
+    })
+    .then(response => {
+      // หากบันทึกข้อมูลสำเร็จ
       setuserList([
         ...userList,
         {
-        email: email,
-        fullName:fullName
-      },
+          email: email,
+          fullName: fullName
+        },
       ]);
       setEmail('');
       setFullName('');
-
-      // ปิด popup
       onClose();
       alert(`ทำการเพิ่มข้อมูลผู้ใช้ ${email} เข้าสู่ระบบ`);
       window.location.reload()
+    })
+    .catch(error => {
+      // หากเกิดข้อผิดพลาดในการบันทึก
+      if (error.response.status === 409) {
+        alert('อีเมลล์นี้มีในระบบอยู่แล้ว');
+      } else {
+        console.error('เกิดข้อผิดพลาดในการส่งคำขอ:', error);
+      }
     });
-};
+  };
+  
 
 
   const handleDrop = (e) => {

@@ -40,20 +40,37 @@ db.connect((err)=>{
 })
 
 app.post("/create", (req, res) => {
-    const fullName = req.body.fullName;
-    const email = req.body.email;
-  
-    db.query(
-      "INSERT INTO usersaj (email,name ) VALUES (?,?)",
-      [email,fullName],
+  const fullName = req.body.fullName;
+  const email = req.body.email;
+
+  // ตรวจสอบว่ามีอีเมลล์นี้ในฐานข้อมูลหรือไม่
+  db.query(
+      "SELECT * FROM usersed WHERE email = ?",
+      [email],
       (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.send("Values Inserted");
-        }
+          if (err) {
+              console.error('เกิดข้อผิดพลาดในการทำคำสั่ง SQL:', err);
+              return res.status(500).send('Internal Server Error');
+          } else if (result.length > 0) {
+              // หากมีอีเมลล์นี้ในฐานข้อมูล
+              return res.status(409).send('Email already exists');
+          } else {
+              // หากไม่มีอีเมลล์นี้ในฐานข้อมูล ให้ทำการเพิ่มข้อมูล
+              db.query(
+                  "INSERT INTO usersed (email, name) VALUES (?, ?)",
+                  [email, fullName],
+                  (err, result) => {
+                      if (err) {
+                          console.error('เกิดข้อผิดพลาดในการเพิ่มข้อมูล:', err);
+                          return res.status(500).send('Failed to insert data');
+                      } else {
+                          return res.status(200).send('Values Inserted');
+                      }
+                  }
+              );
+          }
       }
-    );
+  );
   });
 
   app.post("/upload", (req, res) => {
@@ -76,19 +93,37 @@ app.post("/create", (req, res) => {
   app.post("/creates", (req, res) => {
     const fullName = req.body.fullName;
     const email = req.body.email;
-  
+
+    // ตรวจสอบว่ามีอีเมลล์นี้ในฐานข้อมูลหรือไม่
     db.query(
-      "INSERT INTO usersed (email,name ) VALUES (?,?)",
-      [email,fullName],
-      (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.send("Values Inserted");
+        "SELECT * FROM usersed WHERE email = ?",
+        [email],
+        (err, result) => {
+            if (err) {
+                console.error('เกิดข้อผิดพลาดในการทำคำสั่ง SQL:', err);
+                return res.status(500).send('Internal Server Error');
+            } else if (result.length > 0) {
+                // หากมีอีเมลล์นี้ในฐานข้อมูล
+                return res.status(409).send('Email already exists');
+            } else {
+                // หากไม่มีอีเมลล์นี้ในฐานข้อมูล ให้ทำการเพิ่มข้อมูล
+                db.query(
+                    "INSERT INTO usersed (email, name) VALUES (?, ?)",
+                    [email, fullName],
+                    (err, result) => {
+                        if (err) {
+                            console.error('เกิดข้อผิดพลาดในการเพิ่มข้อมูล:', err);
+                            return res.status(500).send('Failed to insert data');
+                        } else {
+                            return res.status(200).send('Values Inserted');
+                        }
+                    }
+                );
+            }
         }
-      }
     );
-  });
+});
+
   
 
   app.post("/uploads", (req, res) => {
