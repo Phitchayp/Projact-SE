@@ -26,6 +26,11 @@ function BoxImportCourse() {
     const [selectedValue2, setSelectedValue2] = useState('');
     const [selectedValue3, setSelectedValue3] = useState('');
     const [selectedValue4, setSelectedValue4] = useState('');
+    const [reloadPage, setReloadPage] = useState(false); // เพิ่ม state เพื่อให้ BoxImportCourse ทำการรีเฟรชหน้าเว็บ
+
+    const reloadPageHandler = () => {
+        window.location.reload()
+    };
 
     const handleDropdownChange1 = (event) => {
         setSelectedValue1(event.target.value);
@@ -111,13 +116,16 @@ function BoxImportCourse() {
                                 </select>
                             </div>
                             <div className='dropdown4'>
-                                <select value={selectedValue4} onChange={handleDropdownChange4}>
-                                    <option value=""></option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-
+                            <select value={selectedValue4} onChange={handleDropdownChange4}>
+                                <option value=""></option>
+                                <option value="1">(0-3-2)</option>
+                                <option value="2">(0-6-3)</option>
+                                <option value="3">(3-0-6)</option>
+                                <option value="4">(3-3-8)</option>
+                                <option value="5">1-3</option>
+                                <option value="6">1</option>
+                                <option value="7">2</option>
+                                <option value="8">6</option>
                                 </select>
                             </div>
                             <div className='test'>
@@ -126,7 +134,8 @@ function BoxImportCourse() {
                                 <InputEdu
                                     selectedValue2={selectedValue2}
                                     selectedValue3={selectedValue3}
-                                    selectedValue4={selectedValue4} />
+                                    selectedValue4={selectedValue4} 
+                                    reloadPage={reloadPageHandler}/>
                             </div>
                             <w style={{ color: '#8C3941' }}>เพิ่มรายวิชา</w>
                             <t style={{ color: '#838383' }}>(*ครั้งละ 1 วิชา)</t>
