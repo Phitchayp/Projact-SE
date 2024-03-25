@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './CheckRegisCoruse.css'; // Import CSS file for table styling
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import Axios from 'axios';
 
+const ListCoruse = () => {
+  const [course, setCourse] = useState([]);
 
-class CheckRegisCoruse extends React.Component {
-  
-  render() {
+  useEffect(() => {
+      Axios.get("http://localhost:3001/course")
+          .then((response) => {
+              setCourse(response.data);
+          })
+          .catch((error) => {
+              console.error('Error fetching course data:', error);
+          });
+  }, []);
     return (
       <div className='CheckRegisCoruse-right'>
         {/* ตารางผลการลงทะเบียน */}
@@ -34,69 +43,27 @@ class CheckRegisCoruse extends React.Component {
                 <th>ห้องlab</th>
               </tr>
             </thead>
+            {course.map((course) => (
             <tbody>
-              <tr>
-                <td></td>
-                <td>03603213-65</td>
-                <td>Algorithm Design and Analysis</td>
-                <td>3</td>
-                <td>lec</td>
-                <td>800</td>
-                <td className="CheckRegisCoruse-blue-text">สมเกียรติ  ใจดี</td>
-                <td>100</td>
-                <td>2 3 4 x</td>
-                <td className="CheckRegisCoruse-blue-text">Mon</td>
-                <td>9.00-12.00</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td></td>
-                <td>03603423-60</td>
-                <td>Industrial Sociology</td>
-                <td>3</td>
-                <td>lec</td>
-                <td>800</td>
-                <td className="CheckRegisCoruse-blue-text">สมศรี  มีใจ</td>
-                <td>50</td>
-                <td>3 4 x</td>
-                <td className="CheckRegisCoruse-blue-text">Mon</td>
-                <td>13.00-16.00</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td></td>
-                <td>03600390-00</td>
-                <td>Social Problems</td>
-                <td>3</td>
-                <td>lec</td>
-                <td>800</td>
-                <td className="CheckRegisCoruse-blue-text">สมเกียรติ  ใจดี</td>
-                <td>100</td>
-                <td>3 4 x</td>
-                <td className="CheckRegisCoruse-blue-text">Mon</td>
-                <td>16.00-19.00</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td></td>
-                <td>03603452-60</td>
-                <td>Lab Electronic</td>
-                <td>1</td>
-                <td>lab</td>
-                <td>830</td>
-                <td className="CheckRegisCoruse-blue-text">สมเกียรติ  ใจดี</td>
-                <td>50</td>
-                <td>3 4 x</td>
-                <td className="CheckRegisCoruse-blue-text">Mon</td>
-                <td>08.00-09.00</td>
-                <td>lab15</td>
-
+              <tr key={course.id}>
+                <td>{`${course.No}`}</td>
+                <td>{`${course.idsubject}`}</td>
+                <td>{`${course.name}`}</td>
+                <td>{`${course.credit}`}</td>
+                <td>{`${course.lab_lec}`}</td>
+                <td>{`${course.sec}`}</td>
+                <td className="CheckRegisCoruse-blue-text">{`${course.teacher}`}</td>
+                <td>{`${course.n_people}`}</td>
+                <td>{course.class}</td>
+                <td className="CheckRegisCoruse-blue-text">{`${course.day}`}</td>
+                <td>{`${course.time_start}`}-{`${course.time_end}`}</td>
+                <td>{`${course.room}`}</td>
               </tr>
             </tbody>
+            ))}
           </table>
         </header> 
       </div>
     );
   }
-}
-export default CheckRegisCoruse;
+export default ListCoruse;

@@ -556,6 +556,19 @@ app.get('/room', (req, res) => {
     });
   });
 
+app.get('/course', (req, res) => {
+  db.query("SELECT * FROM course", (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json(result); // ส่งผลลัพธ์กลับไปยังผู้ใช้
+      console.log("สำเร็จ")
+    }
+  });
+});
+
+
   app.get('/search-courses', (req, res) => {
     const { query } = req.query; // รับคำค้นหาจาก query string
     // ตัวอย่างคำสั่ง SQL สำหรับค้นหาในตาราง courses
