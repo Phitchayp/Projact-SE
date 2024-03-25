@@ -1,11 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=kanit');
 
 
-.box-Input-position{
-    /* padding-top: 10px; */
+.box-Input-position {
+    padding-top: 15px;
     margin-left: 50px;
+    font-family: kanit;
+    font-weight: bold; /* ทำให้ฟ้อนเป็นตัวหนา */
     /* background-color: black; */
 }
+
 
 /* .drop-area-Edu{
     margin-right: 10px;

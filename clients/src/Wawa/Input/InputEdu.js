@@ -11,10 +11,10 @@ const InputEdu = ({ selectedValue2, selectedValue3, selectedValue4, reloadPage }
     const [idSubject, setIdSubject] = useState('');
     const [subjectName, setSubjectName] = useState('');
     const [subjectList, setsubjectList] = useState([]);
-   
+
 
     const handleButtonAdd = () => {
-        
+
         if (!selectedValue2 || !idSubject || !subjectName || !selectedValue3 || !selectedValue4) {
             window.alert('กรุณากรอกข้อมูลให้ครบถ้วน');
             return; // ไม่ทำงานต่อไปหากข้อมูลในตัวแปรใดตัวหนึ่งว่าง
@@ -48,7 +48,7 @@ const InputEdu = ({ selectedValue2, selectedValue3, selectedValue4, reloadPage }
             setIdSubject('');
             setSubjectName('');
             reloadPage();
-           
+
         }).catch(error => {
             console.error('Error adding subject:', error);
             window.alert('เกิดข้อผิดพลาดในการเพิ่มวิชา');
@@ -58,7 +58,7 @@ const InputEdu = ({ selectedValue2, selectedValue3, selectedValue4, reloadPage }
         console.log(selectedValue4);
         console.log(subjectList);
     };
-    
+
     useEffect(() => {
         // ทำสั่งการที่คุณต้องการที่นี่ เช่น อัพเดต UI
         console.log("User list updated:", subjectList);
@@ -78,8 +78,16 @@ const InputEdu = ({ selectedValue2, selectedValue3, selectedValue4, reloadPage }
                             type="text"
                             value={idSubject}
                             onChange={(e) => setIdSubject(e.target.value)}
-                            style={{ marginBottom: '10px', width: '300px', fontFamily: 'Kanit' }}
+                            style={{
+                                marginBottom: '10px',
+                                width: '300px',
+                                fontFamily: 'Kanit',
+                                height: '25px',
+                                borderRadius: '5px',
+                                border: '1px solid black',
+                            }}
                         />
+
                     </div>
                     <div>
                         <label style={{ fontFamily: 'Kanit', fontSize: '15px', display: 'block', fontweight: 'bold', marginBottom: '5px' }}>ชื่อวิชา:</label>
@@ -87,10 +95,17 @@ const InputEdu = ({ selectedValue2, selectedValue3, selectedValue4, reloadPage }
                             type="text"
                             value={subjectName}
                             onChange={(e) => setSubjectName(e.target.value)}
-                            style={{ width: '300px', fontFamily: 'Kanit' }}
+                            style={{
+                                marginBottom: '10px',
+                                width: '300px',
+                                fontFamily: 'Kanit',
+                                height: '25px',
+                                borderRadius: '5px',
+                                border: '1px solid black',
+                            }}
                         />
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'end', marginTop: 'auto' }}>
+                    <div style={{ display: 'flex', justifyContent: 'end', marginTop: 'auto' , marginRight: '30px'}}>
                         <button onClick={handleButtonAdd} className='btn'>
                             <IoIosAddCircleOutline style={{ fontFamily: 'Kanit', fontSize: '15px', marginRight: '3px', paddingTop: '5px' }} />
                             ADD
