@@ -14,8 +14,8 @@ class CheckRegisCoruse extends React.Component {
                     id="test-table-xls-button"
                     className="download-table-xls-button btn btn-success mb-3"
                     table="table-to-xls"
-                    filename="tablexls"
-                    sheet="tablexls"
+                    filename="ผลการลงทะเบียน"
+                    sheet="ผลการลงทะเบียน"
                     buttonText="EXPORT TO EXCEL"/>
           <table className="CheckRegisCoruse-bordered-table" id="table-to-xls">
             <thead>
@@ -46,7 +46,7 @@ class CheckRegisCoruse extends React.Component {
                 <td>100</td>
                 <td>2 3 4 x</td>
                 <td className="CheckRegisCoruse-blue-text">Mon</td>
-                <td>9-12</td>
+                <td>9.00-12.00</td>
                 <td></td>
               </tr>
               <tr>
@@ -60,7 +60,7 @@ class CheckRegisCoruse extends React.Component {
                 <td>50</td>
                 <td>3 4 x</td>
                 <td className="CheckRegisCoruse-blue-text">Mon</td>
-                <td>13-16</td>
+                <td>13.00-16.00</td>
                 <td></td>
               </tr>
               <tr>
@@ -74,7 +74,7 @@ class CheckRegisCoruse extends React.Component {
                 <td>100</td>
                 <td>3 4 x</td>
                 <td className="CheckRegisCoruse-blue-text">Mon</td>
-                <td>16-19</td>
+                <td>16.00-19.00</td>
                 <td></td>
               </tr>
               <tr>
@@ -88,7 +88,7 @@ class CheckRegisCoruse extends React.Component {
                 <td>50</td>
                 <td>3 4 x</td>
                 <td className="CheckRegisCoruse-blue-text">Mon</td>
-                <td>8-9</td>
+                <td>08.00-09.00</td>
                 <td>lab15</td>
 
               </tr>
