@@ -44,6 +44,9 @@ const Pop = ({ onClose }) => {
 
       },
       ]);
+      onClose();
+      alert(`เพิ่มข้อมูลผู้ใช้เข้าสู่ระบบสำเร็จ`);
+      window.location.reload()
     }).catch(error => {
       console.error('Error saving data:', error);
       window.alert('ข้อมูลไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่');

@@ -42,7 +42,7 @@ const UserList = () => {
                   alt="User Icon"
                 />
                 <div>
-                  <h3>{user.name}</h3>
+                  <h3>{user.fullname}</h3>
                   <p style={{ color:'black',marginTop:'-30px'}}>Email: {user.email}</p>
                 </div>
               </div>
