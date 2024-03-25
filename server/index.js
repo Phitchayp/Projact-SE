@@ -565,8 +565,8 @@ app.get('/room', (req, res) => {
     });
   });
 
-app.get('/course', (req, res) => {
-  db.query("SELECT * FROM course", (err, result) => {
+app.get('/courset', (req, res) => {
+  db.query("SELECT * FROM courset", (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).json({ error: 'Internal Server Error' });

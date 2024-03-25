@@ -7,7 +7,7 @@ const ListCoruse = () => {
   const [course, setCourse] = useState([]);
 
   useEffect(() => {
-      Axios.get("http://localhost:3001/course")
+      Axios.get("http://localhost:3001/courset")
           .then((response) => {
               setCourse(response.data);
           })
