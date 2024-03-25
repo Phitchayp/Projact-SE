@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import "./ResultRegisEdu.css"; // นี่คือไฟล์ CSS ของคุณ
+import "./ResultRegisEdu.css"; 
 import CheckRegisCoruse from "./CheckRegisCoruse";
-import searchIcon from "../assets/searchbar.svg";
+import searchIconName from "../assets/searchbar.svg";
+import searchIconCourse from "../assets/searchbar.svg";
 import TimePickerRe from "./TimepickerResultSearch";
 import newSearchIcon from "../assets/newsearch.png";
 import Axios from "axios";
@@ -23,24 +24,63 @@ function ResultRegisEdu() {
     setSelectedValue7(event.target.value);
   };
 
+  const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
   const [selectedValue10, setSelectedValue10] = useState("");
   const [selectedValue11, setSelectedValue11] = useState("");
   const [selectedValue12, setSelectedValue12] = useState("");
   const [selectedValue13, setSelectedValue13] = useState("");
-
-  const handleAdvancedSearch = () => {
+  // แถบขาว
+  const [searchText1, setSearchText1] = useState("");
+  const [searchResults1, setSearchResults1] = useState([]);
+  
+  
+  const handleAdvancedSearch = async () => {
     // Validate ว่าทุก dropdown และช่องค้นหาถูกกรอกหรือเลือกค่าหรือไม่
-    if (selectedValue10 && selectedValue11 && selectedValue12 && selectedValue13 && searchText.trim() !== "") {
-      // กรณีที่ข้อมูลครบถ้วน ทำการค้นหา
-      searchCourses();
+    if (
+      selectedValue10 ||
+      selectedValue11 ||
+      selectedValue12 ||
+      selectedValue13 ||
+      searchText1.trim() !== "" ||
+      searchText2.trim() !== ""
+    ) {
       setSearching(true);
       console.log("Advanced Searching...");
-    } else {
-      // กรณีที่ข้อมูลไม่ครบถ้วน แสดงข้อความแจ้งเตือน
-      alert("กรุณากรอกหรือเลือกข้อมูลให้ครบถ้วน");
     }
-  };
+  
+    try {
+      const response1 = await Axios.get(
+        `http://localhost:3001/search-courses?query=${searchText1}`
+      );
+      const response2 = await Axios.get(
+        `http://localhost:3001/search-nameajarn?query=${searchText2}`
+      );
+      
+      if (response1.data.length === 0 && response2.data.length === 0) {
+        alert("ไม่พบข้อมูลชื่อผู้ใช้และรายวิชานี้ กรุณากรอกข้อมูลให้ถูกต้อง");
+      } else if (response1.data.length !== 0 ) {
+        alert("ไม่พบข้อมูลรายวิชานี้ กรุณากรอกข้อมูลให้ถูกต้อง");
+      } else if (response2.data.length === 0) {
+        alert("ไม่พบข้อมูลชื่อผู้ใช้นี้ กรุณากรอกข้อมูลให้ถูกต้อง");
+      } else {
+        setSearchResults([response1.data, response2.data]);
+      }
+    } catch (error) {
+      console.error("Error searching nameajarn:", error);
+      console.error("Error searching course:", error);
+    } finally {
+      // เมื่อค้นหาเสร็จสิ้น ปิดการค้นหา
+      setSearching(false);
+    }
+  };    
+  
+
+  
+
+
+  // ----------------searchbarCourse------------------------
+
   document.addEventListener("DOMContentLoaded", function () {
     // เพิ่มโค้ดที่ต้องการให้ทำงานหลังจากการโหลดหน้าเว็บเสร็จสมบูรณ์ที่นี่
     var searchButton = document.getElementById("searchButton");
@@ -61,31 +101,28 @@ function ResultRegisEdu() {
       });
     }
   });
-  const [searchText, setSearchText] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  
+
+  // แถบขาว
   const searchCourses = async () => {
     try {
       const response = await Axios.get(
-        `http://localhost:3001/search-courses?query=${searchText}`
+        `http://localhost:3001/search-courses?query=${searchText1}`
       );
-      if (response.data.length === 0) {
-        // แสดงข้อความเมื่อไม่พบข้อมูล
-        alert("ไม่พบข้อมูลชื่อผู้ใช้นี้หรือรายวิชานี้");
-      }
-      setSearchResults(response.data); // อัปเดต state ด้วยข้อมูลผลการค้นหา
+      setSearchResults1(response.data); // อัปเดต state ด้วยข้อมูลผลการค้นหา
+      console.log(response.data.length)
+      console.log(response.data)
     } catch (error) {
       console.error("Error searching courses:", error);
     }
   };
 
-  const handleSearchChange = (e) => {
-    setSearchText(e.target.value);
+  const handleSearchChangeCourse = (e) => {
+    setSearchText1(e.target.value);
     if (e.target.value.length > 0) {
       // แก้ไขตรงนี้เพื่อค้นหาทันทีที่ผู้ใช้พิมพ์
       searchCourses();
     } else {
-      setSearchResults([]); // หากช่องค้นหาว่าง, ล้างผลลัพธ์การค้นหา
+      setSearchResults1([]); // หากช่องค้นหาว่าง, ล้างผลลัพธ์การค้นหา
     }
   };
 
@@ -94,12 +131,12 @@ function ResultRegisEdu() {
     subject_name: "",
   });
   const handleSelectCourse = (course) => {
-    setSearchText(`${course.subject_id} - ${course.subject_name}`);
+    setSearchText1(`${course.subject_id} - ${course.subject_name}`);
     setSelectedCourse({
       subject_id: course.subject_id,
       subject_name: course.subject_name,
     });
-    setSearchResults([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
+    setSearchResults1([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
   };
 
   // ฟังก์ชันสำหรับบันทึกข้อมูล
@@ -166,6 +203,65 @@ function ResultRegisEdu() {
     });
   };
 
+ // --------------------searchbarName--------------------
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    // เพิ่มโค้ดที่ต้องการให้ทำงานหลังจากการโหลดหน้าเว็บเสร็จสมบูรณ์ที่นี่
+    var searchButton = document.getElementById("searchButton");
+    var saveButton = document.getElementById("saveButton");
+
+    if (searchButton) {
+      searchButton.addEventListener("click", function () {
+        var searchText = document.getElementById("searchInput").value.trim();
+        console.log("คำค้นหา:", searchText);
+        // ทำสิ่งที่ต้องการกับ searchText ที่ได้รับจากผู้ใช้
+      });
+    }
+
+    if (saveButton) {
+      saveButton.addEventListener("click", function () {
+        console.log("คุณกำลังคลิกปุ่มบันทึก");
+        // สามารถเพิ่มโค้ดอื่น ๆ ต่อจากนี้เพื่อทำงานตามที่ต้องการ
+      });
+    }
+  });
+  const [searchText2, setSearchText2] = useState("");
+  const [searchResults2, setSearchResults2] = useState([]);
+
+  const searchNameAjarn = async () => {
+    try {
+      const response = await Axios.get(
+        `http://localhost:3001/search-nameajarn?query=${searchText2}`
+      );
+      setSearchResults2(response.data); // อัปเดต state ด้วยข้อมูลผลการค้นหา
+    } catch (error) {
+      console.error("Error searching nameajarn:", error);
+    }
+  };
+
+  const handleSearchChangeName = (e) => {
+    setSearchText2(e.target.value);
+    if (e.target.value.length > 0) {
+      // แก้ไขตรงนี้เพื่อค้นหาทันทีที่ผู้ใช้พิมพ์
+      searchNameAjarn();
+    } else {
+      setSearchResults2([]); // หากช่องค้นหาว่าง, ล้างผลลัพธ์การค้นหา
+    }
+  };
+
+  const [selectedName, setSelectedName] = useState({
+    name: "",
+  });
+  const handleSelectName = (usersaj) => {
+    setSearchText2(`${usersaj.name}`);
+    setSelectedName({
+      name: usersaj.name,
+    });
+      setSearchResults2([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือก
+  };
+  
+
+
   return (
     <div>
       <div className="turnleft-allEdu">
@@ -226,6 +322,8 @@ function ResultRegisEdu() {
             </div>
             <div class="timepickers-container2">
               <TimePickerRe></TimePickerRe>
+              
+      
             </div>
           </div>
         </div>
@@ -236,16 +334,32 @@ function ResultRegisEdu() {
             <div
               class="ResultTechsearchBar-searchBox"
               style={{ display: "flex", alignItems: "center" }}
+              
             >
-              <input id="searchInput" type="text" placeholder="ชื่อผู้สอน" />
-              <button
-                id="searchButton"
-                onClick={handleAdvancedSearch}
-                disabled={searching}
-              >
-                <img src={searchIcon} alt="Search Icon" />
+              <input
+                value={searchText2}
+                onChange={handleSearchChangeName}
+                type="text"
+                placeholder="ชื่อผู้สอน"
+              />
+              <button onClick={searchNameAjarn}>
+                <img src={searchIconName} alt="Search Icon" />
               </button>
+              {searchResults2.length > 0 && (
+                <div className="autocomplete-dropdown">
+                  {searchResults2.map((usersaj, index) => (
+                    <div
+                      className="autocomplete-item"
+                      key={index}
+                      onClick={() => handleSelectName(usersaj)}
+                    >
+                      {usersaj.name}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
+            
           </div>
 
           <div style={{ width: "450px" }}>
@@ -255,17 +369,17 @@ function ResultRegisEdu() {
               style={{ display: "flex", alignItems: "center" }}
             >
               <input
-                      value={searchText}
-                      onChange={handleSearchChange}
+                      value={searchText1}
+                      onChange={handleSearchChangeCourse}
                       type="text"
                       placeholder="รหัสวิชา, ชื่อวิชา"
                     />
                     <button onClick={searchCourses}>
-                      <img src={searchIcon} alt="Search Icon" />
+                      <img src={searchIconCourse} alt="Search Icon" />
                     </button>
-                    {searchResults.length > 0 && (
+                    {searchResults1.length > 0 && (
                       <div className="autocomplete-dropdown">
-                        {searchResults.map((course, index) => (
+                        {searchResults1.map((course, index) => (
                           <div
                             className="autocomplete-item"
                             key={index}
@@ -276,14 +390,6 @@ function ResultRegisEdu() {
                         ))}
                       </div>
                     )}
-              {/* <input id="searchInput" type="text" placeholder="" />
-              <button
-                id="searchButton"
-                onClick={handleAdvancedSearch}
-                disabled={searching}
-              >
-                <img src={searchIcon} alt="Search Icon" />
-              </button> */}
             </div>
           </div>
 
@@ -308,10 +414,8 @@ function ResultRegisEdu() {
                 style={{
                   color: "white",
                   fontSize: "16px",
-                  fontFamily: "Kanit",
-                }}
-              >
-                {searching ? "Searching..." : "search"}
+                  fontFamily: "Kanit",}}
+              > {"search"}
               </span>
               <img
                 src={newSearchIcon}
