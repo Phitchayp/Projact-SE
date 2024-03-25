@@ -3,18 +3,6 @@ import Axios from 'axios';
 
 const CourseList = ({courses , setListCheck }) => {
 
-    // const [courses, setCourses] = useState([]);
-
-    // useEffect(() => {
-    //     Axios.get("http://127.0.0.1:3001/getsub")
-    //         .then((response) => {
-    //             setCourses(response.data);
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error fetching course data:', error);
-    //         });
-    // }, []);
-
     const handleCheckboxChange = (id, isChecked) => {
         if (isChecked) {
           setListCheck(prevList => [...prevList, id]); // เพิ่ม id เข้าไปใน listCheck
@@ -24,6 +12,7 @@ const CourseList = ({courses , setListCheck }) => {
       };
 
 
+      
 
     return (
         <div>

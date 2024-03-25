@@ -4,6 +4,7 @@ import CourseList from './getsubject';
 import BoxShow from './BoxsTableShowsub';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import OpenCourseList from '../components/getopencoursefinal';
 
 function CheckboxOpenCourse() {
     const [isChecked, setIsChecked] = useState(false);
@@ -139,13 +140,10 @@ function CheckboxOpenCourse() {
 
 
 
-
-
-
     return (
         <div className='turnleft-all'>
             <div className='DateAdmin-text'>
-                <h >เลือกรายวิชาที่สามารถเปิดสอน</h>
+                <h style={{ color: '#8b0000' }}>เลือกรายวิชาที่สามารถเปิดสอน</h>
             </div>
             <div className='CheckboxOpenCourse-box'>
                 <div className='CheckboxOpenCourse-dropdown' >
@@ -188,7 +186,7 @@ function CheckboxOpenCourse() {
                             </div>
                         </div>
                         {/* ทีละอัน */}
-                        <div class="CheckboxOpenCourse-NewBox">
+                        <div class="CheckboxOpenCourse-NewBox" style={{ backgroundColor: '#dcccd4' }}>
                             {/* <CourseList courses={courses} setListCheck={setListCheck}></CourseList> */}
                             <div>
                                 {courses.map((course) => (
@@ -204,15 +202,19 @@ function CheckboxOpenCourse() {
                                             });
                                         }} type='checkbox' id={`checkText${course.courseid}`} />
 
-                                        {/* แสดง course_year ด้วย */}
-                                        <div className='checkbox-text'>{` ${course.course_year}`}</div>
-                                        <div className='checkbox-text' style={{ marginLeft: '10px' }}>{`${course.subject_id} `}</div>
-                                        <div className='checkbox-text' style={{ marginLeft: '10px' }}>{`${course.subject_name}`}</div>
-                                        <div className='checkbox-text' style={{ marginLeft: '10px' }} >{`${course.credit}`}</div>
-                                        <div className='checkbox-text'>{`${course.category}`}</div>
+
+                                        <div key={course.courseid} className='Course-Items-open'>
+                                            {/* <input type='checkbox' id={`checkText${course.courseid}`}/> */}
+                                            <div className='checkbox-text'>{` ${course.course_year}`}</div>
+                                            <div className='checkbox-text' style={{ marginLeft: '10px' }}>{`${course.subject_id} `}</div>
+                                            <div className='checkbox-text' style={{ marginLeft: '10px' }}>{`${course.subject_name}`}</div>
+                                            <div className='check-text2' >{`${course.credit}`}</div>
+                                            <div style={{ marginRight: '20px' }}>{`${course.category}`}</div>
 
 
-                                        <div className='CheckboxOpenCourse-status'>สถานะ:</div>
+                                            {/* <div className='CheckboxOpenCourse-status'>สถานะ:</div> */}
+                                        </div>
+                                        {/* <div className='CheckboxOpenCourse-status'>สถานะ:</div> */}
                                     </div>
                                 ))}
                             </div>
@@ -240,11 +242,45 @@ function CheckboxOpenCourse() {
             <div>
                 <div style={{ marginTop: '65px' }}>
                     <div className='DateAdmin-text'>
-                        <h>รายวิชาที่สามารถเปิดสอน</h>
+                        <h style={{ color: '#127151' }}>รายวิชาที่สามารถเปิดสอน</h>
                     </div>
                     <div className='CheckboxOpenCourse-boxOpensub' style={{ marginTop: '18px' }}>
                         <div className='CheckboxOpenCourse-dropdown'>
-                            <p2 style={{ fontFamily: 'Kanit, sans-serif' }}>หลักสูตร</p2>
+                            {/*                             
+                            <p2 style={{ fontFamily: 'Kanit, sans-serif' }}>หลักสูตร</p2> */}
+                            <div className='CheckboxOpenCourse-dropdown2' >
+                                <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>หลักสูตร</p>
+                                <select>
+                                    <option value=""></option>
+                                    <option value="2569">2569</option>
+                                    <option value="2568">2568</option>
+                                    <option value="2567">2567</option>
+                                    <option value="2566">2566</option>
+                                    <option value="2565">2565</option>
+                                    <option value="2564">2564</option>
+                                    <option value="2563">2563</option>
+                                    <option value="2562">2562</option>
+                                    <option value="2561">2561</option>
+                                    <option value="2560">2560</option>
+                                    <option value="2559">2559</option>
+                                    <option value="2558">2558</option>
+                                    <option value="2557">2557</option>
+                                    <option value="2556">2556</option>
+                                    <option value="2555">2555</option>
+                                </select>
+
+                                <button className='CheckboxOpenCourse-button'>เลือก</button>
+                                <div>
+                                    <p style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginBottom: '30px' }}>รายวิชาที่อาจารย์สามารถลงทะเบียน</p>
+
+                                </div>
+
+                            </div>
+
+                            <div className="CheckboxOpenCourse-NewBox" style={{ marginTop: '35px' }}>
+                                <OpenCourseList></OpenCourseList>
+                            </div>
+
 
 
 
