@@ -248,6 +248,16 @@ app.get('/getsub', (req, res) => {
   });
 });
 
+app.get('/getOpenCourseList', (req, res) => {
+  db.query("SELECT * FROM opencourse ORDER BY courseid", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 app.get('/getsubsearch/:year', (req, res) => {
   const {year} =req.params;
   db.query("SELECT * FROM course where course_year = ? ORDER BY courseid",[year],(err, result) => {
@@ -354,23 +364,23 @@ app.post("/opencourse", (req, res) => {
   const values = listCheck.map(item => [ item.course_year, item.id, item.subjectName, item.credit, item.category]);
 
   // สร้างสตริงของคำสั่ง SQL ที่มี parameterized queries
- const query = "INSERT INTO opencourse ( course_year, subject_id, subject_name, credit, category) VALUES ?";
+  const insertQuery = "INSERT INTO opencourse (course_year, subject_id, subject_name, credit, category) VALUES ?";
+  const selectQuery = "SELECT * FROM opencourse WHERE subject_id = ? AND subject_name = ? AND course_year = ?";
 
   // สร้าง Promise เพื่อให้มั่นใจว่าคำสั่ง SQL ถูกทำสำเร็จหรือไม่
   const insertValuesPromises = listCheck.map(item => {
     return new Promise((resolve, reject) => {
-      const singleValue = [[item.course_year, item.id, item.subjectName, item.credit, item.category]];
-      const checkQuery = "SELECT * FROM opencourse WHERE subject_id = ?";
-      db.query(checkQuery, [item.id], (checkErr, checkResult) => {
+      db.query(selectQuery, [item.id, item.subjectName, item.course_year], (checkErr, checkResult) => {
         if (checkErr) {
           console.error(checkErr);
           reject(checkErr);
         } else {
           if (checkResult.length > 0) {
-            console.log("Data already exists for subject_id:", item.id);
+            console.log("Data already exists for subject_id, subject_name, and course_year:", item.id, item.subjectName, item.course_year);
             resolve({ id: item.id, exists: true }); // ส่งข้อมูลว่าข้อมูลมีอยู่แล้ว
           } else {
-            db.query(query, [singleValue], (err, result) => {
+            const singleValue = [[item.course_year, item.id, item.subjectName, item.credit, item.category]];
+            db.query(insertQuery, [singleValue], (err, result) => {
               if (err) {
                 console.error(err);
                 reject(err);
@@ -396,7 +406,6 @@ app.post("/opencourse", (req, res) => {
       res.status(500).send("Error inserting values");
     });
 });
-
 
 
 app.get('/box', (req, res) => {

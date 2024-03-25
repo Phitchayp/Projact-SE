@@ -16,6 +16,15 @@
     
 
 }
+
+.CheckboxOpenCourse-dropdown2{
+    margin-left: 3px;
+    position: relative;
+    top: 6px;
+    font-size: 16px;
+    
+
+}
 .CheckboxOpenCourse-button {
     background-color: #127151; /* สีพื้นหลังเป็นสีเขียว */
     color: white; /* สีข้อความเป็นสีขาว */
@@ -144,7 +153,7 @@ input[type="checkbox"]:checked ~ .CheckboxOpenCourse-status::after {
 
 .CheckboxOpenCourse-boxOpensub{
     width: 1100px; /* กำหนดความกว้างของกล่อง */
-    height: 200px; /* กำหนดความสูงของกล่อง */
+    height: 580px; /* กำหนดความสูงของกล่อง */
     background-color: rgb(255, 255, 255); /* ตั้งสีพื้นหลังของกล่องเป็นสีขาว */
     border-radius: 20px; /* เพิ่มมุมโค้งให้กับขอบของกล่อง */
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
