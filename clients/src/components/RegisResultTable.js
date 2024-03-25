@@ -32,15 +32,20 @@ function RegisResultTable() {
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const searchCourses = async () => {
+    // Convert the selectedYear array to a comma-separated string
+    // If your backend expects an array, you might need to adjust this
+    const years = selectedYear.join(',');
+  
     try {
       const response = await Axios.get(
-        `http://localhost:3001/search-courses?query=${searchText}`
+        `http://localhost:3001/search-courses?query=${searchText}&checkboxValue=${years}`
       );
-      setSearchResults(response.data); // อัปเดต state ด้วยข้อมูลผลการค้นหา
+      setSearchResults(response.data); // Update state with search results
     } catch (error) {
       console.error("Error searching courses:", error);
     }
   };
+  
 
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
@@ -53,57 +58,76 @@ function RegisResultTable() {
   };
 
   const [selectedCourse, setSelectedCourse] = useState({
-    subject_id: "",
-    subject_name: "",
+    sbj_code: "",
+    sbj_name: "",
+    sbj_year: "",
+    lab: "",
+    lec: "",
   });
   const handleSelectCourse = (course) => {
-    setSearchText(`${course.subject_id} - ${course.subject_name}`);
+    setSearchText(`${course.sbj_code} - ${course.sbj_name}`);
     setSelectedCourse({
-      subject_id: course.subject_id,
-      subject_name: course.subject_name,
+      sbj_code: course.sbj_code,
+      sbj_name: course.sbj_name,
+      sbj_year: course.sbj_year,
+      lab: course.lab,
+      lec: course.lec,
     });
     setSearchResults([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
   };
 
   // ฟังก์ชันสำหรับบันทึกข้อมูล
   const saveCourseRegistration = async () => {
-    // แปลง array ของปีการศึกษาเป็นสตริง
+    // Simple client-side validation
+    if (!selectedCourse.sbj_code || !selectedCourse.sbj_name || selectedYear.length === 0 || !selectedValues.section || !selectedValues.lectureOrLab || selectedBranch.length === 0|| !selectedCourse.sbj_year || !selectedCourse.lab|| !selectedCourse.lec) {
+      alert("Please fill out all required fields.");
+      return; // Stop the function if validation fails
+    }
+  
+    // Convert array of years and branches to strings
     const yearString = selectedYear.join(", ");
     const branchString = selectedBranch.join(", ");
+    
     try {
       const response = await Axios.post("http://localhost:3001/register", {
-        // ข้อมูลอื่นๆ ที่ต้องการบันทึก
-        subject_id: selectedCourse.subject_id,
-        subject_name: selectedCourse.subject_name,
+        sbj_code: selectedCourse.sbj_code,
+        sbj_name: selectedCourse.sbj_name,
         year: yearString,
         section: selectedValues.section,
         lectureOrLab: selectedValues.lectureOrLab,
         branch: branchString,
-        // ...
+        lec: selectedCourse.lec, // เพิ่ม lec
+        lab: selectedCourse.lab, // เพิ่ม lab
+        sbj_year: selectedCourse.sbj_year,
       });
-
-      // แสดงข้อความแจ้งเตือนหรือดำเนินการต่อ ตามความเหมาะสม
+  
       alert("Registration successful!");
       window.location.reload();
-      // ตัวอย่าง: รีเซ็ตฟอร์มหรือ redirect ผู้ใช้
     } catch (error) {
       console.error("Error saving course registration:", error);
-      // Log the entire error object to see more details
-      console.log(error.response.data); // Log the response data from the server, if ava
+      alert("Failed to save course registration. Please try again."); // Provide a user-friendly error message
     }
   };
+  
 
   const [selectedYear, setSelectedYear] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState([]);
 
   const handleCheckboxChange = (e) => {
     const { value, checked, name } = e.target;
-    if (name === "year") {
+    if (name === "years") {
       if (checked) {
-        setSelectedYear([...selectedYear, value]);
-      } else {
-        setSelectedYear(selectedYear.filter((year) => year !== value));
-      }
+        // If less than 2 years are already selected, add the new selection
+        if (selectedYear.length < 2) {
+            setSelectedYear(prevSelectedYear => [...prevSelectedYear, value]);
+        } else {
+            // Optionally notify the user that they can't select more than 2 years
+            console.log("You can select up to 2 years only.");
+        }
+    } else {
+        // Removing a selected year
+        setSelectedYear(prevSelectedYear => prevSelectedYear.filter(year => year !== value));
+    }
     } else if (name === "branch") {
       if (checked) {
         setSelectedBranch([...selectedBranch, value]);
@@ -118,8 +142,8 @@ function RegisResultTable() {
     section: "",
     lectureOrLab: "",
     branch: "",
-    subject_name: "",
-    subject_id: "",
+    course_name: "",
+    course_code: "",
   });
 
   const handleDropdownChange = (event, field) => {
@@ -147,9 +171,9 @@ function RegisResultTable() {
                     ปี55
                     <input
                       type="checkbox"
-                      name="year"
-                      value="ปี55"
-                      checked={selectedYear.includes("ปี55")}
+                      name="years"
+                      value="55"
+                      checked={selectedYear.includes("55")}
                       onChange={handleCheckboxChange}
                     />
                   </label>
@@ -157,9 +181,9 @@ function RegisResultTable() {
                     ปี60
                     <input
                       type="checkbox"
-                      name="year"
-                      value="ปี60"
-                      checked={selectedYear.includes("ปี60")}
+                      name="years"
+                      value="60"
+                      checked={selectedYear.includes("60")}
                       onChange={handleCheckboxChange}
                     />
                   </label>
@@ -167,9 +191,9 @@ function RegisResultTable() {
                     ปี65
                     <input
                       type="checkbox"
-                      name="year"
-                      value="ปี65"
-                      checked={selectedYear.includes("ปี65")}
+                      name="years"
+                      value="65"
+                      checked={selectedYear.includes("65")}
                       onChange={handleCheckboxChange}
                     />
                   </label>
@@ -197,7 +221,7 @@ function RegisResultTable() {
                             key={index}
                             onClick={() => handleSelectCourse(course)}
                           >
-                            {course.subject_id} - {course.subject_name}
+                            {course.sbj_code} - {course.sbj_name}
                           </div>
                         ))}
                       </div>

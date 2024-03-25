@@ -673,6 +673,51 @@ app.get('/registration-data', (req, res) => {
     res.json(results);
   });
 });
+
+app.get("/course-sections/:courseId", (req, res) => {
+  const { courseId } = req.params;
+  const query = "SELECT section FROM registration_records WHERE id = ?";
+  db.query(query, [courseId], (err, results) => {
+    if (err) {
+      console.error("Failed to retrieve sections:", err);
+      return res.status(500).send("Error retrieving sections");
+    }
+    res.json(results);
+  });
+});
+
+app.delete('/delete-course/:id', (req, res) => {
+  const { id } = req.params;
+  const query = 'DELETE FROM registration_records WHERE id = ?';
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Failed to delete course:', err);
+      return res.status(500).send('Error deleting course');
+    }
+    res.send('Course deleted successfully');
+  });
+});
+
+app.get('/schedule', (req, res) => {
+  // Construct SQL query to get the relevant data
+  // The SQL query will depend on your database schema
+  const query = `
+      SELECT courses.id, courses.sbj_code, courses.sbj_name, courses.sbj_num, courses.lab_or_lec,
+             schedules.sec, schedules.name, schedules.number, schedules.branch,
+             schedules.day, schedules.time, schedules.room
+      FROM courses
+      JOIN schedules ON courses.id = schedules.course_id`;
+
+  db.query(query, (err, results) => {
+      if (err) {
+          console.error('Error fetching schedule:', err);
+          res.status(500).send('Error fetching schedule');
+      } else {
+          res.json(results);
+      }
+  });
+});
+
 app.get('/course-sections/:courseId', (req, res) => {
   const { courseId } = req.params;
   const query = 'SELECT section FROM registration_records WHERE id = ?';
