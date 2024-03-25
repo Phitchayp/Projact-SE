@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import './ResultTeacher.css';
 import ResultTableTeacherRed from './ResultTableTeacherRed';
+import axios from "axios";
 
 // Define the days of the week
 const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -24,40 +25,73 @@ const data = [
 ];
 
 function ResultTeacher() {
+  // State to hold the fetched schedule data
+  const [schedule, setSchedule] = useState([]);
+
+  // Fetch data from your API
+  useEffect(() => {
+      const fetchData = async () => {
+          try {
+              const response = await axios.get('http://localhost:3001/schedule');
+              setSchedule(response.data);
+          } catch (error) {
+              console.error("Error fetching data:", error);
+          }
+      };
+
+      fetchData();
+  }, []);
+
+  // Function to find and return course details for a given day and time slot
+  const getCourseDetailsForTimeSlot = (day, time) => {
+    // Assuming your schedule is an array of course objects with properties 'day' and 'time'
+    const courseDetail = schedule.find(course =>
+      course.day === day && course.time === time
+    );
+    return courseDetail ? `${courseDetail.sbj_name} (${courseDetail.time})` : "";
+  };
+
     return (
 
         <div>
-
-            <div className="table-container">
-
-                <div><p className="ResultTeacher-texthead">ตารางสอนของ อาจารย์: <span className="ResultTeacher-nametext">สมเกียรติ  ใจดี</span> </p></div>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th></th> {/* Empty cell for spacing */}
-                            {timeSlots.map((timeSlot, index) => (
-                                <th key={index}>{timeSlot}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {daysOfWeek.map((day, rowIndex) => (
-                            <tr key={rowIndex}>
-                                <td>{day}</td>
-                                {data[rowIndex].map((cell, colIndex) => (
-                                    <td key={colIndex}>{cell}</td>
-                                ))}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            <div className="ResultTableTeacherRed-left">
-                <ResultTableTeacherRed></ResultTableTeacherRed>
-            </div>
-
+        <div className="table-container">
+          <div>
+            <p className="ResultTeacher-texthead">
+              ตารางสอนของ อาจารย์: <span className="ResultTeacher-nametext">สมเกียรติ ใจดี</span>
+            </p>
+          </div>
+  
+          <table>
+            <thead>
+              <tr>
+                <th></th> {/* Empty cell for spacing */}
+                {timeSlots.map((timeSlot, index) => (
+                  <th key={index}>{timeSlot}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {daysOfWeek.map((day, rowIndex) => (
+                <tr key={rowIndex}>
+                  <td>{day}</td>
+                  {timeSlots.map((time, colIndex) => {
+                    // Call getCourseDetailsForTimeSlot and render its return value inside the cell
+                    const courseDetails = getCourseDetailsForTimeSlot(day, time);
+                    return (
+                      <td key={`${rowIndex}-${colIndex}`}>
+                        {courseDetails}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
+        <div className="ResultTableTeacherRed-left">
+          <ResultTableTeacherRed></ResultTableTeacherRed>
+        </div>
+      </div>
 
     );
 }
