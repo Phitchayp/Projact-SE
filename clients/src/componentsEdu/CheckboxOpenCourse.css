@@ -55,6 +55,7 @@
     font-size: 16px;
     cursor: pointer;
     color:  #127151;
+    margin-top: 10px;
 }
 
 
@@ -63,6 +64,7 @@
 }
 .CheckboxOpenCourse-NewBox {
     background-color:#CCDCD7; /* สีพื้นหลังเป็นสีเทา */
+    
     width: 90%; /* กำหนดความกว้าง */
     height: 400px; /* กำหนดความสูง */
     margin-top: 20px; /* กำหนดระยะห่างด้านบน */
@@ -74,12 +76,17 @@
     display: flex;
     align-items: 10px;
     max-height: 300px; /* ปรับความสูงสูงสุดตามที่ต้องการ */
-  overflow-y: auto;
+    overflow-y: auto;
+    margin-top: '20px',
     
 }
 
 .CheckboxOpenCourse-NewBox input[type="checkbox"] {
     margin-right: 5px;
+    margin-top: 5px;
+    margin-left: 5px;
+    width: 20px;
+    height: 20px;
 }
 
 .CheckboxOpenCourse-NewBox .checkbox-text {
@@ -90,12 +97,13 @@
 
 .CheckboxOpenCourse-Item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
      /* จัดแถบสถานะทางซ้ายสุด */
     width: 860px;
     height: 48px;
     /* background-color: #127151; */
     font-family: 'kanit';
+    
 }
 
 .CheckboxOpenCourse-Item .checkbox-text {
