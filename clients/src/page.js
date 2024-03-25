@@ -37,7 +37,7 @@ function Page() {
             {role === "admin" &&
                     <div>
                         <NavbarAdmin />
-                        <HeaderAdmin />
+                        <HeaderTeacher />
                     </div>
                 }
                 {role === "edu" &&

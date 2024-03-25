@@ -171,3 +171,8 @@ input[type="checkbox"]:checked ~ .CheckboxOpenCourse-status::after {
 .course-item div:last-child {
     margin-right: 0; /* ลบ margin-right ของสถานะสุดท้าย */
 }
+
+
+.kanit-font {
+    font-family: 'Kanit', sans-serif;
+}

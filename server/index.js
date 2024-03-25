@@ -310,6 +310,95 @@ app.post("/addsub", (req, res) => {
   );
 });
 
+// app.post("/opencourse", (req, res) => {
+//   const setListCheck = req.body.setListCheck;
+
+//   const values = setListCheck.map(() => "(?,?,?,?)").join(", ");
+
+//   db.query(
+//     "INSERT INTO opencourse (subject_id,subject_name,credit,category ) VALUES (?)",
+//     [values],
+//     (err, result) => {
+//       if (err) {
+//         console.error(err);
+//         res.status(500).send("An error occurred while inserting values into the database.");
+//       } else {
+//         console.log("Values Inserted");
+//         res.send("Values Inserted");
+//       }
+//     }
+//   );
+// });
+
+
+// app.post("/opencourse", (req, res) => {
+//   const listCheck= req.body.listCheck; // รับข้อมูลที่ส่งมาจากหน้าเว็บ
+//   const values = listCheck.map(item => [item.id, item.subjectName, item.credit, item.category]); // สร้างรายการของค่าแทนที่ในรูปแบบของ parameterized queries
+
+//   // สร้างสตริงของคำสั่ง SQL ที่มี parameterized queries
+//   const query = "INSERT INTO opencourse (subject_id, subject_name, credit, category) VALUES ?";
+
+//   db.query(query, [values], (err, result) => {
+//     if (err) {
+//       console.error(err);
+//       res.status(500).send("An error occurred while inserting values into the database.");
+//     } else {
+//       console.log("Values Inserted");
+//       res.send("Values Inserted");
+//     }
+//   });
+// });
+
+app.post("/opencourse", (req, res) => {
+  const listCheck = req.body.listCheck; // รับข้อมูลที่ส่งมาจากหน้าเว็บ
+  const values = listCheck.map(item => [ item.course_year, item.id, item.subjectName, item.credit, item.category]);
+
+  // สร้างสตริงของคำสั่ง SQL ที่มี parameterized queries
+ const query = "INSERT INTO opencourse ( course_year, subject_id, subject_name, credit, category) VALUES ?";
+
+  // สร้าง Promise เพื่อให้มั่นใจว่าคำสั่ง SQL ถูกทำสำเร็จหรือไม่
+  const insertValuesPromises = listCheck.map(item => {
+    return new Promise((resolve, reject) => {
+      const singleValue = [[item.course_year, item.id, item.subjectName, item.credit, item.category]];
+      const checkQuery = "SELECT * FROM opencourse WHERE subject_id = ?";
+      db.query(checkQuery, [item.id], (checkErr, checkResult) => {
+        if (checkErr) {
+          console.error(checkErr);
+          reject(checkErr);
+        } else {
+          if (checkResult.length > 0) {
+            console.log("Data already exists for subject_id:", item.id);
+            resolve({ id: item.id, exists: true }); // ส่งข้อมูลว่าข้อมูลมีอยู่แล้ว
+          } else {
+            db.query(query, [singleValue], (err, result) => {
+              if (err) {
+                console.error(err);
+                reject(err);
+              } else {
+                console.log("Values Inserted");
+                resolve(result);
+              }
+            });
+          }
+        }
+      });
+    });
+  });
+
+  // รอให้ทุก Promise ใน insertValuesPromises เสร็จสมบูรณ์ก่อนที่จะส่งผลลัพธ์กลับ
+  Promise.all(insertValuesPromises)
+    .then(results => {
+      // ส่งผลลัพธ์กลับหลังจากที่ทุกคำสั่ง SQL เสร็จสมบูรณ์
+      res.send("All values inserted successfully");
+    })
+    .catch(error => {
+      // หากเกิดข้อผิดพลาดในการทำคำสั่ง SQL ใด ๆ
+      res.status(500).send("Error inserting values");
+    });
+});
+
+
+
 app.get('/box', (req, res) => {
     db.query("SELECT * FROM box", (err, result) => {
       if (err) {
