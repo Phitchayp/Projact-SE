@@ -33,40 +33,6 @@ function RoomImport() {
   return (
     <div className='turnleft-all'>
       <h className='DateAdmin-text'>นำข้อมูลห้องเรียนเข้าสู่ระบบ</h>
-      <div className="text2">
-        <a>ปีการศึกษา</a>
-        {/* <a>ภาคการศึกษา</a> */}
-      </div>
-      <div className="dropdown">
-        <div className='dropdown8'>
-          <select value={selectedValue8} onChange={handleDropdownChange8}>
-            <option value=""></option>
-            <option value="2566">2569</option>
-            <option value="2566">2568</option>
-            <option value="2566">2567</option>
-            <option value="2566">2566</option>
-            <option value="2565">2565</option>
-            <option value="2564">2564</option>
-            <option value="2563">2563</option>
-            <option value="2562">2562</option>
-            <option value="2561">2561</option>
-            <option value="2560">2560</option>
-            <option value="2559">2559</option>
-            <option value="2558">2558</option>
-            <option value="2557">2557</option>
-            <option value="2557">2556</option>
-            <option value="2557">2555</option>
-          </select>
-        </div>
-        {/* <div className='dropdown9'>
-          <select value={selectedValue9} onChange={handleDropdownChange9}>
-            <option value=""></option>
-            <option value="ภาคต้น">ภาคต้น</option>
-            <option value="ภาคปลาย">ภาคปลาย</option>
-            <option value="ภาคฤดูร้อน">ภาคฤดูร้อน</option>
-          </select>
-        </div> */}
-      </div>
       <div>
         <UploadRoom />
       </div>
