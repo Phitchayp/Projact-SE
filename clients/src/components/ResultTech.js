@@ -7,6 +7,7 @@ import newSearchIcon from "../assets/newsearch.png";
 import Axios from "axios";
 
 function ResultTeach() {
+  const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
   const [selectedValue10, setSelectedValue10] = useState("");
   const [selectedValue11, setSelectedValue11] = useState("");
@@ -29,17 +30,27 @@ function ResultTeach() {
     setSelectedValue13(event.target.value);
   };
 
-  const handleAdvancedSearch = () => {
+  const handleAdvancedSearch = async() => {
       // Validate ว่าทุก dropdown และช่องค้นหาถูกกรอกหรือเลือกค่าหรือไม่
-    if (selectedValue10 && selectedValue11 && selectedValue12 && selectedValue13 && searchText.trim() !== "") {
-      // กรณีที่ข้อมูลครบถ้วน ทำการค้นหา
-      searchNameAjarn();
-      setSearching(true);
-      console.log("Advanced Searching...");
-    } else {
-      // กรณีที่ข้อมูลไม่ครบถ้วน แสดงข้อความแจ้งเตือน
-      alert("กรุณากรอกหรือเลือกข้อมูลให้ครบถ้วน");
-    }
+      if (selectedValue10 || selectedValue11 || selectedValue12 || selectedValue13 || searchText.trim() !== "") {
+        setSearching(true);
+        console.log("Advanced Searching...");
+      } 
+      try {
+        const response = await Axios.get(
+          `http://localhost:3001/search-nameajarn?query=${searchText}`);
+        
+        if (response.data.length === 0) {
+          alert("ไม่พบข้อมูลชื่อผู้ใช้นี้ กรุณากรอกข้อมูลให้ถูกต้อง");
+          // window.location.reload();
+        }
+        setSearchResults([response.data]);
+      } catch (error) {
+        console.error("Error searching nameajarn:", error);
+      }finally {
+        // เมื่อค้นหาเสร็จสิ้น ปิดการค้นหา
+        setSearching(false);
+      }
   };
 
 
@@ -59,26 +70,22 @@ function ResultTeach() {
     if (saveButton) {
       saveButton.addEventListener("click", function () {
         console.log("คุณกำลังคลิกปุ่มบันทึก");
-        // สามารถเพิ่มโค้ดอื่น ๆ ต่อจากนี้เพื่อทำงานตามที่ต้องการ
+        
       });
     }
   });
   const [searchText, setSearchText] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults1, setSearchResults1] = useState([]);
 
   const searchNameAjarn = async () => {
     try {
       const response = await Axios.get(
         `http://localhost:3001/search-nameajarn?query=${searchText}`
       );
-      if (response.data.length === 0) {
-        // แสดงข้อความเมื่อไม่พบข้อมูล
-        alert("ไม่พบข้อมูลชื่อผู้ใช้นี้");
-      }
-      setSearchResults(response.data); // อัปเดต state ด้วยข้อมูลผลการค้นหา
+      setSearchResults1(response.data); // อัปเดต state ด้วยข้อมูลผลการค้นหา
     } catch (error) {
       console.error("Error searching nameajarn:", error);
-    }
+    } 
   };
 
   const handleSearchChange = (e) => {
@@ -87,7 +94,7 @@ function ResultTeach() {
       // แก้ไขตรงนี้เพื่อค้นหาทันทีที่ผู้ใช้พิมพ์
       searchNameAjarn();
     } else {
-      setSearchResults([]); // หากช่องค้นหาว่าง, ล้างผลลัพธ์การค้นหา
+      setSearchResults1([]); // หากช่องค้นหาว่าง, ล้างผลลัพธ์การค้นหา
     }
   };
 
@@ -99,7 +106,7 @@ function ResultTeach() {
     setSelectedName({
       name: usersaj.name,
     });
-    setSearchResults([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือก
+    setSearchResults1([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือก
   };
 
   return (
@@ -184,9 +191,9 @@ function ResultTeach() {
               <button onClick={searchNameAjarn}>
                 <img src={searchIcon} alt="Search Icon" />
               </button>
-              {searchResults.length > 0 && (
+              {searchResults1.length > 0 && (
                 <div className="autocomplete-dropdown">
-                  {searchResults.map((usersaj, index) => (
+                  {searchResults1.map((usersaj, index) => (
                     <div
                       className="autocomplete-item"
                       key={index}
@@ -235,9 +242,10 @@ function ResultTeach() {
               disabled={searching}
             >
               <span
-                style={{ color: "white", fontSize: "16px", fontFamily: "Kanit" }}
-              >
-                {searching ? "Searching..." : "search"}
+                style={{ color: "white", 
+                fontSize: "16px", 
+                fontFamily: "Kanit" }}
+              >{ "search"}
               </span>
               <img
                 src={newSearchIcon}
