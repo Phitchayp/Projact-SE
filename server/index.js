@@ -7,11 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  // host: '127.0.0.1',
-  // user: 'root',
-  // password: '123456',
-  // database: 'databasese',
-  // port: '3306'
+  host: '127.0.0.1',
+  user: 'root',
+  password: '123456',
+  database: 'databasese',
+  port: '3306'
  //pond
   // host: 'localhost',
   // user: 'root',
@@ -25,10 +25,10 @@ const db = mysql.createConnection({
   // database: 'project_se',
 
 
-  host: 'localhost',
-  user: 'root',
-  password: '12345678',
-  database: 'project_se',
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
+  // database: 'project_se',
 })
 
 db.connect((err)=>{
@@ -45,7 +45,7 @@ app.post("/create", (req, res) => {
 
   // ตรวจสอบว่ามีอีเมลล์นี้ในฐานข้อมูลหรือไม่
   db.query(
-      "SELECT * FROM usersed WHERE email = ?",
+      "SELECT * FROM allusers WHERE email = ?",
       [email],
       (err, result) => {
           if (err) {
@@ -57,7 +57,7 @@ app.post("/create", (req, res) => {
           } else {
               // หากไม่มีอีเมลล์นี้ในฐานข้อมูล ให้ทำการเพิ่มข้อมูล
               db.query(
-                  "INSERT INTO usersed (email, name) VALUES (?, ?)",
+                  "INSERT INTO alluers (,email, name) VALUES (2,?, ?)",
                   [email, fullName],
                   (err, result) => {
                       if (err) {
@@ -76,9 +76,9 @@ app.post("/create", (req, res) => {
   app.post("/upload", (req, res) => {
     const excelData = req.body.excelData;
 
-    const values = excelData.map(() => "( ?)").join(", ");
+    const values = excelData.map(() => "(2, ?)").join(", ");
   
-    const sql = `INSERT INTO usersaj (email, name) VALUES ${values}`;
+    const sql = `INSERT INTO allusers (id,email, fullname) VALUES ${values}`;
   
     db.query(sql,excelData, (err, result) => {
       if (err) {
@@ -96,7 +96,7 @@ app.post("/create", (req, res) => {
 
     // ตรวจสอบว่ามีอีเมลล์นี้ในฐานข้อมูลหรือไม่
     db.query(
-        "SELECT * FROM usersed WHERE email = ?",
+        "SELECT * FROM allusers WHERE email = ?",
         [email],
         (err, result) => {
             if (err) {
@@ -108,7 +108,7 @@ app.post("/create", (req, res) => {
             } else {
                 // หากไม่มีอีเมลล์นี้ในฐานข้อมูล ให้ทำการเพิ่มข้อมูล
                 db.query(
-                    "INSERT INTO usersed (email, name) VALUES (?, ?)",
+                    "INSERT INTO allusers (id,email, fullname) VALUES (3,?, ?)",
                     [email, fullName],
                     (err, result) => {
                         if (err) {
@@ -129,9 +129,9 @@ app.post("/create", (req, res) => {
   app.post("/uploads", (req, res) => {
     const excelData = req.body.excelData;
 
-    const values = excelData.map(() => "( ?)").join(", ");
+    const values = excelData.map(() => "(3, ?)").join(", ");
   
-    const sql = `INSERT INTO usersed (email, name) VALUES ${values}`;
+    const sql = `INSERT INTO allusers (id,email, fullname) VALUES ${values}`;
   
     db.query(sql,excelData, (err, result) => {
       if (err) {
@@ -146,7 +146,7 @@ app.post("/create", (req, res) => {
 
 
 app.get('/get',(req,res)=>{
-    db.query("SELECT*FROM usersaj ORDER BY name",(err,result)=>{
+    db.query("SELECT*FROM allusers where id=2 ORDER BY fullname",(err,result)=>{
         if(err){
             console.log(err);
         }else{
@@ -155,7 +155,7 @@ app.get('/get',(req,res)=>{
     })
 })
 app.get('/get1',(req,res)=>{
-  db.query("SELECT*FROM usersed ORDER BY name",(err,result)=>{
+  db.query("SELECT*FROM allusers where id=3 ORDER BY fullname",(err,result)=>{
       if(err){
           console.log(err);
       }else{
@@ -192,7 +192,7 @@ app.get('/searchsubject', (req, res) => {
 
 
 app.get('/api/rowCount', (req, res) => {
-  const query = 'SELECT COUNT(*) AS rowCount FROM usersaj';
+  const query = 'SELECT COUNT(*) AS rowCount FROM allusers where id=2';
 
   db.query(query, (err, result) => {
     if (err) {
@@ -206,7 +206,7 @@ app.get('/api/rowCount', (req, res) => {
 });
 
 app.get('/api/rowCount1', (req, res) => {
-  const query = 'SELECT COUNT(*) AS rowCount FROM usersed';
+  const query = 'SELECT COUNT(*) AS rowCount FROM allusers where id=3';
 
   db.query(query, (err, result) => {
     if (err) {
@@ -527,7 +527,7 @@ app.get('/time', (req, res) => {
 
 app.delete('/delete/:userEmail', (req, res) => {
   const userEmail = req.params.userEmail;
-  db.query("DELETE FROM usersaj WHERE email = ?", [userEmail], (err, result) => {
+  db.query("DELETE FROM allusers WHERE email = ?", [userEmail], (err, result) => {
     if (err) {
       console.error('Error deleting data:', err);
       res.status(500).send('Error deleting data');
@@ -567,7 +567,7 @@ app.delete('/deleteopencourse/:courses', (req, res) => {
 
 app.delete('/delete1/:userEmail', (req, res) => {
   const userEmail = req.params.userEmail;
-  db.query("DELETE FROM usersed WHERE email = ?", [userEmail], (err, result) => {
+  db.query("DELETE FROM allusers WHERE email = ?", [userEmail], (err, result) => {
     if (err) {
       console.error('Error deleting data:', err);
       res.status(500).send('Error deleting data');
