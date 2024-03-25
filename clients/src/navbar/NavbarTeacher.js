@@ -22,7 +22,7 @@ const NavbarTeacher = () => {
       <div className='nav-left'>
         <ul className="navbar-nav">
         <li className={`nav-item ${selectItem === 0 ? 'selected' : ''}` }onClick={() => handleItemClick(0)}>
-            <img src="index.png" style={{ marginLeft: "20px" }}  alt="index" />
+            <img src="prakad.png" style={{ marginLeft: "20px" }}  alt="index" />
             <Link to ="/" className="nav-link" >
               ประกาศ
             </Link>
@@ -34,19 +34,19 @@ const NavbarTeacher = () => {
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 2 ? 'selected' : ''}` }onClick={() => handleItemClick(2)}>
-            <img src="resu.jpg" style={{ marginLeft: "20px" }}  alt="user" />
+            <img src="folder.png" style={{ marginLeft: "20px" }}  alt="user" />
             <Link to ="/ผลการลงทะเบียนอาจารย์" className="nav-link">
               ผลการลงทะเบียน
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 3 ? 'selected' : ''}` }onClick={() => handleItemClick(3)}>
-            <img src="subject.jpg" style={{ marginLeft: "20px" }}  alt="user" />
+            <img src="register.png" style={{ marginLeft: "20px" }}  alt="user" />
             <Link to ="/รายวิชาที่สามารถเปิดสอน" className="nav-link">
               รายวิชาที่สามารถเปิดสอน
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 4 ? 'selected' : ''}` }onClick={() => handleItemClick(4)}>
-            <img src="room.jpg" style={{ marginLeft: "20px" }}  alt="user" />
+            <img src="classroom.png" style={{ marginLeft: "20px" }}  alt="user" />
             <Link to ="/ห้องเรียนทั้งหมดอาจารย์" className="nav-link">
               ห้องเรียนทั้งหมด
             </Link>

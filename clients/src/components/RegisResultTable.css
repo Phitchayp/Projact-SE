@@ -318,8 +318,9 @@ option {
   border: 1px solid #ddd;
   border-top: none;
   z-index: 1000; /* ให้มีค่า z-index มากพอที่จะไม่โดนบังโดย elements อื่น */
-  max-height: 300px; /* หรือความสูงที่ต้องการ */
+  max-height: 150px; /* หรือความสูงที่ต้องการ */
   overflow-y: auto; /* เพิ่ม scroll bar ถ้ามีข้อมูลมากเกินไป */
+  overflow-x: hidden; 
 }
 
 .autocomplete-item {

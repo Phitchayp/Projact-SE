@@ -16,6 +16,7 @@ class RegisTa extends React.Component {
 
   componentDidMount() {
     this.fetchCourseSections();
+    
   }
   componentDidMount() {
     this.fetchData();
@@ -33,11 +34,15 @@ class RegisTa extends React.Component {
       const registrationResponse = await Axios.get(
         "http://localhost:3001/registration-data"
       );
+      const resultsResponse = await Axios.get(
+        "http://localhost:3001/result-data"
+      );
 
       this.setState({
         practicalCourses: practicalResponse.data, // Data for 'ภาคปฏิบัติ'
         lectureData: lectureResponse.data, // Data for 'ภาคบรรยาย' or lecture courses
         registrationData: registrationResponse.data, // All registration data
+        
       });
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -80,24 +85,39 @@ class RegisTa extends React.Component {
       // Handle error here
     }
   };
+  handleDeleteRow = (courseId) => {
+    Axios.delete(`http://localhost:3001/delete-course/${courseId}`)
+      .then(response => {
+        // Handle the successful deletion
+        console.log(response.data);
+        // Optionally, refresh the data in your component or remove the row from the state
+        this.setState(prevState => ({
+          lectureCourses: prevState.lectureCourses.filter(course => course.id !== courseId)
+        }));
+      })
+      .catch(error => {
+        // Handle the error case
+        console.error('There was an error!', error);
+      });
+  };
   renderCourses = (courses) => {
     return courses.flatMap((course, index) => (
       Array.from({ length: course.section }, (_, sectionIndex) => (
         <tr key={`${index}-${sectionIndex}`}>
         <td>
           <div className="testtable-image-container">
-            <img
-              src={MyImage}
-              alt=" "
-              className="testtable-centered-image"
-              onClick={this.handleDeleteRow}
-            />
+          <img
+        src={MyImage}
+        alt="Delete"
+        className="testtable-centered-image"
+        onClick={() => this.handleDeleteRow(course.id)}
+      />
           </div>
         </td>
         <td>{course.year}</td> {/* Display the year data here */}
-        <td>{course.course_code}</td>
-        <td>{course.course_name}</td>
-        <td>3</td>
+        <td>{course.sbj_code}</td>
+        <td>{course.sbj_name}</td>
+        <td>{course.lec}</td>
         <td>1</td>
         <td>800</td>
         <td>
@@ -148,7 +168,7 @@ class RegisTa extends React.Component {
   //   }
   // }
   render() {
-    const { lectureData } = this.state;
+    const { lectureCourses, practicalCourses } = this.state;
 
     document.addEventListener("DOMContentLoaded", function () {
       // เพิ่มโค้ดที่ต้องการให้ทำงานหลังจากการโหลดหน้าเว็บเสร็จสมบูรณ์ที่นี่
@@ -180,14 +200,14 @@ class RegisTa extends React.Component {
 
     return (
       <div className="testtable-turnleft-all">
-        {/* <RegisResultTable></RegisResultTable> */}
-        {/* ตารางภาคบรรยาย */}
-        <header className="testtable-Texthead">
-          <div>ภาคบรรยาย</div>
-          <table className="testtable-bordered-table">
-            <thead>
-              <tr>
-                <th> </th>
+        {lectureCourses.length > 0 && (
+          <>
+            <header className="testtable-Texthead">
+              <div>ภาคบรรยาย</div>
+              <table className="testtable-bordered-table">
+                <thead>
+                  <tr>
+                    <th> </th>
                 <th>หลักสูตร</th>
                 <th>รหัสวิชา</th>
                 <th>ชื่อวิชา</th>
@@ -199,15 +219,14 @@ class RegisTa extends React.Component {
                 <th>วัน</th>
                 <th>เวลา</th>
                 <th>หมายเหตุ</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.renderCourses(this.state.lectureCourses)}
-            </tbody>
-          </table>
-        </header>
-
-        <div>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.renderCourses(lectureCourses)}
+                </tbody>
+              </table>
+            </header>
+            <div>
           <div class="testtable-buttonchange">
             <div class="RegisResultTable-saveButton">
               <button id="saveButtonLec">
@@ -216,14 +235,17 @@ class RegisTa extends React.Component {
             </div>
           </div>
         </div>
-        {/* ตารางภาคปฏิบัติ */}
-        <header className="testtable-Texthead">
-          <div>ภาคปฏิบัติ</div>
-          <div className="box-table-container">
-            <table className="testtable-bordered-table">
-              <thead>
-                <tr>
-                  <th></th>
+          </>
+        )}
+
+        {practicalCourses.length > 0 && (
+          <>
+            <header className="testtable-Texthead">
+              <div>ภาคปฏิบัติ</div>
+              <table className="testtable-bordered-table">
+                <thead>
+                  <tr>
+                    <th></th>
                   <th>หลักสูตร</th>
                   <th>รหัสวิชา</th>
                   <th>ชื่อวิชา</th>
@@ -236,15 +258,14 @@ class RegisTa extends React.Component {
                   <th>เวลา</th>
                   <th>ห้องlab</th>
                   <th>หมายเหตุ</th>
-                </tr>
-              </thead>
-              <tbody>
-              {this.renderCourses(this.state.practicalCourses)}
-              </tbody>
-            </table>
-          </div>
-        </header>
-        <div>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.renderCourses(practicalCourses)}
+                </tbody>
+              </table>
+            </header>
+           <div>
           <div class="testtable-buttonchange">
             <div class="RegisResultTable-saveButton">
               <button id="saveButtonLab">
@@ -253,8 +274,9 @@ class RegisTa extends React.Component {
             </div>
           </div>
         </div>
+          </>
+        )}
 
-        {/* ตารางผลการลงทะเบียน */}
         <header className="testtable-Texthead">
           <div>ผลการลงทะเบียนเบื้องต้น</div>
           <table className="testtable-bordered-table">
@@ -375,6 +397,7 @@ class RegisTa extends React.Component {
           </div>
         </div>
       </div>
+
     );
   }
 }

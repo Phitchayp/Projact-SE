@@ -21,21 +21,21 @@ const NavbarAdmin = () => {
         <ul className="navbar-nav">
         <li className={`nav-item ${selectItem === 0 ? 'selected' : ''}` }
         onClick={() => handleItemClick(0)}>
-            <img src="index.png" style={{ marginLeft: "20px" }} alt="index" />
+            <img src="prakad.png" style={{ marginLeft: "20px" }} alt="index" />
             <Link to="/" className="nav-link">
               ประกาศ
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 1 ? 'selected' : ''}` }
         onClick={() => handleItemClick(1)}>
-            <img src="time.png" style={{ marginLeft: "20px" }} alt="time" />
+            <img src="calender.png" style={{ marginLeft: "20px" }} alt="time" />
             <Link to="/กำหนดการ" className="nav-link">
               กำหนดการ
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 2 ? 'selected' : ''}` }
         onClick={() => handleItemClick(2)}>
-            <img src="user.png" style={{ marginLeft: "20px" }} alt="user" />
+            <img src="useru.png" style={{ marginLeft: "20px" }} alt="user" />
             <Link to="/ข้อมูลผู้ใช้งาน" className="nav-link">
               ข้อมูลผู้ใช้งาน
             </Link>
