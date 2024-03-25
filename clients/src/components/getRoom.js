@@ -16,21 +16,23 @@ const RoomList = () => {
     }, []);
 
     return (
-        <div>
-
+        <table >
+            <tr className='Room-Items-open'>
+              <th className='checkbox-text2'>ตึก</th>
+              <th className='checkbox-text2'>เลขห้อง</th>
+              <th className='checkbox-text2'>จำนวน(ที่นั่ง)</th>
+            </tr>
             {rooms.map((rooms) => (
-                <div key={rooms.id} className='Room-Items-open'>
-                    <div className='checkbox-text'>{` ${rooms.building}`}</div>
-                    <div className='checkbox-text2'>{`${rooms.room} `}</div>
-                    <div className='checkbox-text3'>{`${rooms.quantity}`}</div>
-
-
+                <tbody>
+                <tr key={rooms.id} className='Room-Items-open'>
+                    <td className='checkbox-text'>{`${rooms.building}`}</td>
+                    <td className='checkbox-text'>{`${rooms.room}`}</td>
+                    <td className='checkbox-text'>{`${rooms.quantity}`}</td>
                     {/* <div className='CheckboxOpenCourse-status'>สถานะ:</div> */}
-                </div>
+                </tr>
+                </tbody>
             ))}
-
-            
-        </div>
+        </table>
     );
 };
 

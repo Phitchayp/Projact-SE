@@ -38,7 +38,7 @@ function RoomImport() {
       </div>
       <h3 style={{ marginTop:'100px' ,color: '#8C3941' }}>ห้องเรียนที่เปิดสอน</h3>
 
-      <div class="ListCourse-NewBox">
+      <div>
         <RoomList/>
       </div>
     </div>

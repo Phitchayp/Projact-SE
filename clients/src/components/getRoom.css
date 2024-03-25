@@ -3,29 +3,35 @@
     align-items: flex-start;
     /* justify-content: space-between; */
      /* จัดแถบสถานะทางซ้ายสุด */
-    width: 860px;
-    height: 48px;
+    width: 850px;
     /* background-color: #127151; */
     font-family: 'kanit';
-    margin-left: 20px;
+    justify-content: center;
+    font-size: 20px;
 }
 
 .Room-Items-open .checkbox-text {
-    font-size: 16px;
+    font-size: 15px;
     display: flex;
-    justify-content: flex-start; 
-    align-items: flex-start;
+    width: 500px;
+    height: 60px;
+    font-family: 'kanit';
+    justify-content: center; 
+    align-items: center;
 
      /* ทำให้ข้อความขยายตามพื้นที่ */
      /* background-color: aquamarine; */
 }
 
 .Room-Items-open .checkbox-text2 {
+    font-size: 20px;
     display: flex;
-    justify-content: center;
+    width: 500px;
+    height: 60px;
+    font-family: 'kanit';
+    justify-content: center; 
     align-items: center;
-    /* background-color: blue; */
-    margin-left: 50%;  
+    background-color: #CCDCD7;
 }
 
 
@@ -62,4 +68,37 @@
     font-size: 16px;
     cursor: pointer;
     
+}
+
+.turnleft-all{
+    position: relative;
+    left: 350px;
+    margin-top: 128px;
+  }
+
+.row {
+    display: flex;
+    justify-content: center;
+    /* จัดให้ข้อความอยู่ตรงกลางตามแนวนอน */
+    align-items: center;
+    /* จัดให้ข้อความอยู่ตรงกลางตามแนวตั้ง */
+    background-color: #D9D9D9;
+    /* กำหนดสีพื้นหลังเป็นสีเทา */
+    height: 50px;
+}
+
+.row1 {
+    flex-basis: calc(51% - 10px);
+    /* ความกว้างของแต่ละคอลัมน์ */
+    padding: 1px;
+    border: 1px solid #000;
+    /* เส้นขอบของแต่ละคอลัมน์ */
+    background-color: #ffffff;
+    display: flex;
+    /* ทำให้เนื้อหาอยู่ในคอลัมน์เรียงตรงกลาง */
+    align-items: center;
+    /* จัดให้เนื้อหาอยู่ตรงกลางในแนวตั้ง */
+    justify-content: center;
+    /* จัดให้เนื้อหาอยู่ตรงกลางในแนวนอน */
+
 }
