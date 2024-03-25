@@ -23,12 +23,15 @@ const db = mysql.createConnection({
   // user: 'root',
   // password: '',
   // database: 'project_se',
-
-
   host: 'localhost',
   user: 'root',
-  password: '12345678',
-  database: 'project_se',
+  password: '',
+  database: 'tarangsorn',
+
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
+  // database: 'project_se',
 })
 
 db.connect((err)=>{
@@ -605,37 +608,113 @@ app.get('/courset', (req, res) => {
 });
 
 
-  app.get('/search-courses', (req, res) => {
-    const { query } = req.query; // รับคำค้นหาจาก query string
-    // ตัวอย่างคำสั่ง SQL สำหรับค้นหาในตาราง courses
-    const sql = 'SELECT * FROM course WHERE subject_id LIKE ? OR subject_name LIKE ?';
-    db.query(sql, [`%${query}%`, `%${query}%`], (err, results) => {
-      if (err) {
-        console.error('Error searching courses:', err);
-        return res.status(500).send('Error searching courses');
-      }
-      res.json(results); // ส่งข้อมูลรายวิชาที่ค้นหาได้กลับไปยัง frontend
-    });
-  });
-  
+app.get("/search-courses", (req, res) => {
+  const { query, checkboxValue } = req.query;
+  const yearValues = checkboxValue
+    .split(",")
+    .filter((year) => ["55", "60", "65"].includes(year));
 
-  app.post('/register', (req, res) => {
-    const { course_code, course_name, section, lectureOrLab, branch, year } = req.body;
-    
-    // ตรวจสอบข้อมูลที่จำเป็น
-    if (!course_code || !course_name || !section || !lectureOrLab || !branch || !year) {
-      return res.status(400).send('Missing required fields');
+  let queries = yearValues.map((year) => {
+    const tableName = `course${year}s`;
+    // Use DISTINCT to avoid duplicates
+    return `(SELECT DISTINCT sbj_code, sbj_name, sbj_year, lec, lab FROM ${tableName} WHERE sbj_code LIKE ? OR sbj_name LIKE ?)`;
+  });
+
+  let combinedQuery = queries.join(" UNION "); // UNION already ensures distinct rows across combined results
+  let queryParams = [];
+  yearValues.forEach(() => {
+    queryParams.push(`%${query}%`, `%${query}%`);
+  });
+
+  if (yearValues.length === 0) {
+    return res.json([]);
+  }
+
+  db.query(combinedQuery, queryParams, (err, results) => {
+    if (err) {
+      console;
+      error("Error searching courses:", err);
+      return res.status(500).send("Error searching courses");
     }
-  
-    const query = 'INSERT INTO registration_records (course_code, course_name, section, lectureOrLab, branch, year) VALUES (?, ?, ?, ?, ?, ?)';
-    
-    db.query(query, [course_code, course_name, section, lectureOrLab, branch, year], (err, results) => {
-      if (err) {
-        console.error('Failed to insert registration_records: ', err);
-        return res.status(500).send('Error saving registration_records');
+    // Remove any potential duplicates that could occur across different tables
+    // This is a safety net since UNION should already prevent this
+    const uniqueResults = results.reduce((acc, current) => {
+      const x = acc.find((item) => item.sbj_code === current.sbj_code);
+      if (!x) {
+        return acc.concat([current]);
+      } else {
+        return acc;
       }
-      res.status(201).send('Registration successful');
-    });
+    }, []);
+
+    res.json(uniqueResults);
+  });
+});
+
+app.post("/register", (req, res) => {
+  const {
+    sbj_code,
+    sbj_name,
+    section,
+    lectureOrLab,
+    branch,
+    year,
+    lec,
+    lab,
+    sbj_year,
+  } = req.body;
+
+  // Check for missing data
+  const missingFields = [];
+  if (!sbj_code) missingFields.push("sbj_code");
+  if (!sbj_name) missingFields.push("sbj_name");
+  if (!section) missingFields.push("section");
+  if (!lectureOrLab) missingFields.push("lectureOrLab");
+  if (!branch) missingFields.push("branch");
+  if (!year) missingFields.push("year");
+  if (!sbj_year) missingFields.push("year");
+  if (!lec) missingFields.push("year");
+  if (!lab) missingFields.push("year");
+
+  if (missingFields.length > 0) {
+    return res
+      .status(400)
+      .send(`Missing required fields: ${missingFields.join(", ")}`);
+  }
+
+  const query =
+    "INSERT INTO registration_records (sbj_code, sbj_name, section, lectureOrLab, branch, year, lec, lab , sbj_year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+  db.query(
+    query,
+    [
+      sbj_code,
+      sbj_name,
+      section,
+      lectureOrLab,
+      branch,
+      year,
+      lec,
+      lab,
+      sbj_year,
+    ],
+    (err, results) => {
+      if (err) {
+        console.error("Failed to insert registration_records:", err);
+        return res
+          .status(500)
+          .send(
+            "Error saving registration_records. Please contact support if this issue persists."
+          );
+      }
+      res
+        .status(201)
+        .send({
+          message: "Registration successful",
+          registrationId: results.insertId,
+        }); // Assuming 'results.insertId' is available and relevant
+    }
+  );
 });
 
 // GET endpoint for retrieving 'ภาคปฏิบัติ' data
