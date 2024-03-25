@@ -193,14 +193,14 @@ function CheckboxOpenCourse() {
                             <div className='leftleft'>
 
                                 {/* All */}
-                                <input style={{width:'15px',height:'15px',marginTop:'5px'}} type="checkbox" id="selectAll" checked={isChecked} onChange={() => handleCheckboxAllChange('selectAll', !isChecked)} />
+                                <input style={{ width: '15px', height: '15px', marginTop: '5px' }} type="checkbox" id="selectAll" checked={isChecked} onChange={() => handleCheckboxAllChange('selectAll', !isChecked)} />
 
 
-                                <span className="CheckboxOpenCourse-checkbox-text" style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold' ,marginButton:'10px'}}>เลือกทั้งหมด</span>
+                                <span className="CheckboxOpenCourse-checkbox-text" style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginButton: '10px' }}>เลือกทั้งหมด</span>
                             </div>
                         </div>
                         {/* ทีละอัน */}
-                        <div class="CheckboxOpenCourse-NewBox" style={{backgroundColor: '#dcccd4' }}>
+                        <div class="CheckboxOpenCourse-NewBox" style={{ backgroundColor: '#dcccd4' }}>
                             {/* <CourseList courses={courses} setListCheck={setListCheck}></CourseList> */}
                             <div>
                                 {courses.map((course) => (
@@ -224,12 +224,12 @@ function CheckboxOpenCourse() {
                                             <div className='checkbox-text' style={{ marginLeft: '10px' }}>{`${course.subject_name}`}</div>
                                             <div className='check-text2' >{`${course.credit}`}</div>
                                             <div style={{ marginRight: '20px' }}>{`${course.category}`}</div>
-                                            <LuDelete  style={{fontSize:'24px'}} 
-                                            onClick={() => {
-                                                if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลรายวิชา : ${course.subject_name} ออกจากระบบ?`)) {
-                                                  handleDeleteCourse(course.courseid);
-                                                }
-                                              }}/>
+                                            <LuDelete style={{ fontSize: '24px' }}
+                                                onClick={() => {
+                                                    if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลรายวิชา : ${course.subject_name} ออกจากระบบ?`)) {
+                                                        handleDeleteCourse(course.courseid);
+                                                    }
+                                                }} />
 
                                             {/* <div className='CheckboxOpenCourse-status'>สถานะ:</div> */}
                                         </div>
@@ -247,15 +247,21 @@ function CheckboxOpenCourse() {
                 <div>
 
                 </div>
+                <div class="CheckboxOpenCourse-changeButton2">
 
-                <div class="CheckboxOpenCourse-changeButton">
-                    <div class="RegisResultTable-saveButton">
-                        <button id="saveButtonOpenCourse" onClick={() => saveOpenCourse(listCheck)}>
-                            <p class="RegisResultTable-saveButtontext">บันทึก</p>
+                    <div className='CheckboxOpenCourse-deleteButton'>
+                        <button id="deleteButtonOpenCourse">
+                            <p class="CheckboxOpenCourse-saveButtontext">ลบข้อมูล</p>
                         </button>
                     </div>
-
+                    <div class="CheckboxOpenCourse-saveButton" style={{ marginLeft: '72%' }}>
+                        <button id="saveButtonOpenCourse" onClick={() => saveOpenCourse(listCheck)}>
+                            <p class="CheckboxOpenCourse-saveButtontext">บันทึก</p>
+                        </button>
+                    </div>
                 </div>
+
+
 
             </div>
             <div>
@@ -266,7 +272,7 @@ function CheckboxOpenCourse() {
                     <div className='CheckboxOpenCourse-boxOpensub' style={{ marginTop: '18px' }}>
                         <div className='CheckboxOpenCourse-dropdown'>
                             {/*                             
-                            <p2 style={{ fontFamily: 'Kanit, sans-serif' }}>หลักสูตร</p2> */}
+        <p2 style={{ fontFamily: 'Kanit, sans-serif' }}>หลักสูตร</p2> */}
                             <div className='CheckboxOpenCourse-dropdown2' >
                                 <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>หลักสูตร</p>
                                 <select>
@@ -307,6 +313,13 @@ function CheckboxOpenCourse() {
                         </div>
 
 
+                    </div>
+                    <div class="CheckboxOpenCourse-changeButton2">
+                        <div className='CheckboxOpenCourse-deleteButton2'>
+                            <button id="deleteButtonOpenCourse2" >
+                                <p class="CheckboxOpenCourse-saveButtontext">ลบข้อมูล</p>
+                            </button>
+                        </div>
                     </div>
 
                 </div>
