@@ -48,11 +48,12 @@ const UploadRoom = ({selectedValue8, selectedValue9}) => {
           // selectedValue9:selectedValue9
       },
       ]);
-    });
-
-    // console.log(excelData);
-    console.log(setroomList)
-  };
+    }).catch(error => {
+      console.error('Error saving data:', error);
+      window.alert('ข้อมูลไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่');
+      console.log(setroomList)
+  });
+};
 
 
   const handleDrop = (e) => {
