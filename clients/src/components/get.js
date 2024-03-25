@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';  // Import Axios here
 import bin from '..//assets/bin.png';
 import userIcon from '..//assets/userIcon.png';
+import { AiOutlineUserDelete } from "react-icons/ai";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -45,10 +46,9 @@ const UserList = () => {
                   <p style={{ color:'black',marginTop:'-30px'}}>Email: {user.email}</p>
                 </div>
               </div>
-              <img
-                style={{ width: '30px', height: '30px', cursor: 'pointer' }}
-                src={bin}
-                alt="Delete Icon"
+              <AiOutlineUserDelete
+                style={{ width: '30px', height: '30px', cursor: 'pointer',color:'black',marginRight:'8px' }}
+                
                 onClick={() => {
                   if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลผู้ใช้ Email : ${user.email} ออกจากระบบ?`)) {
                     handleDeleteUser(user.email);

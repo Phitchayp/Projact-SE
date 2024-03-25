@@ -538,6 +538,33 @@ app.delete('/delete/:userEmail', (req, res) => {
   });
 });
 
+app.delete('/deletesub/:courses', (req, res) => {
+  const courses = req.params.courses;
+  db.query("DELETE FROM course WHERE courseid = ?", [courses], (err, result) => {
+    if (err) {
+      console.error('Error deleting data:', err);
+      res.status(500).send('Error deleting data');
+    } else {
+      console.log('Deleted user with email:', courses);
+      res.status(200).send('Data deleted successfully');
+    }
+  });
+});
+
+
+app.delete('/deleteopencourse/:courses', (req, res) => {
+  const courses = req.params.courses;
+  db.query("DELETE FROM opencourse WHERE courseid = ?", [courses], (err, result) => {
+    if (err) {
+      console.error('Error deleting data:', err);
+      res.status(500).send('Error deleting data');
+    } else {
+      console.log('Deleted user with email:', courses);
+      res.status(200).send('Data deleted successfully');
+    }
+  });
+});
+
 app.delete('/delete1/:userEmail', (req, res) => {
   const userEmail = req.params.userEmail;
   db.query("DELETE FROM usersed WHERE email = ?", [userEmail], (err, result) => {
