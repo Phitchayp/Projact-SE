@@ -152,10 +152,13 @@ input[type="checkbox"]:checked ~ .CheckboxOpenCourse-status::after {
 
 /* 
 ////// */
-.CheckboxOpenCourse-changeButton{
-    position: relative;
-    margin-left: 85%;
+.CheckboxOpenCourse-changeButton2{
+    /* position: relative; */
     margin-top: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
 
@@ -193,3 +196,103 @@ input[type="checkbox"]:checked ~ .CheckboxOpenCourse-status::after {
 .kanit-font {
     font-family: 'Kanit', sans-serif;
 }
+
+.CheckboxOpenCourse-deleteButton{
+    position: relative;
+    margin-left: 40px;
+    margin-bottom: 50px;
+    justify-content: flex-start;
+}
+
+.CheckboxOpenCourse-deleteButton button {
+    width: 75px;
+    /* ลดความกว้างเพื่อให้พื้นที่สำหรับขอบเพียงพอ */
+    height: 28px;
+    /* ลดความสูงเพื่อให้พื้นที่สำหรับขอบเพียงพอ */
+    padding: 2px;
+    /* เพิ่มขอบฟิกซ์สำหรับปุ่ม */
+    border: 5px solid #711212;
+    /* ขอบมน 5px สี #127151 */
+    border-radius: 5px;
+    background-color: #711212;
+    /* พื้นหลังสี #127151 */
+    transition: transform 0.2s;
+    /* เพิ่ม transition เพื่อทำให้การเปลี่ยนแปลงเกิดขึ้นเรื่อยๆ */
+    cursor: pointer;
+    margin-top: -30%;
+    margin-left: 40px;
+    justify-content: flex-start;
+  }
+
+  .CheckboxOpenCourse-deleteButtontext {
+    color: white;
+    /* สีตัวอักษรขาว */
+    font-size: 14px;
+    /* ขนาดตัวอักษร */
+    font-family: 'Kanit';
+    margin-top: -4px;
+  
+  }
+
+  .CheckboxOpenCourse-saveButton{
+    position: relative;
+    margin-right: 50%;
+    margin-bottom: 50px;
+    justify-content: flex-start;
+}
+
+.CheckboxOpenCourse-saveButton button {
+    width: 75px;
+    /* ลดความกว้างเพื่อให้พื้นที่สำหรับขอบเพียงพอ */
+    height: 28px;
+    /* ลดความสูงเพื่อให้พื้นที่สำหรับขอบเพียงพอ */
+    padding: 2px;
+    /* เพิ่มขอบฟิกซ์สำหรับปุ่ม */
+    border: 5px solid #127151;
+    /* ขอบมน 5px สี #127151 */
+    border-radius: 5px;
+    background-color: #127151;
+    /* พื้นหลังสี #127151 */
+    transition: transform 0.2s;
+    /* เพิ่ม transition เพื่อทำให้การเปลี่ยนแปลงเกิดขึ้นเรื่อยๆ */
+    cursor: pointer;
+    justify-content: flex-end;
+  }
+
+.CheckboxOpenCourse-saveButtontext {
+    color: white;
+    /* สีตัวอักษรขาว */
+    font-size: 14px;
+    /* ขนาดตัวอักษร */
+    font-family: 'Kanit';
+    margin-top: -4px;
+  
+  }
+
+  .CheckboxOpenCourse-deleteButton2{
+    display: flex;
+    position: relative;
+    margin-left: 40px;
+    margin-bottom: 50px;
+    justify-content: flex-start;
+}
+
+.CheckboxOpenCourse-deleteButton2 button {
+    width: 75px;
+    /* ลดความกว้างเพื่อให้พื้นที่สำหรับขอบเพียงพอ */
+    height: 28px;
+    /* ลดความสูงเพื่อให้พื้นที่สำหรับขอบเพียงพอ */
+    padding: 2px;
+    /* เพิ่มขอบฟิกซ์สำหรับปุ่ม */
+    border: 5px solid #711212;
+    /* ขอบมน 5px สี #127151 */
+    border-radius: 5px;
+    background-color: #711212;
+    /* พื้นหลังสี #127151 */
+    transition: transform 0.2s;
+    /* เพิ่ม transition เพื่อทำให้การเปลี่ยนแปลงเกิดขึ้นเรื่อยๆ */
+    cursor: pointer;
+    margin-top:-120%;
+    margin-left: 40px;
+    justify-content: flex-start;
+  }
