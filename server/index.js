@@ -23,15 +23,15 @@ const db = mysql.createConnection({
   // user: 'root',
   // password: '',
   // database: 'project_se',
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'tarangsorn',
-
   // host: 'localhost',
   // user: 'root',
-  // password: '12345678',
-  // database: 'project_se',
+  // password: '',
+  // database: 'tarangsorn',
+
+  host: 'localhost',
+  user: 'root',
+  password: '12345678',
+  database: 'project_se',
 })
 
 db.connect((err)=>{
