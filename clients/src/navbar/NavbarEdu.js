@@ -19,19 +19,19 @@ const NavbarEdu = () => {
         <ul className="navbar-nav">
           <li className={`nav-item ${selectItem === 0 ? 'selected' : ''}` }onClick={() => handleItemClick(0)}>
             <img src="prakad.png" style={{ marginLeft: "20px" }} alt="index" />
-            <Link to ="/" className="nav-link">
+            <Link to ="/EduNoti" className="nav-link">
               ประกาศ
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 1 ? 'selected' : ''}` }onClick={() => handleItemClick(1)}>
             <img src="folder.png" style={{ marginLeft: "20px" }}  alt="time" />
-            <Link to="/ผลการลงทะเบียน" className="nav-link">
+            <Link to="/RegisResults" className="nav-link">
               ผลการลงทะเบียน
             </Link>
           </li>
           <li className={`nav-item ${selectItem === 2 ? 'selected' : ''}` }onClick={() => handleItemClick(2)}>
             <img src="import.png" style={{ marginLeft: "20px" }}  alt="user" />
-            <Link to="/รายวิชาที่เปิดสอน" className="nav-link">
+            <Link to="/CoursesTaught" className="nav-link">
               นำเข้ารายวิชา
             </Link>
           </li>
@@ -43,7 +43,7 @@ const NavbarEdu = () => {
           </li>
           <li className={`nav-item ${selectItem === 4 ? 'selected' : ''}` }onClick={() => handleItemClick(4)}>
             <img src="classroom.png" style={{ marginLeft: "20px" }}  alt="user" />
-            <Link to="/ห้องเรียนทั้งหมด" className="nav-link">
+            <Link to="/AllRoom" className="nav-link">
               ห้องเรียนทั้งหมด
             </Link>
           </li>
