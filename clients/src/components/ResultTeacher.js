@@ -28,6 +28,8 @@ function ResultTeacher() {
   // State to hold the fetched schedule data
   const [schedule, setSchedule] = useState([]);
 
+  const name = sessionStorage.getItem("name")
+
   // Fetch data from your API
   useEffect(() => {
       const fetchData = async () => {
@@ -57,7 +59,7 @@ function ResultTeacher() {
         <div className="table-container">
           <div>
             <p className="ResultTeacher-texthead">
-              ตารางสอนของ อาจารย์: <span className="ResultTeacher-nametext">สมเกียรติ ใจดี</span>
+              ตารางสอนของ อาจารย์: <span className="ResultTeacher-nametext">{name}</span>
             </p>
           </div>
   
