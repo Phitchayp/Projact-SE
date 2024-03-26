@@ -23,15 +23,15 @@ const db = mysql.createConnection({
   // user: 'root',
   // password: '',
   // database: 'project_se',
-  // host: 'localhost',
-  // user: 'root',
-  // password: '',
-  // database: 'tarangsorn',
-
   host: 'localhost',
   user: 'root',
-  password: '12345678',
-  database: 'project_se',
+  password: '',
+  database: 'tarangsorn',
+
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
+  // database: 'project_se',
 })
 
 db.connect((err)=>{
@@ -610,71 +610,58 @@ app.get('/courset', (req, res) => {
 
 app.get("/search-courses", (req, res) => {
   const { query, checkboxValue } = req.query;
-  const yearValues = checkboxValue
+
+  const courseValues = checkboxValue
     .split(",")
-    .filter((year) => ["55", "60", "65"].includes(year));
+    .filter(course => ["55", "60", "65"].includes(course));
 
-  let queries = yearValues.map((year) => {
-    const tableName = `course${year}s`;
-    // Use DISTINCT to avoid duplicates
-    return `(SELECT DISTINCT sbj_code, sbj_name, sbj_year, lec, lab FROM ${tableName} WHERE sbj_code LIKE ? OR sbj_name LIKE ?)`;
-  });
-
-  let combinedQuery = queries.join(" UNION "); // UNION already ensures distinct rows across combined results
-  let queryParams = [];
-  yearValues.forEach(() => {
-    queryParams.push(`%${query}%`, `%${query}%`);
-  });
-
-  if (yearValues.length === 0) {
+  if (courseValues.length === 0) {
     return res.json([]);
   }
 
-  db.query(combinedQuery, queryParams, (err, results) => {
+  let sqlQuery = `SELECT DISTINCT subject_id, subject_name, credit, category FROM course WHERE course IN (${courseValues.map(() => '?').join(', ')})`;
+
+  let queryParams = [...courseValues];
+
+  // If a search query is provided, extend the SQL query to include a search condition.
+  if (query) {
+    sqlQuery += ` AND (subject_id LIKE ? OR subject_name LIKE ?)`;
+    queryParams.push(`%${query}%`, `%${query}%`); // Add the search query to the parameters array for both subject_id and subject_name.
+  }
+
+  db.query(sqlQuery, queryParams, (err, results) => {
     if (err) {
-      console;
-      error("Error searching courses:", err);
+      console.error("Error searching courses:", err);
       return res.status(500).send("Error searching courses");
     }
-    // Remove any potential duplicates that could occur across different tables
-    // This is a safety net since UNION should already prevent this
-    const uniqueResults = results.reduce((acc, current) => {
-      const x = acc.find((item) => item.sbj_code === current.sbj_code);
-      if (!x) {
-        return acc.concat([current]);
-      } else {
-        return acc;
-      }
-    }, []);
-
-    res.json(uniqueResults);
+    res.json(results);
   });
 });
 
+
 app.post("/register", (req, res) => {
   const {
-    sbj_code,
-    sbj_name,
+    subject_id,
+    subject_name,
     section,
     lectureOrLab,
     branch,
-    year,
-    lec,
-    lab,
-    sbj_year,
+    years,
+    credit,
+    category,
+    
   } = req.body;
 
   // Check for missing data
   const missingFields = [];
-  if (!sbj_code) missingFields.push("sbj_code");
-  if (!sbj_name) missingFields.push("sbj_name");
+  if (!subject_id) missingFields.push("subject_id");
+  if (!subject_name) missingFields.push("subject_name");
   if (!section) missingFields.push("section");
   if (!lectureOrLab) missingFields.push("lectureOrLab");
   if (!branch) missingFields.push("branch");
-  if (!year) missingFields.push("year");
-  if (!sbj_year) missingFields.push("year");
-  if (!lec) missingFields.push("year");
-  if (!lab) missingFields.push("year");
+  if (!years) missingFields.push("years");
+  if (!credit) missingFields.push("credit");
+  if (!category) missingFields.push("category");
 
   if (missingFields.length > 0) {
     return res
@@ -683,20 +670,19 @@ app.post("/register", (req, res) => {
   }
 
   const query =
-    "INSERT INTO registration_records (sbj_code, sbj_name, section, lectureOrLab, branch, year, lec, lab , sbj_year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO registration_records (subject_id, subject_name, section, lectureOrLab, branch, years, credit, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
   db.query(
     query,
     [
-      sbj_code,
-      sbj_name,
+      subject_id,
+      subject_name,
       section,
       lectureOrLab,
       branch,
-      year,
-      lec,
-      lab,
-      sbj_year,
+      years,
+      credit,
+      category,
     ],
     (err, results) => {
       if (err) {
