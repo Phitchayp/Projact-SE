@@ -38,7 +38,8 @@ function RegisResultTable() {
   
     try {
       const response = await Axios.get(
-        `http://localhost:3001/search-courses?query=${searchText}&checkboxValue=${years}`
+        `http://localhost:3001/search-courses?query=${encodeURIComponent(searchText)}&checkboxValue=${encodeURIComponent(years)}`
+            
       );
       setSearchResults(response.data); // Update state with search results
     } catch (error) {
@@ -58,20 +59,18 @@ function RegisResultTable() {
   };
 
   const [selectedCourse, setSelectedCourse] = useState({
-    sbj_code: "",
-    sbj_name: "",
-    sbj_year: "",
-    lab: "",
-    lec: "",
+    subject_id: "",
+    subject_name: "",
+    credit: "",
+    category: "",
   });
   const handleSelectCourse = (course) => {
-    setSearchText(`${course.sbj_code} - ${course.sbj_name}`);
+    setSearchText(`${course.subject_id} - ${course.subject_name}`);
     setSelectedCourse({
-      sbj_code: course.sbj_code,
-      sbj_name: course.sbj_name,
-      sbj_year: course.sbj_year,
-      lab: course.lab,
-      lec: course.lec,
+      subject_id: course.subject_id,
+      subject_name: course.subject_name,
+      credit: course.credit,
+      category: course.category,
     });
     setSearchResults([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
   };
@@ -79,7 +78,7 @@ function RegisResultTable() {
   // ฟังก์ชันสำหรับบันทึกข้อมูล
   const saveCourseRegistration = async () => {
     // Simple client-side validation
-    if (!selectedCourse.sbj_code || !selectedCourse.sbj_name || selectedYear.length === 0 || !selectedValues.section || !selectedValues.lectureOrLab || selectedBranch.length === 0|| !selectedCourse.sbj_year || !selectedCourse.lab|| !selectedCourse.lec) {
+    if (!selectedCourse.subject_id || !selectedCourse.subject_name || selectedYear.length === 0 || !selectedValues.section || !selectedValues.lectureOrLab || selectedBranch.length === 0|| !selectedCourse.credit || !selectedCourse.category) {
       alert("Please fill out all required fields.");
       return; // Stop the function if validation fails
     }
@@ -90,15 +89,14 @@ function RegisResultTable() {
     
     try {
       const response = await Axios.post("http://localhost:3001/register", {
-        sbj_code: selectedCourse.sbj_code,
-        sbj_name: selectedCourse.sbj_name,
-        year: yearString,
+        subject_id: selectedCourse.subject_id,
+        subject_name: selectedCourse.subject_name,
+        years: yearString,
         section: selectedValues.section,
         lectureOrLab: selectedValues.lectureOrLab,
         branch: branchString,
-        lec: selectedCourse.lec, // เพิ่ม lec
-        lab: selectedCourse.lab, // เพิ่ม lab
-        sbj_year: selectedCourse.sbj_year,
+        credit: selectedCourse.credit, // เพิ่ม lec
+        category: selectedCourse.category, // เพิ่ม lab
       });
   
       alert("Registration successful!");
@@ -126,7 +124,7 @@ function RegisResultTable() {
         }
     } else {
         // Removing a selected year
-        setSelectedYear(prevSelectedYear => prevSelectedYear.filter(year => year !== value));
+        setSelectedYear(prevSelectedYear => prevSelectedYear.filter(years => years !== value));
     }
     } else if (name === "branch") {
       if (checked) {
@@ -138,12 +136,12 @@ function RegisResultTable() {
   };
   // สร้างข้อมูลตาราง
   const [selectedValues, setSelectedValues] = useState({
-    year: "",
+    years: "",
     section: "",
     lectureOrLab: "",
     branch: "",
-    course_name: "",
-    course_code: "",
+    subject_name: "",
+    subject_id: "",
   });
 
   const handleDropdownChange = (event, field) => {
@@ -221,7 +219,7 @@ function RegisResultTable() {
                             key={index}
                             onClick={() => handleSelectCourse(course)}
                           >
-                            {course.sbj_code} - {course.sbj_name}
+                            {course.subject_id} - {course.subject_name}
                           </div>
                         ))}
                       </div>
