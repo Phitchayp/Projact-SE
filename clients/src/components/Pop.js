@@ -69,7 +69,7 @@ const Pop = ({ onClose }) => {
       return;
     }
   
-    Axios.post("http://127.0.0.1:3001/creates", {
+    Axios.post("http://127.0.0.1:3001/create", {
       email: email,
       fullName: fullName,
     })

@@ -7,10 +7,11 @@ import * as XLSX from 'xlsx';
 import Axios from "axios";
 import InputEdu from '../Input/InputEdu';
 
-const UploadEdu = ({selectedValue1}) => {
+const UploadEdu = ({selectcourse,selectedValue1}) => {
   const [excelData, setExcelData] = useState(null);
   const [fileName, setFileName] = useState(null);
   const [subjectList,setsubjectList] = useState([]);
+
   
 
   const handleFileUpload = (file) => {
@@ -60,12 +61,14 @@ const UploadEdu = ({selectedValue1}) => {
     Axios.post("http://localhost:3001/uploaded", {
         excelData: excelData,
         selectedValue1: selectedValue1,
+        selectcourse:selectcourse
     }).then(() => {
         window.alert('บันทึกข้อมูลรายวิชาสำเร็จ');
         setsubjectList([
             ...subjectList,
             {
                 excelData: excelData,
+                
                 // selectedValue1: selectedValue1,
             },
         ]);

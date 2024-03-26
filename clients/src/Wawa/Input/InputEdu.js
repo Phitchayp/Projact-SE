@@ -7,7 +7,7 @@ import * as XLSX from 'xlsx';
 import Axios from "axios";
 
 
-const InputEdu = ({ selectedValue2, selectedValue3, selectedValue4, reloadPage }) => {
+const InputEdu = ({ selectcourse1,selectedValue2, selectedValue3, selectedValue4, reloadPage }) => {
     const [idSubject, setIdSubject] = useState('');
     const [subjectName, setSubjectName] = useState('');
     const [subjectList, setsubjectList] = useState([]);
@@ -29,6 +29,7 @@ const InputEdu = ({ selectedValue2, selectedValue3, selectedValue4, reloadPage }
         }
         window.alert('เพิ่มข้อมูลรายวิชาสำเร็จ')
         Axios.post("http://127.0.0.1:3001/addsub", {
+            selectcourse1: selectcourse1,
             selectedValue2: selectedValue2,
             idSubject: idSubject,
             subjectName: subjectName,
@@ -38,6 +39,7 @@ const InputEdu = ({ selectedValue2, selectedValue3, selectedValue4, reloadPage }
             setsubjectList([
                 ...subjectList,
                 {
+                    selectcourse1: selectcourse1,
                     selectedValue2: selectedValue2,
                     idSubject: idSubject,
                     subjectName: subjectName,
