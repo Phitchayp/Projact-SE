@@ -173,12 +173,43 @@ function CheckboxOpenCourse() {
                     header: 'kanit-font',
                     title: 'kanit-font',
                 }
+            }).then(() => {
+                // หลังจากกดปุ่มตกลงใน Swal.fire ให้รีโหลดหน้าเว็บ
+                window.location.reload();
             });
-            
         } catch (error) {
             console.error("Error posting data:", error);
         }
        
+    };
+    
+
+    const handleDeleteOpenCourse = async () => {
+        try {
+            await axios.delete("http://127.0.0.1:3001/deletesuball", {
+                data: {
+                    listCheck: listCheck
+                }
+            });
+    
+            console.log("Data delete successfully");
+    
+            Swal.fire({
+                title: "ลบข้อมูลสำเร็จ!",
+                text: "ลบรายวิชาที่สามารถเปิดสอน",
+                icon: "success",
+                customClass: {
+                    popup: 'kanit-font',
+                    header: 'kanit-font',
+                    title: 'kanit-font',
+                }
+            }).then(() => {
+                // หลังจากกดปุ่มตกลงใน Swal.fire ให้รีโหลดหน้าเว็บ
+                window.location.reload();
+            });
+        } catch (error) {
+            console.error("Error deleting data:", error);
+        }
     };
     
 
@@ -187,6 +218,33 @@ function CheckboxOpenCourse() {
             await axios.delete(`http://localhost:3001/deletesub/${courses}`);
             setCourses((prevsubjects) => prevsubjects.filter((courses) => courses.courseid !== courses));
             window.location.reload();
+
+        } catch (error) {
+            console.error('Error deleting data:', error);
+            alert(`ลบข้อมูล ${courses} ไม่สำเร็จ`);
+        }
+        console.log(courses)
+    };
+
+    const handleDeleteCourseFinal = async (courses) => {
+        try {
+            await axios.delete(`http://localhost:3001/deleteopensuball/${courses}`);
+            setCourses((prevsubjects) => prevsubjects.filter((courses) => courses.courseid !== courses));
+            console.log("Data delete successfully");
+    
+            Swal.fire({
+                title: "ลบข้อมูลสำเร็จ!",
+                text: "ลบรายวิชาที่สามารถเปิดสอน",
+                icon: "success",
+                customClass: {
+                    popup: 'kanit-font',
+                    header: 'kanit-font',
+                    title: 'kanit-font',
+                }
+            }).then(() => {
+                // หลังจากกดปุ่มตกลงใน Swal.fire ให้รีโหลดหน้าเว็บ
+                window.location.reload();
+            });
 
         } catch (error) {
             console.error('Error deleting data:', error);
@@ -292,7 +350,9 @@ function CheckboxOpenCourse() {
                 <div class="CheckboxOpenCourse-changeButton2">
 
                     <div className='CheckboxOpenCourse-deleteButton'>
-                        <button id="deleteButtonOpenCourse">
+                        <button id="deleteButtonOpenCourse"
+                        onClick={() => handleDeleteOpenCourse(listCheck)}
+                        >
                             <p class="CheckboxOpenCourse-saveButtontext">ลบข้อมูล</p>
                         </button>
                     </div>
@@ -359,7 +419,8 @@ function CheckboxOpenCourse() {
                     </div>
                     <div class="CheckboxOpenCourse-changeButton2">
                         <div className='CheckboxOpenCourse-deleteButton2'>
-                            <button id="deleteButtonOpenCourse2" >
+                            <button id="deleteButtonOpenCourse2"
+                            onClick={handleDeleteCourseFinal}>
                                 <p class="CheckboxOpenCourse-saveButtontext">ลบข้อมูล</p>
                             </button>
                         </div>
