@@ -87,19 +87,21 @@ class RegisTa extends React.Component {
   };
   handleDeleteRow = (courseId) => {
     Axios.delete(`http://localhost:3001/delete-course/${courseId}`)
-      .then(response => {
-        // Handle the successful deletion
-        console.log(response.data);
-        // Optionally, refresh the data in your component or remove the row from the state
-        this.setState(prevState => ({
-          lectureCourses: prevState.lectureCourses.filter(course => course.id !== courseId)
-        }));
-      })
-      .catch(error => {
-        // Handle the error case
-        console.error('There was an error!', error);
-      });
-  };
+        .then(response => {
+            // Handle the successful deletion
+            console.log(response.data);
+            // Refresh the data in your component or remove the row from the state
+            this.setState(prevState => ({
+                lectureCourses: prevState.lectureCourses.filter(course => course.id !== courseId),
+                practicalCourses: prevState.practicalCourses.filter(course => course.id !== courseId),
+            }));
+        })
+        .catch(error => {
+            // Handle the error case
+            console.error('There was an error!', error);
+        });
+};
+
   renderCourses = (courses) => {
     return courses.flatMap((course, index) => (
       Array.from({ length: course.section }, (_, sectionIndex) => (
@@ -114,10 +116,10 @@ class RegisTa extends React.Component {
       />
           </div>
         </td>
-        <td>{course.year}</td> {/* Display the year data here */}
-        <td>{course.sbj_code}</td>
-        <td>{course.sbj_name}</td>
-        <td>{course.lec}</td>
+        <td>{course.years}</td> {/* Display the year data here */}
+        <td>{course.subject_id}</td>
+        <td>{course.subject_name}</td>
+        <td>{course.credit}</td>
         <td>1</td>
         <td>800</td>
         <td>
