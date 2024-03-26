@@ -3,6 +3,7 @@ import './NavbarEdu.css';
 import {Link} from 'react-router-dom'
 
 const NavbarEdu = () => {
+  const name = sessionStorage.getItem("name")
   const [selectItem,setSelectItem] = useState(null);
 
   const handleItemClick = (index) => {
@@ -13,7 +14,7 @@ const NavbarEdu = () => {
     <nav className="navbar">
       <div className="navbar-left">
         <img src="profile.png" alt="" />
-        <span>ฝ่ายการศึกษา<br />: ######</span>
+        <span>ฝ่ายการศึกษา<br />: {name}</span>
       </div>
       <div className='nav-left'>
         <ul className="navbar-nav">
