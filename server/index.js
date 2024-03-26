@@ -251,6 +251,16 @@ app.get('/getsub', (req, res) => {
   });
 });
 
+app.get('/opencourse2', (req, res) => {
+  db.query("SELECT * FROM opencourse ORDER BY courseid", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 app.get('/getOpenCourseList', (req, res) => {
   db.query("SELECT * FROM opencourse ORDER BY courseid", (err, result) => {
     if (err) {
@@ -271,6 +281,22 @@ app.get('/getsubsearch/:year', (req, res) => {
     }
   });
 });
+
+app.get('/getsubsearch2/:year', (req, res) => {
+  const { year } =req.params;
+  db.query("SELECT * FROM opencourse where course_year = ? ORDER BY courseid",[year],(err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+
+
+
+
 
 
 app.post("/uploaded", (req, res) => {
