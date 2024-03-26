@@ -46,8 +46,12 @@ const UploadRoom = ({selectedValue8, selectedValue9}) => {
           excelData:excelData,
           // selectedValue8:selectedValue8,
           // selectedValue9:selectedValue9
+          
       },
+      
       ]);
+      window.alert('นำข้อมูลห้องเรียนเข้าสู่ระบบ'); // แสดงกล่องข้อความเมื่อบันทึกข้อมูลเสร็จสิ้น
+      window.location.reload(); // ย้อนกลับไปหน้าก่อนหน้านี้
     }).catch(error => {
       console.error('Error saving data:', error);
       window.alert('ข้อมูลไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่');
