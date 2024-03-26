@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import './opencourse.css'
 
-const CourseList = () => {
-    const [courses, setCourses] = useState([]);
+const CourseList = ({B}) => {
+    const [courses3, setCourses3] = useState([]);
 
     useEffect(() => {
         Axios.get("http://127.0.0.1:3001/getsub")
             .then((response) => {
-                setCourses(response.data);
+                setCourses3(response.data);
             })
             .catch((error) => {
                 console.error('Error fetching course data:', error);
@@ -18,7 +18,7 @@ const CourseList = () => {
     return (
         <div>
 
-            {courses.map((course) => (
+            {B.map((course) => (
                 <div key={course.courseid} className='Course-Items-open'>
                     {/* <input type='checkbox' id={`checkText${course.courseid}`}/> */}
                     <div className='checkbox-text'>{` ${course.course_year}`}</div>
