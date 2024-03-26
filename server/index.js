@@ -7,11 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '123456',
-  database: 'databasese',
-  port: '3306'
+  // host: '127.0.0.1',
+  // user: 'root',
+  // password: '123456',
+  // database: 'databasese',
+  // port: '3306'
  //pond
   // host: 'localhost',
   // user: 'root',
@@ -28,10 +28,10 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  // host: 'localhost',
-  // user: 'root',
-  // password: '12345678',
-  // database: 'project_se',
+  host: 'localhost',
+  user: 'root',
+  password: '12345678',
+  database: 'project_se',
 })
 
 db.connect((err)=>{
@@ -272,6 +272,17 @@ app.get('/getsubsearch/:year', (req, res) => {
   });
 });
 
+
+app.get('/getsubsearch1/:year', (req, res) => {
+  const {year} =req.params;
+  db.query("SELECT * FROM opencourse where course_year = ? ORDER BY courseid",[year],(err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
 
 app.post("/uploaded", (req, res) => {
   const excelData = req.body.excelData;
