@@ -159,7 +159,9 @@ function CheckboxOpenCourse() {
         try {
             await axios.post("http://127.0.0.1:3001/opencourse", {
                 listCheck: listCheck,
+                
             });
+            
             console.log("Data posted successfully");
 
             Swal.fire({
@@ -172,10 +174,13 @@ function CheckboxOpenCourse() {
                     title: 'kanit-font',
                 }
             });
+            
         } catch (error) {
             console.error("Error posting data:", error);
         }
+       
     };
+    
 
     const handleDeleteCourse = async (courses) => {
         try {
@@ -292,7 +297,8 @@ function CheckboxOpenCourse() {
                         </button>
                     </div>
                     <div class="CheckboxOpenCourse-saveButton" style={{ marginLeft: '72%' }}>
-                        <button id="saveButtonOpenCourse" onClick={() => saveOpenCourse(listCheck)}>
+                        <button id="saveButtonOpenCourse" onClick={() => saveOpenCourse(listCheck)}
+                        >
                             <p class="CheckboxOpenCourse-saveButtontext">บันทึก</p>
                         </button>
                     </div>

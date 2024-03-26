@@ -224,22 +224,32 @@ app.get('/api/rowCount1', (req, res) => {
 
 app.post("/addroom", (req, res) => {
   const excelData = req.body.excelData;
-  // const selectedValue8=req.body.selectedValue8;
-  // const selectedValue9=req.body.selectedValue9;
+  
+  // สร้างคำสั่ง SQL เพื่อลบข้อมูลที่มี state = 1 ออกจากตาราง room
+  const deleteSql = `DELETE FROM room WHERE state = 1`;
 
-  const values = excelData.map(() => "( ?)").join(", ");
-
-  const sql = `INSERT INTO room (building,room ,quantity) VALUES ${values}`;
-
-  db.query(sql,excelData, (err, result) => {
+  db.query(deleteSql, (err, result) => {
     if (err) {
       console.log(err);
-      res.status(500).send("Error inserting values");
-    } else {
-      res.send("Values Inserted");
+      res.status(500).send("Error deleting values");
+      return; // หยุดการทำงานเมื่อเกิดข้อผิดพลาด
     }
+
+    // หลังจากลบข้อมูลเสร็จสิ้น ก็ทำการแทรกข้อมูลใหม่ลงในฐานข้อมูล
+    const values = excelData.map(() => "(?, 1)").join(", ");
+    const insertSql = `INSERT INTO room (building, room, quantity, state) VALUES ${values}`;
+
+    db.query(insertSql, excelData, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error inserting values");
+      } else {
+        res.send("Values Inserted");
+      }
+    });
   });
 });
+
 
 app.get('/getsub', (req, res) => {
   db.query("SELECT * FROM course ORDER BY courseid", (err, result) => {
@@ -632,7 +642,7 @@ app.get("/search-courses", (req, res) => {
     return res.json([]);
   }
 
-  let sqlQuery = `SELECT DISTINCT subject_id, subject_name, credit, category FROM course WHERE course IN (${courseValues.map(() => '?').join(', ')})`;
+  let sqlQuery = `SELECT DISTINCT subject_id, subject_name, credit, category FROM course WHERE courses IN (${courseValues.map(() => '?').join(', ')})`;
 
   let queryParams = [...courseValues];
 
