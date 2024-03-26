@@ -3,6 +3,8 @@ import './RoomImport.css';
 import axios from 'axios';
 import { FaFileLines } from "react-icons/fa6";
 import { Link } from 'react-router-dom'; // เพิ่มการนำเข้า Link ที่นี่
+import UploadRoom from '../Wawa/Upload/UploadRoom';
+import RoomList from '../components/getRoom';
 
 function handleClick(event) {
   const button = event.currentTarget;
@@ -16,34 +18,16 @@ function handleClick(event) {
   });
 }
 
-function CheckRoom() {
+function RoomImport() {
   return (
     <div className='turnleft-all'>
-      <h className='DateAdmin-text'>ตรวจสอบห้องเรียนที่สามารถเปิดสอนได้</h>
-      <div className="course-table">
-        <div className="column">
-          <p>ปีการศึกษา</p>
-        </div>
-        <div className="column">
-          <div>
-            <p>ห้องเรียน</p>
-          </div>
-        </div>
-      </div>
+      <h3 style={{ marginTop:'100px' ,color: '#8C3941' ,fontFamily:'Kanit' }}>ห้องเรียนที่สามารถเปิดสอนได้ในปีการศึกษานี้</h3>
 
-      <div className="course-table1">
-        <div className="column1">
-          <p>2566</p>
-        </div>
-        <div className="column2">
-          {/* ใช้ Link เพื่อเปลี่ยนหน้า */}
-          <Link to="/2566_ต้น" className="file-button" onClick={handleClick}>
-            <FaFileLines style={{ fontSize: '35px',color:'black' ,marginLeft:'110px'}} />
-          </Link>
-        </div>
+      <div>
+        <RoomList/>
       </div>
     </div>
   );
 }
 
-export default CheckRoom;
+export default RoomImport;

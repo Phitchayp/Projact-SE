@@ -3,7 +3,7 @@
     align-items: flex-start;
     /* justify-content: space-between; */
      /* จัดแถบสถานะทางซ้ายสุด */
-    width: 850px;
+    width: 1000px;
     /* background-color: #127151; */
     font-family: 'kanit';
     justify-content: center;
@@ -14,7 +14,7 @@
     font-size: 15px;
     display: flex;
     width: 500px;
-    height: 60px;
+    height: 30px;
     font-family: 'kanit';
     justify-content: center; 
     align-items: center;
@@ -27,7 +27,7 @@
     font-size: 20px;
     display: flex;
     width: 500px;
-    height: 60px;
+    height: 45px;
     font-family: 'kanit';
     justify-content: center; 
     align-items: center;
@@ -84,7 +84,7 @@
     /* จัดให้ข้อความอยู่ตรงกลางตามแนวตั้ง */
     background-color: #D9D9D9;
     /* กำหนดสีพื้นหลังเป็นสีเทา */
-    height: 50px;
+    height: 10px;
 }
 
 .row1 {
