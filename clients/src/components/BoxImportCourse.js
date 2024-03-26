@@ -26,6 +26,8 @@ function BoxImportCourse() {
     const [selectedValue2, setSelectedValue2] = useState('');
     const [selectedValue3, setSelectedValue3] = useState('');
     const [selectedValue4, setSelectedValue4] = useState('');
+    const [selectcourse, setselectcourse] = useState('');
+    const [selectcourse1, setselectcourse1] = useState('');
     const [reloadPage, setReloadPage] = useState(false); // เพิ่ม state เพื่อให้ BoxImportCourse ทำการรีเฟรชหน้าเว็บ
 
     const reloadPageHandler = () => {
@@ -46,6 +48,12 @@ function BoxImportCourse() {
     };
     const handleDropdownChange4 = (event) => {
         setSelectedValue4(event.target.value);
+    };
+    const handleDropdownChange5 = (event) => {
+        setselectcourse(event.target.value);
+    };
+    const handleDropdownChange6 = (event) => {
+        setselectcourse1(event.target.value);
     };
 
     return (
@@ -191,7 +199,7 @@ function BoxImportCourse() {
                                         <div style={{ marginLeft: '50px' }}>
                                             <b style={{ color: '#000000', fontSize: '14px' }}>หลักสูตร</b>
                                             <br />
-                                            <select style={{ marginleft: '30px' }}>
+                                            <select value={selectcourse} style={{ marginleft: '30px' } }  onChange={handleDropdownChange5}>
                                                 <option value=""></option>
                                                 <option value="70">70</option>
                                                 <option value="65">65</option>
@@ -202,7 +210,8 @@ function BoxImportCourse() {
                                     </div>
 
                                     <UploadEdu
-                                        selectedValue1={selectedValue1} />
+                                        selectedValue1={selectedValue1}
+                                        selectcourse={selectcourse} />
 
 
 
@@ -237,7 +246,7 @@ function BoxImportCourse() {
                                         <div style={{ marginLeft: '25px' }}>
                                             <b style={{ color: '#000000', fontSize: '14px' }}>หลักสูตร</b>
                                             <br />
-                                            <select style={{ marginleft: '30px' }}>
+                                            <select value={selectcourse1} style={{ marginleft: '30px' } }  onChange={handleDropdownChange6}>
                                                 <option value=""></option>
                                                 <option value="70">70</option>
                                                 <option value="65">65</option>
@@ -278,6 +287,7 @@ function BoxImportCourse() {
                                         selectedValue2={selectedValue2}
                                         selectedValue3={selectedValue3}
                                         selectedValue4={selectedValue4}
+                                        selectcourse1={selectcourse1}
                                         reloadPage={reloadPageHandler} />
 
                                 </div>

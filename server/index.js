@@ -7,11 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  // host: '127.0.0.1',
-  // user: 'root',
-  // password: '123456',
-  // database: 'databasese',
-  // port: '3306'
+  host: '127.0.0.1',
+  user: 'root',
+  password: '123456',
+  database: 'databasese',
+  port: '3306'
  //pond
   // host: 'localhost',
   // user: 'root',
@@ -28,10 +28,10 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  host: 'localhost',
-  user: 'root',
-  password: '12345678',
-  database: 'project_se',
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
+  // database: 'project_se',
 })
 
 db.connect((err)=>{
@@ -60,7 +60,7 @@ app.post("/create", (req, res) => {
           } else {
               // หากไม่มีอีเมลล์นี้ในฐานข้อมูล ให้ทำการเพิ่มข้อมูล
               db.query(
-                  "INSERT INTO alluers (,email, name) VALUES (2,?, ?)",
+                  "INSERT INTO allusers (id,email, fullname) VALUES (2,?, ?)",
                   [email, fullName],
                   (err, result) => {
                       if (err) {
@@ -276,18 +276,19 @@ app.get('/getsubsearch/:year', (req, res) => {
 app.post("/uploaded", (req, res) => {
   const excelData = req.body.excelData;
   const selectedValue1 = req.body.selectedValue1;
+  const selectcourse=req.body.selectcourse;
 
   console.log(selectedValue1);
 
   const modifiedExcelData = excelData.map(data => {
     // data.push(selectedValue1);
  
-    return [selectedValue1, ...data];
+    return [selectcourse,selectedValue1, ...data];
   });
 
-  const values = modifiedExcelData.map(() => "(?,?,?,?,?)").join(", ");
+  const values = modifiedExcelData.map(() => "(?,?,?,?,?,?)").join(", ");
 
-  const sql = `INSERT INTO course (course_year,subject_id,subject_name,credit,category ) VALUES ${values}`;
+  const sql = `INSERT INTO course (courses,course_year,subject_id,subject_name,credit,category ) VALUES ${values}`;
 
   db.query(sql, modifiedExcelData.flat(), (err, result) => {
     if (err) {
@@ -307,16 +308,17 @@ app.post("/addsub", (req, res) => {
   const selectedValue2=req.body.selectedValue2;
   const selectedValue3=req.body.selectedValue3;
   const selectedValue4=req.body.selectedValue4;
+  const selectcourse1=req.body.selectcourse1;
 
   db.query(
-    "INSERT INTO course (course_year,subject_id,subject_name,credit,category ) VALUES (?,?,?,?,?)",
-    [selectedValue2,idSubject,subjectName,selectedValue4,selectedValue3],
+    "INSERT INTO course (courses,course_year,subject_id,subject_name,credit,category ) VALUES (?,?,?,?,?,?)",
+    [selectcourse1,selectedValue2,idSubject,subjectName,selectedValue4,selectedValue3],
     (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send("An error occurred while inserting values into the database.");
       } else {
-        console.log("Values Inserted");
+        console.log(selectcourse1);
         res.send("Values Inserted");
       }
     }
