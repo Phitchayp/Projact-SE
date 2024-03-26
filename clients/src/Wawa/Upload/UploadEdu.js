@@ -64,6 +64,8 @@ const UploadEdu = ({selectcourse,selectedValue1}) => {
         selectcourse:selectcourse
     }).then(() => {
         window.alert('บันทึกข้อมูลรายวิชาสำเร็จ');
+        window.location.reload();
+        
         setsubjectList([
             ...subjectList,
             {
