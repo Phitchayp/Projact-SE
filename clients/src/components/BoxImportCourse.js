@@ -222,18 +222,18 @@ function BoxImportCourse() {
                                             <br />
                                             <select value={selectedValue4} onChange={handleDropdownChange4}>
                                                 <option value=""></option>
-                                                <option value="1">1(0-2-1)</option>
-                                                <option value="2">1(0-3-2)</option>
-                                                <option value="3">1(0-3-6)</option>
-                                                <option value="4">2(0-6-3)</option>
-                                                <option value="5">2(2-0-4)</option>
-                                                <option value="6">3(3-0-6)</option>
-                                                <option value="7">3(2-3-6)</option>
-                                                <option value="8">4(3-3-8)</option>
-                                                <option value="9">1-3</option>
-                                                <option value="10">1</option>
-                                                <option value="11">2</option>
-                                                <option value="12">6</option>
+                                                <option value="1(0-2-1)">1(0-2-1)</option>
+                                                <option value="1(0-3-2)">1(0-3-2)</option>
+                                                <option value="1(0-3-6)">1(0-3-6)</option>
+                                                <option value="2(0-6-3)">2(0-6-3)</option>
+                                                <option value="2(2-0-4)">2(2-0-4)</option>
+                                                <option value="3(3-0-6)">3(3-0-6)</option>
+                                                <option value="3(2-3-6)">3(2-3-6)</option>
+                                                <option value="4(3-3-8)">4(3-3-8)</option>
+                                                <option value="1-3">1-3</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="6">6</option>
                                             </select>
                                         </div>
 
