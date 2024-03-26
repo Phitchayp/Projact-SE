@@ -12,6 +12,8 @@ function CheckboxOpenCourse() {
     const [selectedItems, setSelectedItems] = useState([]);
     const [listCheck, setListCheck] = useState([]);
     const [courses, setCourses] = useState([]);
+
+    const [courses2, setCourses2] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [isDataSaved, setDataSaved] = useState(false);
     const [subjects, setsubjects] = useState([]);
@@ -20,6 +22,16 @@ function CheckboxOpenCourse() {
         axios.get("http://127.0.0.1:3001/getsub")
             .then((response) => {
                 setCourses(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching course data:', error);
+            });
+    }, []);
+
+    useEffect(() => {
+        axios.get("http://127.0.0.1:3001/getOpenCourseList")
+            .then((response) => {
+                setCourses2(response.data);
             })
             .catch((error) => {
                 console.error('Error fetching course data:', error);
@@ -78,6 +90,40 @@ function CheckboxOpenCourse() {
             axios.get("http://127.0.0.1:3001/getsubsearch/" + myyear)
                 .then((response) => {
                     setCourses(response.data);
+                    console.log("หลักสูตร"+myyear)
+                   
+                })
+                .catch((error) => {
+                    console.error('Error fetching course data:', error);
+                });
+        }
+    };
+
+
+    const [myyear2, setYear2] = useState("");
+    const search2 = () => {
+        if (myyear2 === "") {
+            // ถ้า myyear2 ว่าง ให้แสดงข้อความแจ้งเตือนและไม่ทำอะไรเพิ่ม
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "กรุณาเลือกปีการศึกษา",
+                customClass: {
+                    popup: 'kanit-font',
+                    header: 'kanit-font',
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    footer: 'kanit-font'
+                }
+            });
+        } else {
+            // ถ้า myyear2 ไม่ว่าง ให้ส่ง request ไปยัง API ตามปีการศึกษาที่เลือก
+            axios.get("http://127.0.0.1:3001/getsubsearch1/" + myyear2)
+                .then((response) => {
+                    setCourses2(response.data);
+                    console.log("เปิดสอน"+myyear2)
                 })
                 .catch((error) => {
                     console.error('Error fetching course data:', error);
@@ -87,20 +133,11 @@ function CheckboxOpenCourse() {
 
 
 
-
-
     useEffect(() => {
         console.log("listCheck has been changed:", listCheck);
     }, [listCheck]);
 
-    // ทีละอัน
-    // const handleCheckboxChange = (id, isChecked) => {
-    //     if (isChecked) {
-    //         setListCheck(prevList => [...prevList, id]); // เพิ่ม id เข้าไปใน listCheck
-    //     } else {
-    //         setListCheck(prevList => prevList.filter(item => item !== id)); // ลบ id ออกจาก listCheck
-    //     }
-    // };
+
 
     const handleCheckboxChange = (coursedata) => {
         const { course_year, id, checked, subjectName, credit, category } = coursedata;
@@ -275,7 +312,7 @@ function CheckboxOpenCourse() {
         <p2 style={{ fontFamily: 'Kanit, sans-serif' }}>หลักสูตร</p2> */}
                             <div className='CheckboxOpenCourse-dropdown2' >
                                 <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>หลักสูตร</p>
-                                <select>
+                                <select value={myyear2} onChange={(e) => { setYear2(e.target.value) }}>
                                     <option value=""></option>
                                     <option value="2569">2569</option>
                                     <option value="2568">2568</option>
@@ -294,7 +331,7 @@ function CheckboxOpenCourse() {
                                     <option value="2555">2555</option>
                                 </select>
 
-                                <button className='CheckboxOpenCourse-button'>เลือก</button>
+                                <button onClick={() => { search2() }}className='CheckboxOpenCourse-button'>เลือก</button>
                                 <div>
                                     <p style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginBottom: '30px' }}>รายวิชาที่อาจารย์สามารถลงทะเบียน</p>
 
@@ -303,7 +340,7 @@ function CheckboxOpenCourse() {
                             </div>
 
                             <div className="CheckboxOpenCourse-NewBox" style={{ marginTop: '35px' }}>
-                                <OpenCourseList></OpenCourseList>
+                            <OpenCourseList A={courses2}/>
 
                             </div>
 

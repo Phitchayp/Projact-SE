@@ -3,13 +3,13 @@ import axios from 'axios';
 import './opencourse.css'
 import { LuDelete } from "react-icons/lu";
 
-const OpenCourseList = () => {
-    const [courses, setCourses] = useState([]);
+const OpenCourseList =({A}) =>{
+    const [courses2, setCourses2] = useState([]);
 
     useEffect(() => {
         axios.get("http://127.0.0.1:3001/getOpenCourseList")
             .then((response) => {
-                setCourses(response.data);
+                setCourses2(response.data);
             })
             .catch((error) => {
                 console.error('Error fetching course data:', error);
@@ -19,7 +19,7 @@ const OpenCourseList = () => {
     const handleDeleteCourse = async (courseId) => {
         try {
             await axios.delete(`http://localhost:3001/deleteopencourse/${courseId}`);
-            setCourses(prevCourses => prevCourses.filter(course => course.courseid !== courseId));
+            setCourses2(prevCourses => prevCourses.filter(course => course.courseid !== courseId));
             window.location.reload(); // Reload the page after successful deletion
         } catch (error) {
             console.error('Error deleting data:', error);
@@ -29,7 +29,7 @@ const OpenCourseList = () => {
 
     return (
         <div>
-            {courses.map((course) => (
+            {A.map((course) => (
                 <div key={course.courseid} className='Course-Items-open'>
                     <div className='checkbox-text'>{` ${course.course_year}`}</div>
                     <div className='checkbox-text' style={{ marginLeft: '10px' }}>{`${course.subject_id} `}</div>
