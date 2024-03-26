@@ -1,92 +1,127 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './RoomImport.css'; // นี่คือไฟล์ CSS ของคุณ
 import { FaFileLines } from "react-icons/fa6";
 import { Link } from 'react-router-dom'; // เพิ่มการนำเข้า Link ที่นี่
-
+import OpenCourseList from '../components/getopencoursefinal';
+import OpenCourseListTeacher from '../components/getopencourseTeacher';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 function handleClick(event) {
     const button = event.currentTarget;
-  
+
     // เพิ่ม animation class เมื่อคลิก
     button.classList.add('flash-animation');
-  
+
     // ลบ animation class เมื่อ animation เสร็จสิ้น
     button.addEventListener('animationend', () => {
-      button.classList.remove('flash-animation');
+        button.classList.remove('flash-animation');
     });
-  }
-  
+}
+
 function CheckCourse() {
+
+    
+    const [courses2, setCourses2] = useState([]);
+
+    useEffect(() => {
+        axios.get("http://127.0.0.1:3001/getOpenCourseList")
+            .then((response) => {
+                setCourses2(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching course data:', error);
+            });
+    }, []);
+
+    const [myyear2, setYear2] = useState("");
+    const search2 = () => {
+        if (myyear2 === "") {
+            // ถ้า myyear2 ว่าง ให้แสดงข้อความแจ้งเตือนและไม่ทำอะไรเพิ่ม
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "กรุณาเลือกปีการศึกษา",
+                customClass: {
+                    popup: 'kanit-font',
+                    header: 'kanit-font',
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    footer: 'kanit-font'
+                }
+            });
+        } else {
+            // ถ้า myyear2 ไม่ว่าง ให้ส่ง request ไปยัง API ตามปีการศึกษาที่เลือก
+            axios.get("http://127.0.0.1:3001/getsubsearch1/" + myyear2)
+                .then((response) => {
+                    setCourses2(response.data);
+                    console.log("เปิดสอน"+myyear2)
+                })
+                .catch((error) => {
+                    console.error('Error fetching course data:', error);
+                });
+        }
+    };
+
+
+
+
+
+
+
     // สร้างข้อมูลตาราง
     const tableData = [2566, 2565, 2564, 2563];
     return (
-            <div className='turnleft-all'>
-                    <h className='DateAdmin-text'>ตรวจสอบรายวิชาที่สามารถเปิดสอน</h>
-                    <div className="course-table">
-                        <div className="column">
-                            <p>หลักสูตร</p>
-                            {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
+        <div className='turnleft-all'>
+            <h className='DateAdmin-text'>ตรวจสอบรายวิชาที่สามารถเปิดสอน</h>
+            <div className='CheckboxOpenCourse-boxOpensub' style={{ marginTop: '18px' }}>
+                <div className='CheckboxOpenCourse-dropdown'>
+                    {/*                             
+        <p2 style={{ fontFamily: 'Kanit, sans-serif' }}>หลักสูตร</p2> */}
+                    <div className='CheckboxOpenCourse-dropdown2' >
+                        <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>ปีการศึกษา</p>
+                        <select value={myyear2} onChange={(e) => { setYear2(e.target.value) }}>
+                            <option value=""></option>
+                            <option value="2569">2569</option>
+                            <option value="2568">2568</option>
+                            <option value="2567">2567</option>
+                            <option value="2566">2566</option>
+                            <option value="2565">2565</option>
+                            <option value="2564">2564</option>
+                            <option value="2563">2563</option>
+                            <option value="2562">2562</option>
+                            <option value="2561">2561</option>
+                            <option value="2560">2560</option>
+                            <option value="2559">2559</option>
+                            <option value="2558">2558</option>
+                            <option value="2557">2557</option>
+                            <option value="2556">2556</option>
+                            <option value="2555">2555</option>
+                        </select>
+
+                        <button onClick={() => { search2() }} className='CheckboxOpenCourse-button'>เลือก</button>
+                        <div>
+                            <p style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginBottom: '30px' }}>รายวิชาที่อาจารย์สามารถลงทะเบียน</p>
+
                         </div>
-                        <div className="column">
-                            <div>
-                                <p>รายวิชาที่เปิดสอน</p>
-                            </div>
-                            {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                        </div>
+
                     </div>
 
-                    {/* เพิ่มตารางอีก 3 ตาราง */}
-                    <div className="course-table1">
-                        <div className="column1">
-                            <p>2566</p>
-                            {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                        </div>
-                        <div className="column2">
-                        <Link to="/หลักสูตรปี_66" className="file-button" onClick={handleClick}>
-                            <FaFileLines style={{ fontSize: '35px',color:'black' ,marginLeft:'110px'}} />
-                        </Link>
-                            {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                        </div>
+                    <div className="CheckboxOpenCourse-NewBox" style={{ marginTop: '35px' }}>
+                        <OpenCourseListTeacher  A={courses2}/>
+                       
                     </div>
 
-                    <div className="course-table2">
-                        <div className="column3">
-                            <p>2565</p>
-                            {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                        </div>
-                        <div className="column4">
-                        <Link to="/หลักสูตรปี_65" className="file-button" onClick={handleClick}>
-                            <FaFileLines style={{ fontSize: '35px',color:'black',marginLeft:'110px' }} />
-                        </Link>
-                            {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                        </div>
-                    </div>
 
-                    <div className="course-table3">
-                        <div className="column5">
-                            <k>2564</k>
-                            {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                        </div>
-                        <div className="column6">
-                        <Link to="/หลักสูตรปี_64" className="file-button" onClick={handleClick}>
-                            <FaFileLines style={{ fontSize: '35px',color:'black',marginLeft:'110px' }} />
-                        </Link>
-                            {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                        </div>
-                    </div>
-                    <div className="course-table4">
-                        <div className="column7">
-                            <p>2563</p>
-                            {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                        </div>
-                        <div className="column8">
-                        <Link to="/หลักสูตรปี_63" className="file-button" onClick={handleClick}>
-                            <FaFileLines style={{ fontSize: '35px',color:'black',marginLeft:'110px' }} />
-                        </Link>
-                            {/* ใส่ข้อมูลที่ต้องการแสดงในคอลัมนี้ */}
-                        </div>
-                    </div>
+
+
                 </div>
+
+
+            </div>
+        </div>
 
 
     );
