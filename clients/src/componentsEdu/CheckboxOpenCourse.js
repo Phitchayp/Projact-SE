@@ -194,11 +194,11 @@ function CheckboxOpenCourse() {
     return (
         <div className='turnleft-all'>
             <div className='DateAdmin-text'>
-                <h style={{ color: '#8b0000' }}>เลือกรายวิชาที่สามารถเปิดสอน</h>
+                <h style={{ color: '#8b0000' }}>เลือกรายวิชาที่จะเปิดสอน</h>
             </div>
             <div className='CheckboxOpenCourse-box'>
                 <div className='CheckboxOpenCourse-dropdown' >
-                    <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>หลักสูตร</p>
+                    <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>ปีการศึกษา</p>
                     <select value={myyear} onChange={(e) => { setYear(e.target.value) }}>
                         <option value=""></option>
                         <option value="2569">2569</option>
@@ -304,14 +304,14 @@ function CheckboxOpenCourse() {
             <div>
                 <div style={{ marginTop: '65px' }}>
                     <div className='DateAdmin-text'>
-                        <h style={{ color: '#127151' }}>รายวิชาที่สามารถเปิดสอน</h>
+                        <h style={{ color: '#127151' }}>รายวิชาที่อาจารย์สามารถเปิดสอน</h>
                     </div>
                     <div className='CheckboxOpenCourse-boxOpensub' style={{ marginTop: '18px' }}>
                         <div className='CheckboxOpenCourse-dropdown'>
                             {/*                             
         <p2 style={{ fontFamily: 'Kanit, sans-serif' }}>หลักสูตร</p2> */}
                             <div className='CheckboxOpenCourse-dropdown2' >
-                                <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>หลักสูตร</p>
+                                <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>ปีการศึกษา</p>
                                 <select value={myyear2} onChange={(e) => { setYear2(e.target.value) }}>
                                     <option value=""></option>
                                     <option value="2569">2569</option>
