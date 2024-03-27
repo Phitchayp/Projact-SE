@@ -9,6 +9,7 @@ import { LuDelete } from "react-icons/lu";
 
 function CheckboxOpenCourse() {
     const [isChecked, setIsChecked] = useState(false);
+    const [termChecked, settermChecked] = useState(null);
     const [selectedItems, setSelectedItems] = useState([]);
     const [listCheck, setListCheck] = useState([]);
     const [courses, setCourses] = useState([]);
@@ -41,6 +42,7 @@ function CheckboxOpenCourse() {
 
     const [myyear, setYear] = useState("");
 
+
     // ทั้งหมด
     const handleCheckboxAllChange = (id, isChecked) => {
         setIsChecked(isChecked);
@@ -58,6 +60,9 @@ function CheckboxOpenCourse() {
             setListCheck([]); // เมื่อยกเลิกเลือกทั้งหมด ให้ล้าง listCheck
         }
     };
+    const handleCheckterm1 = (option) => {
+        settermChecked(option);
+    }; console.log(termChecked)
 
     const handleItemCheckboxChange = (e) => {
         const itemId = e.target.id;
@@ -101,13 +106,14 @@ function CheckboxOpenCourse() {
 
 
     const [myyear2, setYear2] = useState("");
+    const [termsearch, setTerm] = useState("");
     const search2 = () => {
-        if (myyear2 === "") {
-            // ถ้า myyear2 ว่าง ให้แสดงข้อความแจ้งเตือนและไม่ทำอะไรเพิ่ม
+        if (myyear2 === "" || termsearch === "") {
+            // ถ้า myyear2 หรือ termseach ว่าง ให้แสดงข้อความแจ้งเตือนและไม่ทำอะไรเพิ่ม
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "กรุณาเลือกปีการศึกษา",
+                text: "กรุณาเลือกปีการศึกษาและเทอม",
                 customClass: {
                     popup: 'kanit-font',
                     header: 'kanit-font',
@@ -119,11 +125,11 @@ function CheckboxOpenCourse() {
                 }
             });
         } else {
-            // ถ้า myyear2 ไม่ว่าง ให้ส่ง request ไปยัง API ตามปีการศึกษาที่เลือก
-            axios.get("http://127.0.0.1:3001/getsubsearch1/" + myyear2)
+            // ถ้า myyear2 และ termseach ไม่ว่าง ให้ส่ง request ไปยัง API ตามปีการศึกษาและเทอมที่เลือก
+            axios.get("http://127.0.0.1:3001/getsubsearch1/" + myyear2 + "/" + termsearch)
                 .then((response) => {
                     setCourses2(response.data);
-                    console.log("เปิดสอน" + myyear2)
+                    console.log("เปิดสอน" + myyear2 + "เทอม" + termsearch); // แสดงปีการศึกษาและเทอมที่เลือก
                 })
                 .catch((error) => {
                     console.error('Error fetching course data:', error);
@@ -157,31 +163,72 @@ function CheckboxOpenCourse() {
 
     const saveOpenCourse = async () => {
         try {
-            await axios.post("http://127.0.0.1:3001/opencourse", {
-                listCheck: listCheck,
-
-            });
-
-            console.log("Data posted successfully");
-
-            Swal.fire({
-                title: "บันทึกข้อมูลสำเร็จ!",
-                text: "บันทึกรายวิชาที่สามารถเปิดสอน",
-                icon: "success",
-                customClass: {
-                    popup: 'kanit-font',
-                    header: 'kanit-font',
-                    title: 'kanit-font',
-                }
-            }).then(() => {
-                // หลังจากกดปุ่มตกลงใน Swal.fire ให้รีโหลดหน้าเว็บ
-                window.location.reload();
-            });
+            // เช็คว่า termChecked และ listCheck มีค่าหรือไม่
+            if (!termChecked && !listCheck.length) {
+                // ถ้าไม่มีการเลือก term และไม่มีการเลือกวิชา
+                Swal.fire({
+                    title: "กรุณาเลือกภาคเรียนและวิชา",
+                    text: "กรุณาเลือกภาคเรียนและวิชาเพื่อกดบันทึก",
+                    icon: "warning",
+                    customClass: {
+                        popup: 'kanit-font',
+                        header: 'kanit-font',
+                        title: 'kanit-font',
+                    }
+                });
+            } else if (!termChecked) {
+                // ถ้าไม่มีการเลือก term
+                Swal.fire({
+                    title: "กรุณาเลือกภาคเรียน",
+                    text: "กรุณาเลือกภาคเรียนเพื่อกดบันทึก",
+                    icon: "warning",
+                    customClass: {
+                        popup: 'kanit-font',
+                        header: 'kanit-font',
+                        title: 'kanit-font',
+                    }
+                });
+            } else if (!listCheck.length) {
+                // ถ้าไม่มีการเลือกวิชา
+                Swal.fire({
+                    title: "กรุณาเลือกวิชา",
+                    text: "กรุณาเลือกวิชาเพื่อกดบันทึก",
+                    icon: "warning",
+                    customClass: {
+                        popup: 'kanit-font',
+                        header: 'kanit-font',
+                        title: 'kanit-font',
+                    }
+                });
+            } else {
+                // ทำการส่งข้อมูลไปยังเซิร์ฟเวอร์
+                await axios.post("http://127.0.0.1:3001/opencourse", {
+                    listCheck: listCheck,
+                    termChecked: termChecked
+                });
+    
+                console.log("Data posted successfully");
+    
+                Swal.fire({
+                    title: "บันทึกข้อมูลสำเร็จ!",
+                    text: "บันทึกรายวิชาที่สามารถเปิดสอน",
+                    icon: "success",
+                    customClass: {
+                        popup: 'kanit-font',
+                        header: 'kanit-font',
+                        title: 'kanit-font',
+                    }
+                }).then(() => {
+                    // หลังจากกดปุ่มตกลงใน Swal.fire ให้รีโหลดหน้าเว็บ
+                    window.location.reload();
+                });
+            }
         } catch (error) {
             console.error("Error posting data:", error);
         }
-
     };
+    
+    
 
 
     const handleDeleteOpenCourse = async () => {
@@ -252,6 +299,7 @@ function CheckboxOpenCourse() {
         }
         console.log(courses)
     };
+    const myValue = "ภาคต้น','ภาคปลาย"
 
 
     return (
@@ -304,22 +352,18 @@ function CheckboxOpenCourse() {
                             <div className='leftleft'>
                                 <input
                                     type="radio"
-                                    id="selectAllCourses"
-                                    name="selectOption"
-                                    value="allCourses"
-                                    checked={isChecked}
-                                    onChange={() => handleCheckboxAllChange('selectAll', !isChecked)}
+                                    
+                                    checked={termChecked==='ภาคต้น'}
+                                    onChange={() => handleCheckterm1('ภาคต้น')}
                                 />
                                 <label htmlFor="selectAllCourses" className="CheckboxOpenCourse-checkbox-text" style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginButton: '10px' }}>ภาคต้น</label>
 
                                 <input
                                     style={{ marginLeft: '20px' }}
                                     type="radio"
-                                    id="selectOpenedCourses"
-                                    name="selectOption"
-                                    value="openedCourses"
-                                    checked={!isChecked}
-                                    onChange={() => handleCheckboxAllChange('selectAll', !isChecked)}
+                                  
+                                    checked={termChecked==='ภาคปลาย'}
+                                    onChange={() => handleCheckterm1('ภาคปลาย')}
                                 />
                                 <label htmlFor="selectOpenedCourses" className="CheckboxOpenCourse-checkbox-text" style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginButton: '10px' }}>ภาคปลาย</label>
                             </div>
@@ -427,11 +471,11 @@ function CheckboxOpenCourse() {
 
                                 <div style={{ marginLeft: '20px' }}>
                                     <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>ภาคเรียน</p>
-                                    <select>
+                                    <select value={termsearch} onChange={(e) => { setTerm(e.target.value) }}>
                                         <option value=""></option>
-                                        <option value="ต้น">ต้น</option>
-                                        <option value="ปลาย">ปลาย</option>
-                                        <option value="ทั้งหมด">ทั้งหมด</option>
+                                        <option value="ภาคต้น">ภาคต้น</option>
+                                        <option value="ภาคปลาย">ภาคปลาย</option>
+                                        <option value="ภาคต้น','ภาคปลาย">ทั้งหมด</option>
                                     </select>
                                 </div>
 
