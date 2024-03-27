@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ResultRegisEdu.css"; 
 import CheckRegisCoruse from "./CheckRegisCoruse";
 import searchIconName from "../assets/searchbar.svg";
@@ -6,6 +6,7 @@ import searchIconCourse from "../assets/searchbar.svg";
 import TimePickerRe from "./TimepickerResultSearch";
 import newSearchIcon from "../assets/newsearch.png";
 import Axios from "axios";
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 function ResultRegisEdu() {
   const tableData = [2569, 2568, 2567, 2566, 2565, 2564, 2563, 2562, 2561, 2560, 2559, 2558, 2557, 2556, 2555, 'วิชาบังคับ', 'วิชาเลือก', 'วิชาแกน',];
@@ -38,8 +39,41 @@ function ResultRegisEdu() {
   // แถบขาว
   const [searchText1, setSearchText1] = useState("");
   const [searchResults1, setSearchResults1] = useState([]);
-  
-  
+  const [allname, setAllname] = useState([]);
+  const [filterresult, setFilterresult] = useState([]);
+  const [searchNameTable, setSearchNameTable] = useState("");
+
+  // กรองข้อมูลตามคำค้นหาที่ผู้ใช้ป้อนลงในช่องค้นหา และเก็บผลลัพธ์ไว้ใน filterdata
+  const handlesearch = (event) => {
+    const search = event.target.value;
+    console.log(search);
+    setSearchNameTable(search);
+    if (search !== "") {
+      const filterdata = allname.filter((item) => {
+        for (const key in item) {
+            if (typeof item[key] === 'string' && item[key].indexOf(search) !== -1) {
+                return true;
+            }
+        }
+        return false;
+      });
+      setFilterresult(filterdata);
+    } else {
+      setFilterresult(allname);
+    }
+  };
+
+
+  useEffect(() => { 
+    const getname = async () => {
+      const getres = await fetch("http://localhost:3001/courset");
+      const setname = await getres.json();
+      //console.log(setname);
+      setAllname(await setname);
+    };
+    getname();
+  }, []);
+
   const handleAdvancedSearch = async () => {
     // Validate ว่าทุก dropdown และช่องค้นหาถูกกรอกหรือเลือกค่าหรือไม่
     if (
@@ -81,28 +115,16 @@ function ResultRegisEdu() {
   };    
   
 
-  
-
-
   // ----------------searchbarCourse------------------------
 
   document.addEventListener("DOMContentLoaded", function () {
-    // เพิ่มโค้ดที่ต้องการให้ทำงานหลังจากการโหลดหน้าเว็บเสร็จสมบูรณ์ที่นี่
     var searchButton = document.getElementById("searchButton");
-    var saveButton = document.getElementById("saveButton");
 
     if (searchButton) {
       searchButton.addEventListener("click", function () {
         var searchText = document.getElementById("searchInput").value.trim();
         console.log("คำค้นหา:", searchText);
         // ทำสิ่งที่ต้องการกับ searchText ที่ได้รับจากผู้ใช้
-      });
-    }
-
-    if (saveButton) {
-      saveButton.addEventListener("click", function () {
-        console.log("คุณกำลังคลิกปุ่มบันทึก");
-        // สามารถเพิ่มโค้ดอื่น ๆ ต่อจากนี้เพื่อทำงานตามที่ต้องการ
       });
     }
   });
@@ -143,90 +165,17 @@ function ResultRegisEdu() {
     });
     setSearchResults1([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
   };
-
-  // ฟังก์ชันสำหรับบันทึกข้อมูล
-  const saveCourseRegistration = async () => {
-    // แปลง array ของปีการศึกษาเป็นสตริง
-    const yearString = selectedYear.join(", ");
-    const branchString = selectedBranch.join(", ");
-    try {
-      const response = await Axios.post("http://localhost:3001/register", {
-        // ข้อมูลอื่นๆ ที่ต้องการบันทึก
-        subject_id: selectedCourse.subject_id,
-        subject_name: selectedCourse.subject_name,
-        year: yearString,
-        section: selectedValues.section,
-        lectureOrLab: selectedValues.lectureOrLab,
-        branch: branchString,
-        // ...
-      });
-
-      // แสดงข้อความแจ้งเตือนหรือดำเนินการต่อ ตามความเหมาะสม
-      alert("Registration successful!");
-      window.location.reload();
-      // ตัวอย่าง: รีเซ็ตฟอร์มหรือ redirect ผู้ใช้
-    } catch (error) {
-      console.error("Error saving course registration:", error);
-      // Log the entire error object to see more details
-      console.log(error.response.data); // Log the response data from the server, if ava
-    }
-  };
-
-  const [selectedYear, setSelectedYear] = useState([]);
-  const [selectedBranch, setSelectedBranch] = useState([]);
-
-  const handleCheckboxChange = (e) => {
-    const { value, checked, name } = e.target;
-    if (name === "year") {
-      if (checked) {
-        setSelectedYear([...selectedYear, value]);
-      } else {
-        setSelectedYear(selectedYear.filter((year) => year !== value));
-      }
-    } else if (name === "branch") {
-      if (checked) {
-        setSelectedBranch([...selectedBranch, value]);
-      } else {
-        setSelectedBranch(selectedBranch.filter((branch) => branch !== value));
-      }
-    }
-  };
-  // สร้างข้อมูลตาราง
-  const [selectedValues, setSelectedValues] = useState({
-    year: "",
-    section: "",
-    lectureOrLab: "",
-    branch: "",
-    subject_name: "",
-    subject_id: "",
-  });
-
-  const handleDropdownChange = (event, field) => {
-    setSelectedValues({
-      ...selectedValues,
-      [field]: event.target.value,
-    });
-  };
-
+  
  // --------------------searchbarName--------------------
   
   document.addEventListener("DOMContentLoaded", function () {
-    // เพิ่มโค้ดที่ต้องการให้ทำงานหลังจากการโหลดหน้าเว็บเสร็จสมบูรณ์ที่นี่
     var searchButton = document.getElementById("searchButton");
-    var saveButton = document.getElementById("saveButton");
 
     if (searchButton) {
       searchButton.addEventListener("click", function () {
         var searchText = document.getElementById("searchInput").value.trim();
         console.log("คำค้นหา:", searchText);
         // ทำสิ่งที่ต้องการกับ searchText ที่ได้รับจากผู้ใช้
-      });
-    }
-
-    if (saveButton) {
-      saveButton.addEventListener("click", function () {
-        console.log("คุณกำลังคลิกปุ่มบันทึก");
-        // สามารถเพิ่มโค้ดอื่น ๆ ต่อจากนี้เพื่อทำงานตามที่ต้องการ
       });
     }
   });
@@ -413,47 +362,183 @@ function ResultRegisEdu() {
           </div>
 
           <div className="ButtonChange">
-            <button
-              style={{
-                backgroundColor: "#127151",
-                border: "5px",
-                cursor: "pointer",
-                width: "110px",
-                height: "37px",
-                borderRadius: "10px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "5px 10px",
-              }}
-              onClick={handleAdvancedSearch}
-              disabled={searching}
-            >
-              <span
-                style={{
-                  color: "white",
+                {/* ตรวจสอบว่ากำลังค้นหาหรือไม่ */}
+                {searching ? (
+                  <p>Loading...</p>
+                ) : (
+                  <button
+                  style={{
+                    backgroundColor: "#127151",
+                    border: "5px",
+                    cursor: "pointer",
+                    width: "110px",
+                    height: "37px",
+                    borderRadius: "10px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "5px 10px",
+                  }}
+                  onClick={() => handlesearch({ target: { value: searchText2 } })}>
+                    <span
+                  style={{ color: "white",
                   fontSize: "16px",
-                  fontFamily: "Kanit",}}
-              > {"search"}
-              </span>
-              <img
-                src={newSearchIcon}
-                alt="New Search Icon"
-                style={{ width: "16px", height: "16px" }}
-              />
-            </button>
+                  fontFamily: "Kanit" }}
+                >{ "search"}
+                </span>
+                <img
+                  src={newSearchIcon}
+                  alt="New Search Icon"
+                  style={{ width: "16px", height: "16px" }}
+                />
+                </button>
+                )}
+             {/* <table className="table " style={{ color:"black" }}>
+              <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>รหัสวิชา</th>
+                    <th>ชื่อวิชา</th>
+                    <th>นก.</th>
+                    <th>lab/lec</th>
+                    <th>sec</th>
+                    <th>ชื่อผู้สอน</th>
+                    <th>จำนวนนิสิต</th>
+                    <th>ชั้นปี</th>
+                    <th>วัน</th>
+                    <th>เวลา</th>
+                    <th>ห้องlab</th>
+                </tr>
+              </thead>
+              <tbody>
+                {serachcountry.length > 1
+                  ? filterresult.map((filtercountry, index) => (
+                    <tr key={index}>
+                        <td>{`${filtercountry.No}`}</td>
+                        <td>{`${filtercountry.idsubject}`}</td>
+                        <td>{`${filtercountry.name}`}</td>
+                        <td>{`${filtercountry.credit}`}</td>
+                        <td>{`${filtercountry.lab_lec}`}</td>
+                        <td>{`${filtercountry.sec}`}</td>
+                        <td className="CheckRegisCoruse-blue-text">{`${filtercountry.teacher}`}</td>
+                        <td>{`${filtercountry.n_people}`}</td>
+                        <td>{filtercountry.class}</td>
+                        <td className="CheckRegisCoruse-blue-text">{`${filtercountry.day}`}</td>
+                        <td>{`${filtercountry.time_start}`}-{`${filtercountry.time_end}`}</td>
+                        <td>{`${filtercountry.room}`}</td>
+                   </tr>
+                    ))
+                  : allcountry.map((getcon, index) => (
+                    <tr key={index}>
+                        <td>{`${getcon.No}`}</td>
+                        <td>{`${getcon.idsubject}`}</td>
+                        <td>{`${getcon.name}`}</td>
+                        <td>{`${getcon.credit}`}</td>
+                        <td>{`${getcon.lab_lec}`}</td>
+                        <td>{`${getcon.sec}`}</td>
+                        <td className="CheckRegisCoruse-blue-text">{`${getcon.teacher}`}</td>
+                        <td>{`${getcon.n_people}`}</td>
+                        <td>{getcon.class}</td>
+                        <td className="CheckRegisCoruse-blue-text">{`${getcon.day}`}</td>
+                        <td>{`${getcon.time_start}`}-{`${getcon.time_end}`}</td>
+                        <td>{`${getcon.room}`}</td>
+                  </tr>
+                    ))}
+              </tbody>
+            </table> */}
           </div>
-        </div>
+          </div>
 
         <div>
           <div class="DateAdmin-textEdu">
             <p1>ผลการลงทะเบียนของอาจารย์ทั้งหมด</p1>{" "}
           </div>
-          <CheckRegisCoruse></CheckRegisCoruse>
+          {/* <CheckRegisCoruse></CheckRegisCoruse> */}
+          <div className='CheckRegisCoruse-right'>
+          {/* ตารางผลการลงทะเบียน */}
+              <header className="CheckRegisCoruse-Texthead">
+              <ReactHTMLTableToExcel
+                id="test-table-xls-button"
+                className="download-table-xls-button btn btn-success mb-3"
+                table="table-to-xls"
+                filename="ผลการลงทะเบียน"
+                sheet="ผลการลงทะเบียน"
+                buttonText="EXPORT TO EXCEL"/>
+              <table className="CheckRegisCoruse-bordered-table" id="table-to-xls">
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>รหัสวิชา</th>
+                    <th>ชื่อวิชา</th>
+                    <th>นก.</th>
+                    <th>lab/lec</th>
+                    <th>sec</th>
+                    <th>ชื่อผู้สอน</th>
+                    <th>จำนวนนิสิต</th>
+                    <th>ชั้นปี</th>
+                    <th>วัน</th>
+                    <th>เวลา</th>
+                    <th>ห้องlab</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {searchNameTable?.length > 0 ? (
+                    filterresult
+                        .filter(filterName => (
+                            filterName.teacher
+                            // Add more conditions for additional fields if needed
+                        ))
+                        .map((filterName, index) => (
+                            <tr key={index}>
+                                <td>{`${filterName.No}`}</td>
+                                <td>{`${filterName.idsubject}`}</td>
+                                <td>{`${filterName.name}`}</td>
+                                <td>{`${filterName.credit}`}</td>
+                                <td>{`${filterName.lab_lec}`}</td>
+                                <td>{`${filterName.sec}`}</td>
+                                <td className="CheckRegisCoruse-blue-text">{`${filterName.teacher}`}</td>
+                                <td>{`${filterName.n_people}`}</td>
+                                <td>{filterName.class}</td>
+                                <td className="CheckRegisCoruse-blue-text">{`${filterName.day}`}</td>
+                                <td>{`${filterName.time_start}`}-{`${filterName.time_end}`}</td>
+                                <td>{`${filterName.room}`}</td>
+                            </tr>
+                        ))
+                ) : (
+                    allname
+                        .filter(getcon => (
+                            getcon.name
+                            // Add more conditions for additional fields if needed
+                        ))
+                        .map((getcon, index) => (
+                            <tr key={index}>
+                                <td>{`${getcon.No}`}</td>
+                                <td>{`${getcon.idsubject}`}</td>
+                                <td>{`${getcon.name}`}</td>
+                                <td>{`${getcon.credit}`}</td>
+                                <td>{`${getcon.lab_lec}`}</td>
+                                <td>{`${getcon.sec}`}</td>
+                                <td className="CheckRegisCoruse-blue-text">{`${getcon.teacher}`}</td>
+                                <td>{`${getcon.n_people}`}</td>
+                                <td>{getcon.class}</td>
+                                <td className="CheckRegisCoruse-blue-text">{`${getcon.day}`}</td>
+                                <td>{`${getcon.time_start}`}-{`${getcon.time_end}`}</td>
+                                <td>{`${getcon.room}`}</td>
+
+
+                            </tr>
+                      ))
+                  )}
+
+                </tbody>
+              </table>
+              </header>
+            </div>
+          </div>
+            
+
         </div>
       </div>
-    </div>
   );
 }
-
 export default ResultRegisEdu;
