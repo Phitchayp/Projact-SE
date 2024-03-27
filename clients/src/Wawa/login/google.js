@@ -4,55 +4,64 @@ import { useState, useEffect } from 'react';
 import './login.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Google = () => {
   const clientId = "903970944042-27p6mntuucj32e4nftg2v0ob9k5q2807.apps.googleusercontent.com"
-  const [error, setError] = useState('');
   const nav = useNavigate();
-  
-  const responseGoogle = (response) => {
-    console.log('Response from Google:', response);
-    
-    // const userEmail = response.profileObj.email;
-    axios.get(`http://localhost:3001/checkUserRole?emailUser=${response.profileObj.email}`)
-      .then(res => {
-        sessionStorage.setItem("role", res.data.role)
-        sessionStorage.setItem("email", res.data.email)
-        sessionStorage.setItem("name", res.data.fullname)
-        // if (err) throw err;
-        if (res.data.role === 'admin') {
-          console.log("ADMIN")
-          nav("/AdminNoti");
-          window.location.reload()
-        } else if (res.data.role === 'edu') {
-          console.log("EDU")
-          nav("/EduNoti");
-          window.location.reload()
-        } else if (res.data.role === 'teacher') {
-          console.log("Teacher")
-          nav("/TeacherNoti");
-          window.location.reload()
-        } else {
-          setError('User not found in the database.');
-          // res.status(404).json({ error: 'User not found' }); // You don't need to handle status here
+
+  const responseGoogle = async (response) => {
+    try {
+      const userEmail = response.profileObj.email;
+      const res = await axios.get(`http://localhost:3001/checkUserRole?emailUser=${userEmail}`);
+
+      sessionStorage.setItem("role", res.data.role);
+      sessionStorage.setItem("email", res.data.email);
+      sessionStorage.setItem("name", res.data.fullname);
+
+      if (res.data.role === 'admin') {
+        nav("/AdminNoti");
+        window.location.reload();
+      } else if (res.data.role === 'edu') {
+        nav("/EduNoti");
+        window.location.reload();
+      } else if (res.data.role === 'teacher') {
+        nav("/TeacherNoti");
+        window.location.reload();
+      }
+    } catch (err) {
+      if (err.response) {
+        if (err.response.status === 404) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Login ไม่สำเร็จ',
+            text: 'ไม่พบผู้ใช้งาน กรุณา Login ใหม่อีกครั้ง',
+          });
+        } else if (err.response.status === 408) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Login ไม่สำเร็จ',
+            text: 'การร้องขอใช้งานหมดเวลา กรุณา Login ใหม่อีกครั้ง',
+          });
         }
-      })
-      .catch(err => {
-        setError(err.response.data.error);
-        // alert(`${err}`)
-      });
-
-    
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Login ไม่สำเร็จ',
+          text: 'เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณา Login ใหม่อีกครั้ง',
+        });
+      }
     }
-
-    return (
-      <GoogleLogin
-        clientId={clientId}
-        buttonText="Sign in with Google"
-        onSuccess={responseGoogle}
-        onFailure={responseGoogle}
-        cookiePolicy={'single_host_origin'}
-      />
-    );
   };
-  export default Google;
+
+  return (
+    <GoogleLogin
+      clientId={clientId}
+      buttonText="Sign in with Google"
+      onSuccess={responseGoogle}
+      onFailure={responseGoogle}
+      cookiePolicy={'single_host_origin'}
+    />
+  );
+};
+export default Google;
