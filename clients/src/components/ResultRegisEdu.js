@@ -12,6 +12,11 @@ function ResultRegisEdu() {
   const [selectedValue5, setSelectedValue5] = useState("");
   const [selectedValue6, setSelectedValue6] = useState("");
   const [selectedValue7, setSelectedValue7] = useState("");
+  const [SelectDay, setSelectDay] = useState("");
+
+  const handleDropdownSelectDay = (event) => {
+    setSelectDay(event.target.value);
+  };
   const handleDropdownChange5 = (event) => {
     setSelectedValue5(event.target.value);
   };
@@ -267,13 +272,14 @@ function ResultRegisEdu() {
       <div className="turnleft-allEdu">
         <div className="text1">
           <a>ปีการศึกษา</a>
-          {/* <a>ภาคการศึกษา</a> */}
-          <a>ห้อง</a>
-          <a>เวลาเริ่มต้น</a>
-          <a>เวลาสิ้นสุด</a>
+          <a style={{marginLeft:'-25px'}}>ภาคการศึกษา</a>
+          <a style={{marginLeft:'-40px'}}>ห้อง</a>
+          <a style={{marginLeft:'22px'}}>วัน</a>
+          <a style={{marginLeft:'35px'}}>เวลาเริ่มต้น</a>
+          <a style={{marginLeft:'-20px'}}>เวลาสิ้นสุด</a>
         </div>
         <div class="flex-container">
-          <div className="dropdown5">
+          <div className="dropdown5" style={{marginLeft:'1px', marginRight:'5px'}}>
             <select value={selectedValue5} onChange={handleDropdownChange5}>
               <option value=""></option>
               <option value="2569">2569</option>
@@ -293,14 +299,14 @@ function ResultRegisEdu() {
               <option value="2555">2555</option>
             </select>
           </div>
-          {/* <div className="dropdown6">
+          <div className="dropdown6">
             <select value={selectedValue6} onChange={handleDropdownChange6}>
               <option value=""></option>
               <option value="ภาคต้น">ภาคต้น</option>
               <option value="ภาคปลาย">ภาคปลาย</option>
-              <option value="ภาคฤดูร้อน">ภาคฤดูร้อน</option>
+              <option value="ภาคฤดูร้อน">ทั้งหมด</option>
             </select>
-          </div> */}
+          </div>
 
           <div className="dropdown7">
             <select value={selectedValue7} onChange={handleDropdownChange7}>
@@ -316,6 +322,19 @@ function ResultRegisEdu() {
             </select>
 
           </div>
+          <div className="dropdownDay">
+          <select value={SelectDay} onChange={handleDropdownSelectDay}>
+              <option value=""></option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+              
+            </select>
+          </div>
           <div>
             <div class="timepickers-container1">
               <TimePickerRe></TimePickerRe>
@@ -328,8 +347,8 @@ function ResultRegisEdu() {
           </div>
         </div>
 
-        <div className="ChangePosition3">
-          <div style={{ width: "230px" }}>
+        <div className="ChangePosition3" >
+          <div style={{ width: "230px" ,marginTop:'10px'}}>
             <div class="ResultTech-Text">ชื่อผู้สอน</div>
             <div
               class="ResultTechsearchBar-searchBox"
@@ -362,7 +381,7 @@ function ResultRegisEdu() {
             
           </div>
 
-          <div style={{ width: "450px" }}>
+          <div style={{ width: "450px" ,marginTop:'10px'}}>
             <div class="ResultTech-Text">รหัสวิชา/ชื่อวิชา</div>
             <div
               class="ResultTechsearchBar-searchBoxSub"
