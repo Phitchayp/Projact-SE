@@ -5,6 +5,7 @@ import searchIcon from "../assets/searchbar.svg";
 import TimePickerRe from "./TimepickerResultSearch";
 import newSearchIcon from "../assets/newsearch.png";
 import Axios from "axios";
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
  
 function ResultTeach() {
@@ -296,13 +297,12 @@ function ResultTeach() {
             <TimePickerRe></TimePickerRe>
           </div>
           </div>
- 
             <div className="ButtonChange">
                 {/* ตรวจสอบว่ากำลังค้นหาหรือไม่ */}
                 {searching ? (
                   <p>Loading...</p>
                 ) : (
-                  <button
+                  <button 
                   style={{
                     backgroundColor: "#127151",
                     border: "5px",
@@ -323,8 +323,8 @@ function ResultTeach() {
                     handlesearch(e);
                   }}>
                     <span
-                  style={{ color: "white",
-                  fontSize: "16px",
+                  style={{ color: "white", 
+                  fontSize: "16px", 
                   fontFamily: "Kanit" }}
                 >{ "search"}
                 </span>
@@ -335,7 +335,21 @@ function ResultTeach() {
                 />
                 </button>
                 )}
-             {/* <table className="table " style={{ color:"black" }}>
+             
+            </div>        
+           </div>
+          </div>
+          <div className='CheckRegisCoruse-right'>
+        {/* ตารางผลการลงทะเบียน */}
+        <header className="CheckRegisCoruse-Texthead">
+        <ReactHTMLTableToExcel
+                    id="test-table-xls-button"
+                    className="download-table-xls-button btn btn-success mb-3"
+                    table="table-to-xls"
+                    filename="ผลการลงทะเบียน"
+                    sheet="ผลการลงทะเบียน"
+                    buttonText="EXPORT TO EXCEL"/>
+          <table className="CheckRegisCoruse-bordered-table" id="table-to-xls">
               <thead>
                 <tr>
                     <th>No.</th>
@@ -387,21 +401,11 @@ function ResultTeach() {
                   </tr>
                     ))}
               </tbody>
-            </table> */}
-            </div>        
-           </div>
-          </div>
+            </table>
+            </header>
+        </div>
         </div>
   );
 }
- 
-               
-      // <div style={{ marginTop: '25px' }}>
-      //   <div className="ChangePosition">
-      //   {/* <Search></Search> */}
-      //     {/* <CheckRegisCoruse></CheckRegisCoruse> */}
-      //     <Search></Search>
-      //    </div>
-      //   </div>
- 
+
 export default ResultTeach;
