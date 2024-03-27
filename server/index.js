@@ -7,11 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  // host: '127.0.0.1',
-  // user: 'root',
-  // password: '123456',
-  // database: 'databasese',
-  // port: '3306'
+  host: '127.0.0.1',
+  user: 'root',
+  password: '123456',
+  database: 'databasese',
+  port: '3306'
  //pond
   // host: 'localhost',
   // user: 'root',
@@ -28,10 +28,10 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  host: 'localhost',
-  user: 'root',
-  password: '12345678',
-  database: 'project_se',
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
+  // database: 'project_se',
 })
 
 db.connect((err)=>{
@@ -283,16 +283,21 @@ app.get('/getsubsearch/:year', (req, res) => {
 });
 
 
-app.get('/getsubsearch1/:year', (req, res) => {
-  const {year} =req.params;
-  db.query("SELECT * FROM opencourse where course_year = ? ORDER BY courseid",[year],(err, result) => {
+
+app.get('/getsubsearch1/:year/:term', (req, res) => {
+  const { year, term } = req.params;
+  const sTerm = term.replace(/\\/g, '');
+  db.query("SELECT * FROM opencourse WHERE course_year = ? AND term in (?) ORDER BY courseid", [year, sTerm], (err, result) => {
     if (err) {
       console.log(err);
     } else {
       res.send(result);
+      console.log(term);
+      console.log("SELECT * FROM opencourse WHERE course_year = " + year + " AND term IN (" + db.escape(sTerm) + ") ORDER BY courseid");
     }
   });
 });
+
 
 app.post("/uploaded", (req, res) => {
   const excelData = req.body.excelData;
@@ -387,10 +392,11 @@ app.post("/addsub", (req, res) => {
 
 app.post("/opencourse", (req, res) => {
   const listCheck = req.body.listCheck; // รับข้อมูลที่ส่งมาจากหน้าเว็บ
+  const termChecked=req.body.termChecked;
   const values = listCheck.map(item => [ item.course_year, item.id, item.subjectName, item.credit, item.category]);
 
   // สร้างสตริงของคำสั่ง SQL ที่มี parameterized queries
-  const insertQuery = "INSERT INTO opencourse (course_year, subject_id, subject_name, credit, category,state) VALUES ?";
+  const insertQuery = "INSERT INTO opencourse (course_year, subject_id, subject_name, credit, category,term,state) VALUES ?";
   const selectQuery = "SELECT * FROM opencourse WHERE subject_id = ? AND subject_name = ? AND course_year = ?";
 
   // สร้าง Promise เพื่อให้มั่นใจว่าคำสั่ง SQL ถูกทำสำเร็จหรือไม่
@@ -405,7 +411,7 @@ app.post("/opencourse", (req, res) => {
             console.log("Data already exists for subject_id, subject_name, and course_year:", item.id, item.subjectName, item.course_year);
             resolve({ id: item.id, exists: true }); // ส่งข้อมูลว่าข้อมูลมีอยู่แล้ว
           } else {
-            const singleValue = [[item.course_year, item.id, item.subjectName, item.credit, item.category,1]];
+            const singleValue = [[item.course_year, item.id, item.subjectName, item.credit, item.category,termChecked,1]];
             db.query(insertQuery, [singleValue], (err, result) => {
               if (err) {
                 console.error(err);
