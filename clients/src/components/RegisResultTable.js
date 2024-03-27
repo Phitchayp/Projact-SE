@@ -9,6 +9,12 @@ import Axios from "axios";
 import searchIcon from "../assets/searchbar.svg"; // Import รูปไอคอน
 
 function RegisResultTable() {
+  const [searchText, setSearchText] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  const [selectedValue5, setSelectedValue5] = useState("");
+  const [selectedValue6, setSelectedValue6] = useState("");
+
   document.addEventListener("DOMContentLoaded", function () {
     // เพิ่มโค้ดที่ต้องการให้ทำงานหลังจากการโหลดหน้าเว็บเสร็จสมบูรณ์ที่นี่
     var searchButton = document.getElementById("searchButton");
@@ -29,25 +35,30 @@ function RegisResultTable() {
       });
     }
   });
-  const [searchText, setSearchText] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+
   const searchCourses = async () => {
     // Convert the selectedYear array to a comma-separated string
     // If your backend expects an array, you might need to adjust this
     const years = selectedYear.join(',');
-  
+
     try {
       const response = await Axios.get(
         `http://localhost:3001/search-courses?query=${encodeURIComponent(searchText)}&checkboxValue=${encodeURIComponent(years)}`
-            
+
       );
       setSearchResults(response.data); // Update state with search results
     } catch (error) {
       console.error("Error searching courses:", error);
     }
   };
-  
 
+  const handleDropdownChange5 = (event) => {
+    setSelectedValue5(event.target.value);
+  };
+
+  const handleDropdownChange6 = (event) => {
+    setSelectedValue6(event.target.value);
+  };
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
     if (e.target.value.length > 0) {
@@ -78,15 +89,15 @@ function RegisResultTable() {
   // ฟังก์ชันสำหรับบันทึกข้อมูล
   const saveCourseRegistration = async () => {
     // Simple client-side validation
-    if (!selectedCourse.subject_id || !selectedCourse.subject_name || selectedYear.length === 0 || !selectedValues.section || !selectedValues.lectureOrLab || selectedBranch.length === 0|| !selectedCourse.credit || !selectedCourse.category) {
+    if (!selectedCourse.subject_id || !selectedCourse.subject_name || selectedYear.length === 0 || !selectedValues.section || !selectedValues.lectureOrLab || selectedBranch.length === 0 || !selectedCourse.credit || !selectedCourse.category) {
       alert("Please fill out all required fields.");
       return; // Stop the function if validation fails
     }
-  
+
     // Convert array of years and branches to strings
     const yearString = selectedYear.join(", ");
     const branchString = selectedBranch.join(", ");
-    
+
     try {
       const response = await Axios.post("http://localhost:3001/register", {
         subject_id: selectedCourse.subject_id,
@@ -98,7 +109,7 @@ function RegisResultTable() {
         credit: selectedCourse.credit, // เพิ่ม lec
         category: selectedCourse.category, // เพิ่ม lab
       });
-  
+
       alert("Registration successful!");
       window.location.reload();
     } catch (error) {
@@ -106,7 +117,7 @@ function RegisResultTable() {
       alert("Failed to save course registration. Please try again."); // Provide a user-friendly error message
     }
   };
-  
+
 
   const [selectedYear, setSelectedYear] = useState([]);
   const [selectedBranch, setSelectedBranch] = useState([]);
@@ -117,15 +128,15 @@ function RegisResultTable() {
       if (checked) {
         // If less than 2 years are already selected, add the new selection
         if (selectedYear.length < 2) {
-            setSelectedYear(prevSelectedYear => [...prevSelectedYear, value]);
+          setSelectedYear(prevSelectedYear => [...prevSelectedYear, value]);
         } else {
-            // Optionally notify the user that they can't select more than 2 years
-            console.log("You can select up to 2 years only.");
+          // Optionally notify the user that they can't select more than 2 years
+          console.log("You can select up to 2 years only.");
         }
-    } else {
+      } else {
         // Removing a selected year
         setSelectedYear(prevSelectedYear => prevSelectedYear.filter(years => years !== value));
-    }
+      }
     } else if (name === "branch") {
       if (checked) {
         setSelectedBranch([...selectedBranch, value]);
@@ -163,6 +174,8 @@ function RegisResultTable() {
               <div>
                 <div className="text5">
                   <a>หลักสูตร</a>
+                  <b>ปีการศึกษา</b>
+                  <c>ภาคเรียน</c>
                 </div>
                 <div className="checkbox-group2">
                   <label>
@@ -195,7 +208,41 @@ function RegisResultTable() {
                       onChange={handleCheckboxChange}
                     />
                   </label>
+                  {/* <div className="dropdownRegisResultTable "> */}
+                    <div className="dropdown5" style={{ marginLeft: '1px', marginRight: '5px' }}>
+                      <select value={selectedValue5} onChange={handleDropdownChange5}>
+                        <option value=""></option>
+                        <option value="2569">2569</option>
+                        <option value="2568">2568</option>
+                        <option value="2567">2567</option>
+                        <option value="2566">2566</option>
+                        <option value="2565">2565</option>
+                        <option value="2564">2564</option>
+                        <option value="2563">2563</option>
+                        <option value="2562">2562</option>
+                        <option value="2561">2561</option>
+                        <option value="2560">2560</option>
+                        <option value="2559">2559</option>
+                        <option value="2558">2558</option>
+                        <option value="2557">2557</option>
+                        <option value="2556">2556</option>
+                        <option value="2555">2555</option>
+                      </select>
+                    </div>
+
+                    <div className="dropdown6">
+                      <select value={selectedValue6} onChange={handleDropdownChange6}>
+                        <option value=""></option>
+                        <option value="ภาคต้น">ภาคต้น</option>
+                        <option value="ภาคปลาย">ภาคปลาย</option>
+                        <option value="ทั้งหมด">ทั้งหมด</option>
+                      </select>
+                    </div>
+                  {/* </div> */}
                 </div>
+
+
+
                 <div className="RegisResultTable-searchbar-changposition">
                   <div className="searchBar-subjectBox">รายวิชา</div>
                   <div
