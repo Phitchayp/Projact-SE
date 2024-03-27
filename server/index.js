@@ -23,15 +23,15 @@ const db = mysql.createConnection({
   // user: 'root',
   // password: '',
   // database: 'project_se',
-  // host: 'localhost',
-  // user: 'root',
-  // password: '',
-  // database: 'tarangsorn',
-
   host: 'localhost',
   user: 'root',
-  password: '12345678',
-  database: 'project_se',
+  password: '',
+  database: 'tarangsorn',
+
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
+  // database: 'project_se',
 
   // host: '192.168.43.237',
   // user: 'dbSE',
@@ -844,6 +844,16 @@ app.get('/registration-data', (req, res) => {
     res.json(results);
   });
 });
+app.get('/registall-data', (req, res) => {
+  const query = 'SELECT * FROM courset';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Failed to retrieve registration data: ', err);
+      return res.status(500).send('Error retrieving registration data');
+    }
+    res.json(results);
+  });
+});
 
 app.get("/course-sections/:courseId", (req, res) => {
   const { courseId } = req.params;
@@ -869,25 +879,25 @@ app.delete('/delete-course/:id', (req, res) => {
   });
 });
 
-app.get('/schedule', (req, res) => {
-  // Construct SQL query to get the relevant data
-  // The SQL query will depend on your database schema
-  const query = `
-      SELECT courses.id, courses.sbj_code, courses.sbj_name, courses.sbj_num, courses.lab_or_lec,
-             schedules.sec, schedules.name, schedules.number, schedules.branch,
-             schedules.day, schedules.time, schedules.room
-      FROM courses
-      JOIN schedules ON courses.id = schedules.course_id`;
+// app.get('/schedule', (req, res) => {
+//   // Construct SQL query to get the relevant data
+//   // The SQL query will depend on your database schema
+//   const query = `
+//       SELECT courses.id, courses.sbj_code, courses.sbj_name, courses.sbj_num, courses.lab_or_lec,
+//              schedules.sec, schedules.name, schedules.number, schedules.branch,
+//              schedules.day, schedules.time, schedules.room
+//       FROM courses
+//       JOIN schedules ON courses.id = schedules.course_id`;
 
-  db.query(query, (err, results) => {
-      if (err) {
-          console.error('Error fetching schedule:', err);
-          res.status(500).send('Error fetching schedule');
-      } else {
-          res.json(results);
-      }
-  });
-});
+//   db.query(query, (err, results) => {
+//       if (err) {
+//           console.error('Error fetching schedule:', err);
+//           res.status(500).send('Error fetching schedule');
+//       } else {
+//           res.json(results);
+//       }
+//   });
+// });
 
 app.get('/course-sections/:courseId', (req, res) => {
   const { courseId } = req.params;
