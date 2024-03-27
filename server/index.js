@@ -7,11 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '123456',
-  database: 'databasese',
-  port: '3306'
+  // host: '127.0.0.1',
+  // user: 'root',
+  // password: '123456',
+  // database: 'databasese',
+  // port: '3306'
  //pond
   // host: 'localhost',
   // user: 'root',
@@ -23,10 +23,10 @@ const db = mysql.createConnection({
   // user: 'root',
   // password: '',
   // database: 'project_se',
-  // host: 'localhost',
-  // user: 'root',
-  // password: '',
-  // database: 'tarangsorn',
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'tarangsorn',
 
   // host: 'localhost',
   // user: 'root',
@@ -741,6 +741,17 @@ app.get('/registration-data', (req, res) => {
   });
 });
 
+app.get('/registall-data', (req, res) => {
+  const query = 'SELECT * FROM courset';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Failed to retrieve registration data: ', err);
+      return res.status(500).send('Error retrieving registration data');
+    }
+    res.json(results);
+  });
+});
+
 app.get("/course-sections/:courseId", (req, res) => {
   const { courseId } = req.params;
   const query = "SELECT section FROM registration_records WHERE id = ?";
@@ -765,25 +776,25 @@ app.delete('/delete-course/:id', (req, res) => {
   });
 });
 
-app.get('/schedule', (req, res) => {
-  // Construct SQL query to get the relevant data
-  // The SQL query will depend on your database schema
-  const query = `
-      SELECT courses.id, courses.sbj_code, courses.sbj_name, courses.sbj_num, courses.lab_or_lec,
-             schedules.sec, schedules.name, schedules.number, schedules.branch,
-             schedules.day, schedules.time, schedules.room
-      FROM courses
-      JOIN schedules ON courses.id = schedules.course_id`;
+// app.get('/schedule', (req, res) => {
+//   // Construct SQL query to get the relevant data
+//   // The SQL query will depend on your database schema
+//   const query = `
+//       SELECT courses.id, courses.sbj_code, courses.sbj_name, courses.sbj_num, courses.lab_or_lec,
+//              schedules.sec, schedules.name, schedules.number, schedules.branch,
+//              schedules.day, schedules.time, schedules.room
+//       FROM courset
+//       JOIN schedules ON courses.id = schedules.course_id`;
 
-  db.query(query, (err, results) => {
-      if (err) {
-          console.error('Error fetching schedule:', err);
-          res.status(500).send('Error fetching schedule');
-      } else {
-          res.json(results);
-      }
-  });
-});
+//   db.query(query, (err, results) => {
+//       if (err) {
+//           console.error('Error fetching schedule:', err);
+//           res.status(500).send('Error fetching schedule');
+//       } else {
+//           res.json(results);
+//       }
+//   });
+// });
 
 app.get('/course-sections/:courseId', (req, res) => {
   const { courseId } = req.params;

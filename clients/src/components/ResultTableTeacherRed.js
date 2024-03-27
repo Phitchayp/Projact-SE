@@ -1,15 +1,41 @@
 import React from 'react';
 import './ResultTableTeacherRed.css'; // Import CSS file for table styling
+import Axios from 'axios';
 
 class ResultTableTeacherRed extends React.Component {
-  
+  state = {
+    registrationData: [],
+    isLoading: true, // Add isLoading to state
+    error: null, // Track any errors
+  };
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData = async () => {
+    this.setState({ isLoading: true, error: null }); // Reset loading state and clear errors
+    try {
+      const response = await Axios.get("http://localhost:3001/registall-data");
+      this.setState({
+        registrationData: response.data,
+        isLoading: false, // Data fetched, loading done
+      });
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+      this.setState({ error: "Failed to fetch data", isLoading: false }); // Set error message and loading done
+    }
+  };
+
   render() {
+    const { registrationData, isLoading, error } = this.state;
+
+    if (isLoading) return <div>Loading...</div>; // Loading feedback
+    if (error) return <div>Error: {error}</div>; // Error handling
+
     return (
       <div>
-       
-        {/* ตารางผลการลงทะเบียน */}
         <header className="ResultTableTeacherRed-Texthead">
-       
           <table className="ResultTableTeacherRed-bordered-table">
             <thead>
               <tr>
@@ -28,67 +54,28 @@ class ResultTableTeacherRed extends React.Component {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td></td>
-                <td>03603213-65</td>
-                <td>Algorithm Design and Analysis</td>
-                <td>3</td>
-                <td>lec</td>
-                <td>800</td>
-                <td>อาจารย์ สมเกียรติ   ใจดี</td>
-                <td>100</td>
-                <td>2 3 4 x</td>
-                <td>Mon</td>
-                <td>9-12</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td></td>
-                <td>03600390-00</td>
-                <td>Co-operative Education</td>
-                <td>3</td>
-                <td>lec</td>
-                <td>800</td>
-                <td>อาจารย์ สมเกียรติ   ใจดี</td>
-                <td>100</td>
-                <td>3 4 x</td>
-                <td>Tue</td>
-                <td>13-16</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td></td>
-                <td>03603423-60</td>
-                <td>Network Programming</td>
-                <td>3</td>
-                <td>lec</td>
-                <td>800</td>
-                <td>อาจารย์ สมเกียรติ   ใจดี</td>
-                <td>50</td>
-                <td>3 4 x</td>
-                <td>Thu</td>
-                <td>9-12</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td></td>
-                <td>01420114-60</td>
-                <td>Data Mining</td>
-                <td>3</td>
-                <td>lec</td>
-                <td>800</td>
-                <td>อาจารย์ สมเกียรติ   ใจดี</td>
-                <td>30</td>
-                <td>3 4 x</td>
-                <td>Fri</td>
-                <td>16-19</td>
-                <td></td>
-              </tr>
+              {registrationData.map((course, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{course.idsubject}</td>
+                  <td>{course.name}</td>
+                  <td>{course.credit}</td>
+                  <td>{course.lab_lec}</td>
+                  <td>{course.sec}</td>
+                  <td>{course.teacher}</td>
+                  <td>{course.n_people}</td>
+                  <td>{course.class}</td>
+                  <td>{course.day}</td>
+                  <td>{course.time_start}-{course.time_end}</td>
+                  <td>{course.room}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
-        </header> 
+        </header>
       </div>
     );
   }
 }
+
 export default ResultTableTeacherRed;
