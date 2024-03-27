@@ -30,6 +30,30 @@ td {
     font-family: 'Kanit', sans-serif;
 }
 
+.hidden-element {
+    display: none;
+  }
+  
+  .invisible-element {
+    visibility: hidden;
+  }
+  
+  .transparent-element {
+    opacity: 0;
+  }
+  
+  .off-screen-element {
+    position: absolute;
+    left: -9999px;
+  }
+  .subject-cell {
+    background-color: #DCCCCC; /* Light blue background */
+    color: #000; /* Black text */
+    text-align: center;
+    /* Add other styles as needed */
+  }
+  
+
 /* Style alternating rows */
 tr:nth-child(even) {
     background-color: #f2f2f2;
