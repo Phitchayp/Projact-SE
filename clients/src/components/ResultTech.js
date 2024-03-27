@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ResultTech.css";
 import CheckRegisCoruse from "./CheckRegisCoruse";
 import searchIcon from "../assets/searchbar.svg";
@@ -6,40 +6,88 @@ import TimePickerRe from "./TimepickerResultSearch";
 import newSearchIcon from "../assets/newsearch.png";
 import Axios from "axios";
 
+ 
 function ResultTeach() {
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
+  const [selectedValue6, setSelectedValue6] = useState("");
   const [selectedValue10, setSelectedValue10] = useState("");
   const [selectedValue11, setSelectedValue11] = useState("");
   const [selectedValue12, setSelectedValue12] = useState("");
   const [selectedValue13, setSelectedValue13] = useState("");
+  const [selectedValue5, setSelectedValue5] = useState("");
+  const [SelectDay, setSelectDay] = useState("");
+
+  const [allcountry, setAllcountry] = useState([]);
+  const [filterresult, setFilterresult] = useState([]);
+  const [serachcountry, setSearchcountry] = useState("");
+  
+  const handleDropdownSelectDay = (event) => {
+    setSelectDay(event.target.value);
+  };
+  const handleDropdownChange5 = (event) => {
+    setSelectedValue5(event.target.value);
+  };
+
+  const handleDropdownChange6 = (event) => {
+    setSelectedValue6(event.target.value);
+  };
 
   const handleDropdownChange10 = (event) => {
     setSelectedValue10(event.target.value);
   };
-
+ 
   const handleDropdownChange11 = (event) => {
     setSelectedValue11(event.target.value);
   };
-
+ 
   const handleDropdownChange12 = (event) => {
     setSelectedValue12(event.target.value);
   };
-
+ 
   const handleDropdownChange13 = (event) => {
     setSelectedValue13(event.target.value);
   };
+ 
 
+  const handlesearch = (event) => {
+    const search = event.target.value;
+    console.log(search);
+    setSearchcountry(search);
+ 
+    if (search !== "") {
+      const filterdata = allcountry.filter((item) => {
+        return Object.values(item)
+          .join("")
+          .toLowerCase()
+          .includes(search.toLowerCase());
+      });
+      setFilterresult(filterdata);
+    } else {
+      setFilterresult(allcountry);
+    }
+  };
+ 
+  useEffect(() => {
+    const getcountry = async () => {
+      const getres = await fetch("http://localhost:3001/courset");
+      const setcounty = await getres.json();
+      //console.log(setcounty);
+      setAllcountry(await setcounty);
+    };
+    getcountry();
+  }, []);
+
+  
   const handleAdvancedSearch = async() => {
       // Validate ว่าทุก dropdown และช่องค้นหาถูกกรอกหรือเลือกค่าหรือไม่
       if (selectedValue10 || selectedValue11 || selectedValue12 || selectedValue13 || searchText.trim() !== "") {
         setSearching(true);
-        console.log("Advanced Searching...");
-      } 
+        console.log("Advanced Searching...");    
+      }
       try {
         const response = await Axios.get(
           `http://localhost:3001/search-nameajarn?query=${searchText}`);
-        
         if (response.data.length === 0) {
           alert("ไม่พบข้อมูลชื่อผู้ใช้นี้ กรุณากรอกข้อมูลให้ถูกต้อง");
           // window.location.reload();
@@ -52,13 +100,12 @@ function ResultTeach() {
         setSearching(false);
       }
   };
-
-
+ 
+ 
   document.addEventListener("DOMContentLoaded", function () {
     // เพิ่มโค้ดที่ต้องการให้ทำงานหลังจากการโหลดหน้าเว็บเสร็จสมบูรณ์ที่นี่
     var searchButton = document.getElementById("searchButton");
-    var saveButton = document.getElementById("saveButton");
-
+  
     if (searchButton) {
       searchButton.addEventListener("click", function () {
         var searchText = document.getElementById("searchInput").value.trim();
@@ -66,17 +113,11 @@ function ResultTeach() {
         // ทำสิ่งที่ต้องการกับ searchText ที่ได้รับจากผู้ใช้
       });
     }
-
-    if (saveButton) {
-      saveButton.addEventListener("click", function () {
-        console.log("คุณกำลังคลิกปุ่มบันทึก");
-        
-      });
-    }
+  
   });
   const [searchText, setSearchText] = useState("");
   const [searchResults1, setSearchResults1] = useState([]);
-
+ 
   const searchNameAjarn = async () => {
     try {
       const response = await Axios.get(
@@ -85,9 +126,9 @@ function ResultTeach() {
       setSearchResults1(response.data); // อัปเดต state ด้วยข้อมูลผลการค้นหา
     } catch (error) {
       console.error("Error searching nameajarn:", error);
-    } 
+    }
   };
-
+ 
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
     if (e.target.value.length > 0) {
@@ -97,7 +138,7 @@ function ResultTeach() {
       setSearchResults1([]); // หากช่องค้นหาว่าง, ล้างผลลัพธ์การค้นหา
     }
   };
-
+ 
   const [selectedName, setSelectedName] = useState({
     name: "",
   });
@@ -108,31 +149,51 @@ function ResultTeach() {
     });
     setSearchResults1([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือก
   };
-
+ 
   return (
     <div className="top">
       <h className="DateAdmin-text">ผลการลงทะเบียน</h>
       <div style={{ marginTop: '25px' }}>
         <div>
-
-          <a>วัน</a>
+ 
+          <a>ปีการศึกษา</a>
+          <a>ภาคการศึกษา</a>
           <a>ชั้นปี</a>
           <a>ห้อง</a>
           <a>สาขา</a>
-
+          <a>วัน</a>
+ 
           <div className="dropdown">
-            <div className="dropdown10">
-              <select value={selectedValue10} onChange={handleDropdownChange10}>
+            <div className="dropdown5" style={{marginLeft:'1px', marginRight:'5px'}}>
+              <select value={selectedValue5} onChange={handleDropdownChange5}>
                 <option value=""></option>
-                <option value="MON">MON</option>
-                <option value="TUE">TUE</option>
-                <option value="WED">WED</option>
-                <option value="THU">THU</option>
-                <option value="FRI">FRI</option>
-                <option value="SAT">SAT</option>
-                <option value="SUN">SUN</option>
+                <option value="2569">2569</option>
+                <option value="2568">2568</option>
+                <option value="2567">2567</option>
+                <option value="2566">2566</option>
+                <option value="2565">2565</option>
+                <option value="2564">2564</option>
+                <option value="2563">2563</option>
+                <option value="2562">2562</option>
+                <option value="2561">2561</option>
+                <option value="2560">2560</option>
+                <option value="2559">2559</option>
+                <option value="2558">2558</option>
+                <option value="2557">2557</option>
+                <option value="2556">2556</option>
+                <option value="2555">2555</option>
               </select>
             </div>
+
+            <div className="dropdown6">
+              <select value={selectedValue6} onChange={handleDropdownChange6}>
+                <option value=""></option>
+                <option value="ภาคต้น">ภาคต้น</option>
+                <option value="ภาคปลาย">ภาคปลาย</option>
+                <option value="ทั้งหมด">ทั้งหมด</option>
+              </select>
+            </div>
+
             <div className="dropdown11">
               <select value={selectedValue11} onChange={handleDropdownChange11}>
                 <option value=""></option>
@@ -174,7 +235,7 @@ function ResultTeach() {
             </div>
           </div>
         </div>
-
+ 
         <div className="ChangePosition2">
           <div style={{ width: "230px" }}>
             <div class="ResultTech-Text">ชื่อผู้สอน</div>
@@ -205,67 +266,137 @@ function ResultTeach() {
                 </div>
               )}
             </div>
-            {/*
-              <button
-                id="searchButton"
-                onClick={handleAdvancedSearch}
-                disabled={searching}>
-              </button>
-            </div> */}
           </div>
 
+          <div className="dropdownDay">
+          <select value={SelectDay} onChange={handleDropdownSelectDay}>
+              <option value=""></option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+              
+            </select>
+          </div>
+ 
           <div>
             <div class="ResultTech-Text">เวลาเริ่มต้น</div>
             <TimePickerRe></TimePickerRe>
           </div>
-
+ 
           <div>
             <div class="ResultTech-Text">เวลาสิ้นสุด</div>
             <TimePickerRe></TimePickerRe>
           </div>
-
-          <div className="ButtonChange">
-            <button
-              style={{
-                backgroundColor: "#127151",
-                border: "5px",
-                cursor: "pointer",
-                width: "110px",
-                height: "37px",
-                borderRadius: "10px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "5px 10px",
-              }}
-              onClick={handleAdvancedSearch}
-              disabled={searching}
-            >
-              <span
-                style={{ color: "white", 
-                fontSize: "16px", 
-                fontFamily: "Kanit" }}
-              >{ "search"}
-              </span>
-              <img
-                src={newSearchIcon}
-                alt="New Search Icon"
-                style={{ width: "16px", height: "16px" }}
-              />
-            </button>
+ 
+            <div className="ButtonChange">
+                {/* ตรวจสอบว่ากำลังค้นหาหรือไม่ */}
+                {searching ? (
+                  <p>Loading...</p>
+                ) : (
+                  <button
+                  style={{
+                    backgroundColor: "#127151",
+                    border: "5px",
+                    cursor: "pointer",
+                    width: "110px",
+                    height: "37px",
+                    borderRadius: "10px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "5px 10px",
+                  }}
+                      value={searchText}
+                  onChange={handlesearch}
+                  type="text"
+                  placeholder="ชื่อผู้สอน"
+                  onClick={(e) => {
+                    handlesearch(e);
+                  }}>
+                    <span
+                  style={{ color: "white",
+                  fontSize: "16px",
+                  fontFamily: "Kanit" }}
+                >{ "search"}
+                </span>
+                <img
+                  src={newSearchIcon}
+                  alt="New Search Icon"
+                  style={{ width: "16px", height: "16px" }}
+                />
+                </button>
+                )}
+             <table className="table " style={{ color:"black" }}>
+              <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>รหัสวิชา</th>
+                    <th>ชื่อวิชา</th>
+                    <th>นก.</th>
+                    <th>lab/lec</th>
+                    <th>sec</th>
+                    <th>ชื่อผู้สอน</th>
+                    <th>จำนวนนิสิต</th>
+                    <th>ชั้นปี</th>
+                    <th>วัน</th>
+                    <th>เวลา</th>
+                    <th>ห้องlab</th>
+                </tr>
+              </thead>
+              <tbody>
+                {serachcountry.length > 1
+                  ? filterresult.map((filtercountry, index) => (
+                    <tr key={index}>
+                        <td>{`${filtercountry.No}`}</td>
+                        <td>{`${filtercountry.idsubject}`}</td>
+                        <td>{`${filtercountry.name}`}</td>
+                        <td>{`${filtercountry.credit}`}</td>
+                        <td>{`${filtercountry.lab_lec}`}</td>
+                        <td>{`${filtercountry.sec}`}</td>
+                        <td className="CheckRegisCoruse-blue-text">{`${filtercountry.teacher}`}</td>
+                        <td>{`${filtercountry.n_people}`}</td>
+                        <td>{filtercountry.class}</td>
+                        <td className="CheckRegisCoruse-blue-text">{`${filtercountry.day}`}</td>
+                        <td>{`${filtercountry.time_start}`}-{`${filtercountry.time_end}`}</td>
+                        <td>{`${filtercountry.room}`}</td>
+                   </tr>
+                    ))
+                  : allcountry.map((getcon, index) => (
+                    <tr key={index}>
+                        <td>{`${getcon.No}`}</td>
+                        <td>{`${getcon.idsubject}`}</td>
+                        <td>{`${getcon.name}`}</td>
+                        <td>{`${getcon.credit}`}</td>
+                        <td>{`${getcon.lab_lec}`}</td>
+                        <td>{`${getcon.sec}`}</td>
+                        <td className="CheckRegisCoruse-blue-text">{`${getcon.teacher}`}</td>
+                        <td>{`${getcon.n_people}`}</td>
+                        <td>{getcon.class}</td>
+                        <td className="CheckRegisCoruse-blue-text">{`${getcon.day}`}</td>
+                        <td>{`${getcon.time_start}`}-{`${getcon.time_end}`}</td>
+                        <td>{`${getcon.room}`}</td>
+                  </tr>
+                    ))}
+              </tbody>
+            </table>
+            </div>        
+           </div>
           </div>
         </div>
-
-      </div>
-
-      <div style={{ marginTop: '25px' }}>
-        <div className="ChangePosition">
-          <CheckRegisCoruse></CheckRegisCoruse>
-        </div>
-
-      </div>
-    </div>
   );
 }
-
+ 
+               
+      // <div style={{ marginTop: '25px' }}>
+      //   <div className="ChangePosition">
+      //   {/* <Search></Search> */}
+      //     {/* <CheckRegisCoruse></CheckRegisCoruse> */}
+      //     <Search></Search>
+      //    </div>
+      //   </div>
+ 
 export default ResultTeach;

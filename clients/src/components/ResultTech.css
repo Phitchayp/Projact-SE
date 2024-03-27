@@ -17,6 +17,17 @@ a {
   margin-right: 120px;
 }
 
+.dropdown6 select {
+  width: 100px; /* Adjust the width as needed */
+  height: 30px;
+  padding: 5px; /* Adjust padding as needed */
+  font-size: 12px; /* Adjust font size as needed */
+  border: 1px solid #000; /* Ensure the border is always visible */
+  border-radius: 4px; /* Border radius */
+  background-color: #fff; /* Background color */
+  color: #000; /* Text color */
+}
+
 .dropdown10 select {
   width: 80px;
   /* Adjust the width as needed */
@@ -95,6 +106,12 @@ option {
   /* Background color */
   color: #000;
   /* Text color */
+}
+
+.dropdown6 {
+  margin-left: 60px; /* Adjust left margin */
+  
+  display: inline-block; /* Change to block to move below text */
 }
 
 .dropdown10 {

@@ -32,6 +32,11 @@ const db = mysql.createConnection({
   user: 'root',
   password: '12345678',
   database: 'project_se',
+
+  // host: '192.168.43.237',
+  // user: 'dbSE',
+  // password: 'root123456',
+  // database: 'databasese',
 })
 
 db.connect((err)=>{
@@ -909,5 +914,18 @@ app.get('/search-nameEdu', (req, res) => {
       return res.status(500).send('Error searching name_edu');
     }
     res.json(results); 
+  });
+});
+
+app.get('/searchbarcourses', (req, res) => {
+  const { query } = req.query; // รับคำค้นหาจาก query string
+  // ตัวอย่างคำสั่ง SQL สำหรับค้นหาในตาราง courses
+  const sql = 'SELECT * FROM course WHERE subject_id LIKE ? OR subject_name LIKE ?';
+  db.query(sql, [`%${query}%`, `%${query}%`], (err, results) => {
+    if (err) {
+      console.error('Error searching courses:', err);
+      return res.status(500).send('Error searching courses');
+    }
+    res.json(results); // ส่งข้อมูลรายวิชาที่ค้นหาได้กลับไปยัง frontend
   });
 });
