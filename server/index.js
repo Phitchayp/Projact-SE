@@ -287,18 +287,6 @@ app.get('/getsubsearch/:year', (req, res) => {
   });
 });
 
-
-app.get('/getsubsearch1/:year', (req, res) => {
-  const {year} =req.params;
-  db.query("SELECT * FROM opencourse where course_year = ? ORDER BY courseid",[year],(err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(result);
-    }
-  });
-});
-
 app.post("/uploaded", (req, res) => {
   const excelData = req.body.excelData;
   const selectedValue1 = req.body.selectedValue1;
@@ -390,12 +378,28 @@ app.post("/addsub", (req, res) => {
 //   });
 // });
 
+app.get('/getsubsearch1/:year/:term', (req, res) => {
+  const { year, term } = req.params;
+  
+  db.query("SELECT * FROM opencourse WHERE course_year = ? AND term in (?) ORDER BY courseid", [year, term], (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+      console.log(term);
+      console.log("SELECT * FROM opencourse WHERE course_year = " + year + " AND term IN (" + db.escape(term) + ") ORDER BY courseid");
+    }
+  });
+});
+
+
 app.post("/opencourse", (req, res) => {
   const listCheck = req.body.listCheck; // รับข้อมูลที่ส่งมาจากหน้าเว็บ
+  const termChecked=req.body.termChecked;
   const values = listCheck.map(item => [ item.course_year, item.id, item.subjectName, item.credit, item.category]);
 
   // สร้างสตริงของคำสั่ง SQL ที่มี parameterized queries
-  const insertQuery = "INSERT INTO opencourse (course_year, subject_id, subject_name, credit, category,state) VALUES ?";
+  const insertQuery = "INSERT INTO opencourse (course_year, subject_id, subject_name, credit, category,term,state) VALUES ?";
   const selectQuery = "SELECT * FROM opencourse WHERE subject_id = ? AND subject_name = ? AND course_year = ?";
 
   // สร้าง Promise เพื่อให้มั่นใจว่าคำสั่ง SQL ถูกทำสำเร็จหรือไม่
@@ -410,7 +414,7 @@ app.post("/opencourse", (req, res) => {
             console.log("Data already exists for subject_id, subject_name, and course_year:", item.id, item.subjectName, item.course_year);
             resolve({ id: item.id, exists: true }); // ส่งข้อมูลว่าข้อมูลมีอยู่แล้ว
           } else {
-            const singleValue = [[item.course_year, item.id, item.subjectName, item.credit, item.category,1]];
+            const singleValue = [[item.course_year, item.id, item.subjectName, item.credit, item.category,termChecked,1]];
             db.query(insertQuery, [singleValue], (err, result) => {
               if (err) {
                 console.error(err);
@@ -435,6 +439,37 @@ app.post("/opencourse", (req, res) => {
     .catch(error => {
       // หากเกิดข้อผิดพลาดในการทำคำสั่ง SQL ใด ๆ
       res.status(500).send("Error inserting values");
+    });
+});
+
+app.delete("/deletesuball", (req, res) => {
+  const listCheck = req.body.listCheck; // รับข้อมูลที่ส่งมาจากหน้าเว็บ
+  const deleteQuery = "DELETE FROM course WHERE subject_id = ? AND subject_name = ? AND course_year = ?";
+  
+  // สร้าง Promise เพื่อลบข้อมูลทั้งหมดใน listCheck
+  const deleteValuesPromises = listCheck.map(item => {
+    return new Promise((resolve, reject) => {
+      db.query(deleteQuery, [item.id, item.subjectName, item.course_year], (err, result) => {
+        if (err) {
+          console.error("Error deleting data:", err);
+          reject(err);
+        } else {
+          console.log("Data deleted for :", item.id, item.subjectName, item.course_year);
+          resolve(result);
+        }
+      });
+    });
+  });
+
+  // รอให้ทุก Promise ใน deleteValuesPromises เสร็จสมบูรณ์ก่อนที่จะส่งผลลัพธ์กลับ
+  Promise.all(deleteValuesPromises)
+    .then(results => {
+      // ส่งผลลัพธ์กลับหลังจากที่ทุกคำสั่ง SQL เสร็จสมบูรณ์
+      res.send("All values deleted successfully");
+    })
+    .catch(error => {
+      // หากเกิดข้อผิดพลาดในการทำคำสั่ง SQL ใด ๆ
+      res.status(500).send("Error deleting values");
     });
 });
 
