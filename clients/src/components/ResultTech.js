@@ -151,17 +151,17 @@ function ResultTeach() {
   };
  
   return (
-    <div className="top">
+    <div className="top" style={{ marginBottom:'30px' }}>
       <h className="DateAdmin-text">ผลการลงทะเบียน</h>
       <div style={{ marginTop: '25px' }}>
         <div>
  
           <a>ปีการศึกษา</a>
-          <a>ภาคการศึกษา</a>
-          <a>ชั้นปี</a>
+          <a style={{marginLeft:'-25px'}}>ภาคการศึกษา</a>
+          <a style={{marginLeft:'-55px'}}>ชั้นปี</a>
           <a>ห้อง</a>
           <a>สาขา</a>
-          <a>วัน</a>
+          
  
           <div className="dropdown">
             <div className="dropdown5" style={{marginLeft:'1px', marginRight:'5px'}}>
@@ -217,7 +217,7 @@ function ResultTeach() {
                 <option value="25202">25202</option>
               </select>
             </div>
-            <div className="dropdown13">
+            <div className="dropdown13" style={{marginLeft:'65px'}}>
               <select value={selectedValue13} onChange={handleDropdownChange13}>
                 <option value=""></option>
                 <option value="T05">T05</option>
@@ -237,7 +237,7 @@ function ResultTeach() {
         </div>
  
         <div className="ChangePosition2">
-          <div style={{ width: "230px" }}>
+          <div style={{ width: "265px" }}>
             <div class="ResultTech-Text">ชื่อผู้สอน</div>
             <div
               class="ResultTechsearchBar-searchBox"
@@ -267,22 +267,26 @@ function ResultTeach() {
               )}
             </div>
           </div>
-
-          <div className="dropdownDay">
-          <select value={SelectDay} onChange={handleDropdownSelectDay}>
-              <option value=""></option>
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-              <option value="Saturday">Saturday</option>
-              <option value="Sunday">Sunday</option>
-              
-            </select>
+          
+          <div className="ChangePosition3" style={{marginLeft:'-34px'}}>
+          <div style={{marginTop:'0px',marginLeft:'-10px'}}>
+            <a style={{marginLeft:'60px'}}>วัน</a>
+            <div className="dropdownDay" style={{marginTop:'10px',marginLeft:'-10px'}}>
+            <select value={SelectDay} onChange={handleDropdownSelectDay} style={{ height: '35px' }}>
+                <option value=""></option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+                
+              </select>
+            </div>
           </div>
  
-          <div>
+          <div style={{marginLeft:'-25px'}}>
             <div class="ResultTech-Text">เวลาเริ่มต้น</div>
             <TimePickerRe></TimePickerRe>
           </div>
@@ -290,6 +294,7 @@ function ResultTeach() {
           <div>
             <div class="ResultTech-Text">เวลาสิ้นสุด</div>
             <TimePickerRe></TimePickerRe>
+          </div>
           </div>
  
             <div className="ButtonChange">
@@ -330,7 +335,7 @@ function ResultTeach() {
                 />
                 </button>
                 )}
-             <table className="table " style={{ color:"black" }}>
+             {/* <table className="table " style={{ color:"black" }}>
               <thead>
                 <tr>
                     <th>No.</th>
@@ -382,7 +387,7 @@ function ResultTeach() {
                   </tr>
                     ))}
               </tbody>
-            </table>
+            </table> */}
             </div>        
            </div>
           </div>
