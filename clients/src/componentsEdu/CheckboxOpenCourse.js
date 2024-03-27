@@ -90,8 +90,8 @@ function CheckboxOpenCourse() {
             axios.get("http://127.0.0.1:3001/getsubsearch/" + myyear)
                 .then((response) => {
                     setCourses(response.data);
-                    console.log("หลักสูตร"+myyear)
-                   
+                    console.log("หลักสูตร" + myyear)
+
                 })
                 .catch((error) => {
                     console.error('Error fetching course data:', error);
@@ -123,7 +123,7 @@ function CheckboxOpenCourse() {
             axios.get("http://127.0.0.1:3001/getsubsearch1/" + myyear2)
                 .then((response) => {
                     setCourses2(response.data);
-                    console.log("เปิดสอน"+myyear2)
+                    console.log("เปิดสอน" + myyear2)
                 })
                 .catch((error) => {
                     console.error('Error fetching course data:', error);
@@ -159,9 +159,9 @@ function CheckboxOpenCourse() {
         try {
             await axios.post("http://127.0.0.1:3001/opencourse", {
                 listCheck: listCheck,
-                
+
             });
-            
+
             console.log("Data posted successfully");
 
             Swal.fire({
@@ -180,9 +180,9 @@ function CheckboxOpenCourse() {
         } catch (error) {
             console.error("Error posting data:", error);
         }
-       
+
     };
-    
+
 
     const handleDeleteOpenCourse = async () => {
         try {
@@ -191,9 +191,9 @@ function CheckboxOpenCourse() {
                     listCheck: listCheck
                 }
             });
-    
+
             console.log("Data delete successfully");
-    
+
             Swal.fire({
                 title: "ลบข้อมูลสำเร็จ!",
                 text: "ลบรายวิชาที่สามารถเปิดสอน",
@@ -211,7 +211,7 @@ function CheckboxOpenCourse() {
             console.error("Error deleting data:", error);
         }
     };
-    
+
 
     const handleDeleteCourse = async (courses) => {
         try {
@@ -231,7 +231,7 @@ function CheckboxOpenCourse() {
             await axios.delete(`http://localhost:3001/deleteopensuball/${courses}`);
             setCourses((prevsubjects) => prevsubjects.filter((courses) => courses.courseid !== courses));
             console.log("Data delete successfully");
-    
+
             Swal.fire({
                 title: "ลบข้อมูลสำเร็จ!",
                 text: "ลบรายวิชาที่สามารถเปิดสอน",
@@ -289,7 +289,7 @@ function CheckboxOpenCourse() {
 
 
                         <div className="CheckboxOpenCourse-check-block">
-                            <p style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold' }}>เลือกรายการ</p>
+                            <p style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold' }}>เลือกรายการที่ต้องการลบ/บันทึก</p>
                             <div className='leftleft'>
 
                                 {/* All */}
@@ -299,6 +299,32 @@ function CheckboxOpenCourse() {
                                 <span className="CheckboxOpenCourse-checkbox-text" style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginButton: '10px' }}>เลือกทั้งหมด</span>
                             </div>
                         </div>
+                        <div style={{ display: 'flex', alignItems: 'center', marginTop: '-25px' }}>
+                            <p style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold' }}>เลือกภาคเรียน</p>
+                            <div className='leftleft'>
+                                <input
+                                    type="radio"
+                                    id="selectAllCourses"
+                                    name="selectOption"
+                                    value="allCourses"
+                                    checked={isChecked}
+                                    onChange={() => handleCheckboxAllChange('selectAll', !isChecked)}
+                                />
+                                <label htmlFor="selectAllCourses" className="CheckboxOpenCourse-checkbox-text" style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginButton: '10px' }}>ภาคต้น</label>
+
+                                <input
+                                    style={{ marginLeft: '20px' }}
+                                    type="radio"
+                                    id="selectOpenedCourses"
+                                    name="selectOption"
+                                    value="openedCourses"
+                                    checked={!isChecked}
+                                    onChange={() => handleCheckboxAllChange('selectAll', !isChecked)}
+                                />
+                                <label htmlFor="selectOpenedCourses" className="CheckboxOpenCourse-checkbox-text" style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginButton: '10px' }}>ภาคปลาย</label>
+                            </div>
+                        </div>
+
                         {/* ทีละอัน */}
                         <div class="CheckboxOpenCourse-NewBox" style={{ backgroundColor: '#dcccd4' }}>
                             {/* <CourseList courses={courses} setListCheck={setListCheck}></CourseList> */}
@@ -351,7 +377,7 @@ function CheckboxOpenCourse() {
 
                     <div className='CheckboxOpenCourse-deleteButton'>
                         <button id="deleteButtonOpenCourse"
-                        onClick={() => handleDeleteOpenCourse(listCheck)}
+                            onClick={() => handleDeleteOpenCourse(listCheck)}
                         >
                             <p class="CheckboxOpenCourse-saveButtontext">ลบข้อมูล</p>
                         </button>
@@ -376,37 +402,51 @@ function CheckboxOpenCourse() {
                         <div className='CheckboxOpenCourse-dropdown'>
                             {/*                             
         <p2 style={{ fontFamily: 'Kanit, sans-serif' }}>หลักสูตร</p2> */}
-                            <div className='CheckboxOpenCourse-dropdown2' >
-                                <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>ปีการศึกษา</p>
-                                <select value={myyear2} onChange={(e) => { setYear2(e.target.value) }}>
-                                    <option value=""></option>
-                                    <option value="2569">2569</option>
-                                    <option value="2568">2568</option>
-                                    <option value="2567">2567</option>
-                                    <option value="2566">2566</option>
-                                    <option value="2565">2565</option>
-                                    <option value="2564">2564</option>
-                                    <option value="2563">2563</option>
-                                    <option value="2562">2562</option>
-                                    <option value="2561">2561</option>
-                                    <option value="2560">2560</option>
-                                    <option value="2559">2559</option>
-                                    <option value="2558">2558</option>
-                                    <option value="2557">2557</option>
-                                    <option value="2556">2556</option>
-                                    <option value="2555">2555</option>
-                                </select>
-
-                                <button onClick={() => { search2() }}className='CheckboxOpenCourse-button'>เลือก</button>
+                            <div className='CheckboxOpenCourse-dropdown2' style={{ display: 'flex', alignItems: 'center' }}>
                                 <div>
+                                    <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>ปีการศึกษา</p>
+                                    <select value={myyear2} onChange={(e) => { setYear2(e.target.value) }}>
+                                        <option value=""></option>
+                                        <option value="2569">2569</option>
+                                        <option value="2568">2568</option>
+                                        <option value="2567">2567</option>
+                                        <option value="2566">2566</option>
+                                        <option value="2565">2565</option>
+                                        <option value="2564">2564</option>
+                                        <option value="2563">2563</option>
+                                        <option value="2562">2562</option>
+                                        <option value="2561">2561</option>
+                                        <option value="2560">2560</option>
+                                        <option value="2559">2559</option>
+                                        <option value="2558">2558</option>
+                                        <option value="2557">2557</option>
+                                        <option value="2556">2556</option>
+                                        <option value="2555">2555</option>
+                                    </select>
+                                </div>
+
+                                <div style={{ marginLeft: '20px' }}>
+                                    <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>ภาคเรียน</p>
+                                    <select>
+                                        <option value=""></option>
+                                        <option value="ต้น">ต้น</option>
+                                        <option value="ปลาย">ปลาย</option>
+                                        <option value="ทั้งหมด">ทั้งหมด</option>
+                                    </select>
+                                </div>
+
+                                <button onClick={() => { search2() }} className='CheckboxOpenCourse-button' style={{ marginLeft: '20px', marginTop:'55px'}}>เลือก</button>
+
+                                
+
+                            </div>
+                            <div>
                                     <p style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginBottom: '30px' }}>รายวิชาที่อาจารย์สามารถลงทะเบียน</p>
 
                                 </div>
 
-                            </div>
-
                             <div className="CheckboxOpenCourse-NewBox" style={{ marginTop: '35px' }}>
-                            <OpenCourseList A={courses2}/>
+                                <OpenCourseList A={courses2} />
 
                             </div>
 
@@ -420,7 +460,7 @@ function CheckboxOpenCourse() {
                     <div class="CheckboxOpenCourse-changeButton2">
                         <div className='CheckboxOpenCourse-deleteButton2'>
                             <button id="deleteButtonOpenCourse2"
-                            onClick={handleDeleteCourseFinal}>
+                                onClick={handleDeleteCourseFinal}>
                                 <p class="CheckboxOpenCourse-saveButtontext">ลบข้อมูล</p>
                             </button>
                         </div>
