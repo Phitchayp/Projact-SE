@@ -23,10 +23,6 @@ const db = mysql.createConnection({
   // user: 'root',
   // password: '',
   // database: 'project_se',
-  // host: 'localhost',
-  // user: 'root',
-  // password: '',
-  // database: 'tarangsorn',
 
   // host: 'localhost',
   // user: 'root',
