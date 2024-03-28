@@ -109,7 +109,7 @@ function CheckCourse() {
                                 <option value=""></option>
                                 <option value="ภาคต้น">ภาคต้น</option>
                                 <option value="ภาคปลาย">ภาคปลาย</option>
-                                <option value="ภาคต้น','ภาคปลาย">ทั้งหมด</option>
+                                <option value="ทั้งหมด">ทั้งหมด</option>
                             </select>
                             <button onClick={() => { search2() }} className='CheckboxOpenCourse-button'>เลือก</button>
                         </div>

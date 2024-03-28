@@ -12,8 +12,8 @@ function RegisResultTable() {
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  const [selectedValue5, setSelectedValue5] = useState("");
-  const [selectedValue6, setSelectedValue6] = useState("");
+  const [selectyear, setSelectyear] = useState("");
+  const [selectterm, setSelectterm] = useState("");
 
   document.addEventListener("DOMContentLoaded", function () {
     // เพิ่มโค้ดที่ต้องการให้ทำงานหลังจากการโหลดหน้าเว็บเสร็จสมบูรณ์ที่นี่
@@ -37,33 +37,33 @@ function RegisResultTable() {
   });
 
   const searchCourses = async () => {
-    // Convert the selectedYear array to a comma-separated string
-    // If your backend expects an array, you might need to adjust this
     const years = selectedYear.join(',');
+
 
     try {
       const response = await Axios.get(
-        `http://localhost:3001/search-courses?query=${encodeURIComponent(searchText)}&checkboxValue=${encodeURIComponent(years)}`
-
+        `http://localhost:3001/search-courses?query=${encodeURIComponent(searchText)}&checkboxValue=${encodeURIComponent(years)}&selectterm=${encodeURIComponent(selectterm)}&selectyear=${encodeURIComponent(selectyear)}`
       );
-      setSearchResults(response.data); // Update state with search results
+      setSearchResults(response.data); 
     } catch (error) {
       console.error("Error searching courses:", error);
     }
   };
 
+  
+
   const handleDropdownChange5 = (event) => {
-    setSelectedValue5(event.target.value);
+    setSelectyear(event.target.value);
   };
 
   const handleDropdownChange6 = (event) => {
-    setSelectedValue6(event.target.value);
+    setSelectterm(event.target.value);
   };
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
     if (e.target.value.length > 0) {
       // แก้ไขตรงนี้เพื่อค้นหาทันทีที่ผู้ใช้พิมพ์
-      searchCourses();
+      searchCourses(selectyear, selectterm);
     } else {
       setSearchResults([]); // หากช่องค้นหาว่าง, ล้างผลลัพธ์การค้นหา
     }
@@ -210,7 +210,7 @@ function RegisResultTable() {
                   </label>
                   {/* <div className="dropdownRegisResultTable "> */}
                     <div className="dropdown5" style={{ marginLeft: '1px', marginRight: '5px' }}>
-                      <select value={selectedValue5} onChange={handleDropdownChange5}>
+                      <select value={selectyear} onChange={handleDropdownChange5}>
                         <option value=""></option>
                         <option value="2569">2569</option>
                         <option value="2568">2568</option>
@@ -231,7 +231,7 @@ function RegisResultTable() {
                     </div>
 
                     <div className="dropdown6">
-                      <select value={selectedValue6} onChange={handleDropdownChange6}>
+                      <select value={selectterm} onChange={handleDropdownChange6}>
                         <option value=""></option>
                         <option value="ภาคต้น">ภาคต้น</option>
                         <option value="ภาคปลาย">ภาคปลาย</option>
