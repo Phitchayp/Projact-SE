@@ -7,11 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  // host: '127.0.0.1',
-  // user: 'root',
-  // password: '123456',
-  // database: 'databasese',
-  // port: '3306'
+  host: '127.0.0.1',
+  user: 'root',
+  password: '123456',
+  database: 'databasese',
+  port: '3306'
  //pond
   // host: 'localhost',
   // user: 'root',
@@ -28,10 +28,10 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  host: 'localhost',
-  user: 'root',
-  password: '12345678',
-  database: 'project_se',
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
+  // database: 'project_se',
 
   // host: '192.168.43.237',
   // user: 'dbSE',
@@ -177,7 +177,7 @@ app.get('/searchsubject', (req, res) => {
   const searchText = req.query.searchText || '';
 
   // ใช้ prepared statement เพื่อป้องกัน SQL injection
-  const sql = "SELECT * FROM course WHERE name LIKE ?";
+  const sql = "SELECT * FROM course WHERE subject_name LIKE ?";
 
   db.query(sql, [`%${searchText}%`], (err, result) => {
       if (err) {
@@ -380,26 +380,38 @@ app.post("/addsub", (req, res) => {
 
 app.get('/getsubsearch1/:year/:term', (req, res) => {
   const { year, term } = req.params;
-  
-  db.query("SELECT * FROM opencourse WHERE course_year = ? AND term in (?) ORDER BY courseid", [year, term], (err, result) => {
+
+  let sqlQuery;
+  let sqlParams;
+
+  if (term == "ทั้งหมด") {
+    sqlQuery = "SELECT * FROM opencourse WHERE course_year = ? AND (term = 'ภาคต้น' OR term = 'ภาคปลาย') ORDER BY courseid";
+    sqlParams = [year];
+  } else {
+    sqlQuery = "SELECT * FROM opencourse WHERE course_year = ? AND (term = ? ) ORDER BY courseid";
+    sqlParams = [year, term];
+  }
+
+  db.query(sqlQuery, sqlParams, (err, result) => {
     if (err) {
       console.log(err);
     } else {
       res.send(result);
       console.log(term);
-      console.log("SELECT * FROM opencourse WHERE course_year = " + year + " AND term IN (" + db.escape(term) + ") ORDER BY courseid");
+     
     }
   });
 });
 
 
+
 app.post("/opencourse", (req, res) => {
   const listCheck = req.body.listCheck; // รับข้อมูลที่ส่งมาจากหน้าเว็บ
   const termChecked=req.body.termChecked;
-  const values = listCheck.map(item => [ item.course_year, item.id, item.subjectName, item.credit, item.category]);
+  const values = listCheck.map(item => [ item.courses,item.course_year, item.id, item.subjectName, item.credit, item.category]);
 
   // สร้างสตริงของคำสั่ง SQL ที่มี parameterized queries
-  const insertQuery = "INSERT INTO opencourse (course_year, subject_id, subject_name, credit, category,term,state) VALUES ?";
+  const insertQuery = "INSERT INTO opencourse (courses,course_year, subject_id, subject_name, credit, category,term,state) VALUES ?";
   const selectQuery = "SELECT * FROM opencourse WHERE subject_id = ? AND subject_name = ? AND course_year = ?";
 
   // สร้าง Promise เพื่อให้มั่นใจว่าคำสั่ง SQL ถูกทำสำเร็จหรือไม่
@@ -414,7 +426,7 @@ app.post("/opencourse", (req, res) => {
             console.log("Data already exists for subject_id, subject_name, and course_year:", item.id, item.subjectName, item.course_year);
             resolve({ id: item.id, exists: true }); // ส่งข้อมูลว่าข้อมูลมีอยู่แล้ว
           } else {
-            const singleValue = [[item.course_year, item.id, item.subjectName, item.credit, item.category,termChecked,1]];
+            const singleValue = [[ item.courses,item.course_year, item.id, item.subjectName, item.credit, item.category,termChecked,1]];
             db.query(insertQuery, [singleValue], (err, result) => {
               if (err) {
                 console.error(err);
@@ -715,7 +727,7 @@ app.get('/courset', (req, res) => {
 
 
 app.get("/search-courses", (req, res) => {
-  const { query, checkboxValue } = req.query;
+  const { query, checkboxValue, selectterm, selectyear } = req.query;
 
   const courseValues = checkboxValue
     .split(",")
@@ -725,9 +737,15 @@ app.get("/search-courses", (req, res) => {
     return res.json([]);
   }
 
-  let sqlQuery = `SELECT DISTINCT subject_id, subject_name, credit, category FROM course WHERE courses IN (${courseValues.map(() => '?').join(', ')})`;
+  let sqlQuery = `SELECT DISTINCT subject_id, subject_name, credit, category FROM opencourse WHERE courses IN (${courseValues.map(() => '?').join(', ')})`;
 
   let queryParams = [...courseValues];
+
+  // เพิ่มเงื่อนไขสำหรับ selectterm และ selectyear
+  if (selectterm && selectyear) {
+    sqlQuery += ` AND term = ? AND course_year = ?`;
+    queryParams.push(selectterm, selectyear);
+  }
 
   // If a search query is provided, extend the SQL query to include a search condition.
   if (query) {
@@ -940,7 +958,7 @@ app.listen("3001", () => {
 
 app.get('/search-nameajarn', (req, res) => {
   const { query } = req.query; // รับคำค้นหาจาก query string
-  const sql = 'SELECT * FROM usersaj WHERE name LIKE ?';
+  const sql = 'SELECT * FROM allusers WHERE id=2 and fullname LIKE ?';
   db.query(sql, [`%${query}%`, `%${query}%`], (err, results) => {
     if (err) {
       console.error('Error searching name_ajarn:', err);
@@ -952,7 +970,7 @@ app.get('/search-nameajarn', (req, res) => {
 
 app.get('/search-nameEdu', (req, res) => {
   const { query } = req.query; // รับคำค้นหาจาก query string
-  const sql = 'SELECT * FROM usersed WHERE name LIKE ?';
+  const sql = 'SELECT * FROM allusers WHERE id=2 and fullname LIKE ?';
   db.query(sql, [`%${query}%`, `%${query}%`], (err, results) => {
     if (err) {
       console.error('Error searching name_edu:', err);
