@@ -49,6 +49,7 @@ function CheckboxOpenCourse() {
         if (isChecked) {
             // เพิ่มข้อมูลของทุกตัวในรายการ courses เข้าไปใน listCheck
             const selectedCourses = courses.map(course => ({
+                courses:course.courses,
                 course_year: course.course_year,
                 id: course.subject_id,
                 subjectName: course.subject_name,
@@ -146,9 +147,9 @@ function CheckboxOpenCourse() {
 
 
     const handleCheckboxChange = (coursedata) => {
-        const { course_year, id, checked, subjectName, credit, category } = coursedata;
+        const { courses,course_year, id, checked, subjectName, credit, category } = coursedata;
         if (checked) {
-            setListCheck(prevList => [...prevList, { course_year, id, subjectName, credit, category }]);
+            setListCheck(prevList => [...prevList, { courses,course_year, id, subjectName, credit, category }]);
         } else {
             setListCheck(prevList => prevList.filter(item => item.id !== id));
         }
@@ -280,18 +281,28 @@ function CheckboxOpenCourse() {
             console.log("Data delete successfully");
 
             Swal.fire({
-                title: "ลบข้อมูลสำเร็จ!",
-                text: "ลบรายวิชาที่สามารถเปิดสอน",
-                icon: "success",
-                customClass: {
-                    popup: 'kanit-font',
-                    header: 'kanit-font',
-                    title: 'kanit-font',
+                title: "คุณแน่ใจหรือไมว่าจะลบรายวิชาทั้งหมด?",
+                text: "คุณต้องการลบรายวิชาทั้งหมด",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+              }).then((result) => {
+                
+                if (result.isConfirmed) {
+                  Swal.fire({
+                    title: "Deleted!",
+                    text: "ลบรายวิชาออกทั้งหมดแล้ว",
+                    icon: "success"
+                  }).then((result) =>{
+                    window.location.reload();
+    
+                  });;
+                  
                 }
-            }).then(() => {
-                // หลังจากกดปุ่มตกลงใน Swal.fire ให้รีโหลดหน้าเว็บ
-                window.location.reload();
-            });
+                
+              });
 
         } catch (error) {
             console.error('Error deleting data:', error);
@@ -299,7 +310,7 @@ function CheckboxOpenCourse() {
         }
         console.log(courses)
     };
-    const myValue = "ภาคต้น','ภาคปลาย"
+   
 
 
     return (
@@ -382,14 +393,16 @@ function CheckboxOpenCourse() {
                                                 subjectName: course.subject_name,
                                                 credit: course.credit,
                                                 category: course.category,
-                                                course_year: course.course_year // เพิ่ม course_year เข้าไปในอ็อบเจกต์
+                                                course_year: course.course_year,
+                                                courses: course.courses,
                                             });
                                         }} type='checkbox' id={`checkText${course.courseid}`} />
 
 
                                         <div key={course.courseid} className='Course-Items-open'>
                                             {/* <input type='checkbox' id={`checkText${course.courseid}`}/> */}
-                                            <div className='checkbox-text'>{` ${course.course_year}`}</div>
+                                            <div className='checkbox-text'>{`${course.courses}`}</div>
+                                            <div className='checkbox-text' style={{ marginLeft: '10px' }}>{` ${course.course_year}`}</div>
                                             <div className='checkbox-text' style={{ marginLeft: '10px' }}>{`${course.subject_id} `}</div>
                                             <div className='checkbox-text' style={{ marginLeft: '10px' }}>{`${course.subject_name}`}</div>
                                             <div className='check-text2' >{`${course.credit}`}</div>
@@ -475,7 +488,9 @@ function CheckboxOpenCourse() {
                                         <option value=""></option>
                                         <option value="ภาคต้น">ภาคต้น</option>
                                         <option value="ภาคปลาย">ภาคปลาย</option>
-                                        <option value="ภาคต้น','ภาคปลาย">ทั้งหมด</option>
+                                        <option value="ทั้งหมด">ทั้งหมด</option>
+
+                            
                                     </select>
                                 </div>
 
