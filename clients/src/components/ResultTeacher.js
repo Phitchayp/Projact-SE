@@ -7,6 +7,7 @@ import axios from "axios";
 // Define the days of the week
 const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
+
 // Define the time slots
 const timeSlots = [
   "07:00-07:30",
@@ -256,6 +257,7 @@ const data = [
 function ResultTeacher() {
   
     const [schedule, setSchedule] = useState([]);
+    const name = sessionStorage.getItem("name")
   
     // Define the formatTime function above its first use
     const formatTime = (time) => {
@@ -348,7 +350,7 @@ function ResultTeacher() {
         <div>
           <p className="ResultTeacher-texthead">
             ตารางสอนของ อาจารย์:{" "}
-            <span className="ResultTeacher-nametext">สมเกียรติ ใจดี</span>
+            <span className="ResultTeacher-nametext">{name}</span>
           </p>
         </div>
 

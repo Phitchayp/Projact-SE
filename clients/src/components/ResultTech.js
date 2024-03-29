@@ -7,29 +7,33 @@ import newSearchIcon from "../assets/newsearch.png";
 import Axios from "axios";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
- 
+
 function ResultTeach() {
   const tableData = [2569, 2568, 2567, 2566, 2565, 2564, 2563, 2562, 2561, 2560, 2559, 2558, 2557, 2556, 2555, 'วิชาบังคับ', 'วิชาเลือก', 'วิชาแกน',];
   const [selectedValue5, setSelectedValue5] = useState("");
   const [selectedValue6, setSelectedValue6] = useState("");
   const [selectedValue7, setSelectedValue7] = useState("");
   const [SelectDay, setSelectDay] = useState("");
- 
+
+  const searchIconName = 'searchIconNameValue';
+  const searchIconCourse = 'searchIconCourseValue';
+
+
   const handleDropdownSelectDay = (event) => {
     setSelectDay(event.target.value);
   };
   const handleDropdownChange5 = (event) => {
     setSelectedValue5(event.target.value);
   };
- 
+
   const handleDropdownChange6 = (event) => {
     setSelectedValue6(event.target.value);
   };
- 
+
   const handleDropdownChange7 = (event) => {
     setSelectedValue7(event.target.value);
   };
- 
+
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
   const [selectedValue10, setSelectedValue10] = useState("");
@@ -42,7 +46,7 @@ function ResultTeach() {
   const [allname, setAllname] = useState([]);
   const [filterresult, setFilterresult] = useState([]);
   const [searchNameTable, setSearchNameTable] = useState("");
- 
+
   // กรองข้อมูลตามคำค้นหาที่ผู้ใช้ป้อนลงในช่องค้นหา และเก็บผลลัพธ์ไว้ใน filterdata
   const handlesearch = (event) => {
     const search = event.target.value;
@@ -51,9 +55,9 @@ function ResultTeach() {
     if (search !== "") {
       const filterdata = allname.filter((item) => {
         for (const key in item) {
-            if (typeof item[key] === 'string' && item[key].indexOf(search) !== -1) {
-                return true;
-            }
+          if (typeof item[key] === 'string' && item[key].indexOf(search) !== -1) {
+            return true;
+          }
         }
         return false;
       });
@@ -62,8 +66,8 @@ function ResultTeach() {
       setFilterresult(allname);
     }
   };
- 
- 
+
+
   useEffect(() => {
     const getname = async () => {
       const getres = await fetch("http://localhost:3001/courset");
@@ -73,7 +77,7 @@ function ResultTeach() {
     };
     getname();
   }, []);
- 
+
   const handleAdvancedSearch = async () => {
     // Validate ว่าทุก dropdown และช่องค้นหาถูกกรอกหรือเลือกค่าหรือไม่
     if (
@@ -87,7 +91,7 @@ function ResultTeach() {
       setSearching(true);
       console.log("Advanced Searching...");
     }
- 
+
     try {
       const response1 = await Axios.get(
         `http://localhost:3001/search-courses?query=${searchText1}`
@@ -95,10 +99,10 @@ function ResultTeach() {
       const response2 = await Axios.get(
         `http://localhost:3001/search-nameajarn?query=${searchText2}`
       );
-     
+
       if (response1.data.length === 0 && response2.data.length === 0) {
         alert("ไม่พบข้อมูลชื่อผู้ใช้และรายวิชานี้ กรุณากรอกข้อมูลให้ถูกต้อง");
-      } else if (response1.data.length !== 0 ) {
+      } else if (response1.data.length !== 0) {
         alert("ไม่พบข้อมูลรายวิชานี้ กรุณากรอกข้อมูลให้ถูกต้อง");
       } else if (response2.data.length === 0) {
         alert("ไม่พบข้อมูลชื่อผู้ใช้นี้ กรุณากรอกข้อมูลให้ถูกต้อง");
@@ -112,14 +116,14 @@ function ResultTeach() {
       // เมื่อค้นหาเสร็จสิ้น ปิดการค้นหา
       setSearching(false);
     }
-  };    
- 
- 
+  };
+
+
   // ----------------searchbarCourse------------------------
- 
+
   document.addEventListener("DOMContentLoaded", function () {
     var searchButton = document.getElementById("searchButton");
- 
+
     if (searchButton) {
       searchButton.addEventListener("click", function () {
         var searchText = document.getElementById("searchInput").value.trim();
@@ -128,7 +132,7 @@ function ResultTeach() {
       });
     }
   });
- 
+
   // แถบขาว
   const searchCourses = async () => {
     try {
@@ -142,7 +146,7 @@ function ResultTeach() {
       console.error("Error searching courses:", error);
     }
   };
- 
+
   const handleSearchChangeCourse = (e) => {
     setSearchText1(e.target.value);
     if (e.target.value.length > 0) {
@@ -152,7 +156,7 @@ function ResultTeach() {
       setSearchResults1([]); // หากช่องค้นหาว่าง, ล้างผลลัพธ์การค้นหา
     }
   };
- 
+
   const [selectedCourse, setSelectedCourse] = useState({
     subject_id: "",
     subject_name: "",
@@ -165,12 +169,12 @@ function ResultTeach() {
     });
     setSearchResults1([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
   };
- 
- // --------------------searchbarName--------------------
- 
+
+  // --------------------searchbarName--------------------
+
   document.addEventListener("DOMContentLoaded", function () {
     var searchButton = document.getElementById("searchButton");
- 
+
     if (searchButton) {
       searchButton.addEventListener("click", function () {
         var searchText = document.getElementById("searchInput").value.trim();
@@ -181,7 +185,7 @@ function ResultTeach() {
   });
   const [searchText2, setSearchText2] = useState("");
   const [searchResults2, setSearchResults2] = useState([]);
- 
+
   const searchNameAjarn = async () => {
     try {
       const response = await Axios.get(
@@ -192,7 +196,7 @@ function ResultTeach() {
       console.error("Error searching nameajarn:", error);
     }
   };
- 
+
   const handleSearchChangeName = (e) => {
     setSearchText2(e.target.value);
     if (e.target.value.length > 0) {
@@ -202,33 +206,33 @@ function ResultTeach() {
       setSearchResults2([]); // หากช่องค้นหาว่าง, ล้างผลลัพธ์การค้นหา
     }
   };
- 
+
   const [selectedName, setSelectedName] = useState({
     name: "",
   });
-  const handleSelectName = (usersaj) => {
-    setSearchText2(`${usersaj.name}`);
+  const handleSelectName = (courset) => {
+    setSearchText2(`${courset.teacher}`);
     setSelectedName({
-      name: usersaj.name,
+      teacher: courset.teacher,
     });
-      setSearchResults2([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือก
+    setSearchResults2([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือก
   };
- 
- 
- 
+
+
+
   return (
     <div>
       <div className="turnleft-allEdu">
         <div className="text1">
           <a>ปีการศึกษา</a>
-          <a style={{marginLeft:'-25px'}}>ภาคการศึกษา</a>
-          <a style={{marginLeft:'-40px'}}>ห้อง</a>
-          <a style={{marginLeft:'22px'}}>วัน</a>
-          <a style={{marginLeft:'35px'}}>เวลาเริ่มต้น</a>
-          <a style={{marginLeft:'-20px'}}>เวลาสิ้นสุด</a>
+          <a style={{ marginLeft: '-25px' }}>ภาคการศึกษา</a>
+          <a style={{ marginLeft: '-40px' }}>ห้อง</a>
+          <a style={{ marginLeft: '22px' }}>วัน</a>
+          <a style={{ marginLeft: '35px' }}>เวลาเริ่มต้น</a>
+          <a style={{ marginLeft: '-20px' }}>เวลาสิ้นสุด</a>
         </div>
         <div class="flex-container">
-          <div className="dropdown5" style={{marginLeft:'1px', marginRight:'5px'}}>
+          <div className="dropdown5" style={{ marginLeft: '1px', marginRight: '5px' }}>
             <select value={selectedValue5} onChange={handleDropdownChange5}>
               <option value=""></option>
               <option value="2569">2569</option>
@@ -256,7 +260,7 @@ function ResultTeach() {
               <option value="ภาคฤดูร้อน">ทั้งหมด</option>
             </select>
           </div>
- 
+
           <div className="dropdown7">
             <select value={selectedValue7} onChange={handleDropdownChange7}>
               <option value=""></option>
@@ -269,10 +273,10 @@ function ResultTeach() {
               <option value="1969/1">1969/1</option>
               <option value="25202">25202</option>
             </select>
- 
+
           </div>
           <div className="dropdownDay">
-          <select value={SelectDay} onChange={handleDropdownSelectDay}>
+            <select value={SelectDay} onChange={handleDropdownSelectDay}>
               <option value=""></option>
               <option value="Monday">Monday</option>
               <option value="Tuesday">Tuesday</option>
@@ -281,7 +285,7 @@ function ResultTeach() {
               <option value="Friday">Friday</option>
               <option value="Saturday">Saturday</option>
               <option value="Sunday">Sunday</option>
-             
+
             </select>
           </div>
           <div>
@@ -290,19 +294,19 @@ function ResultTeach() {
             </div>
             <div class="timepickers-container2">
               <TimePickerRe></TimePickerRe>
-             
-     
+
+
             </div>
           </div>
         </div>
- 
+
         <div className="ChangePosition3" >
-          <div style={{ width: "230px" ,marginTop:'10px'}}>
+          <div style={{ width: "230px", marginTop: '10px' }}>
             <div class="ResultTech-Text">ชื่อผู้สอน</div>
             <div
               class="ResultTechsearchBar-searchBox"
               style={{ display: "flex", alignItems: "center" }}
-             
+
             >
               <input
                 value={searchText2}
@@ -311,89 +315,91 @@ function ResultTeach() {
                 placeholder="ชื่อผู้สอน"
               />
               <button onClick={searchNameAjarn}>
-                <img src={searchIconName} alt="Search Icon" />
+                <img src={searchIcon} alt="Search Icon" />
               </button>
               {searchResults2.length > 0 && (
                 <div className="autocomplete-dropdown">
-                  {searchResults2.map((usersaj, index) => (
+                  {searchResults2.map((courset, index) => (
                     <div
                       className="autocomplete-item"
                       key={index}
-                      onClick={() => handleSelectName(usersaj)}
+                      onClick={() => handleSelectName(courset)}
                     >
-                      {usersaj.name}
+                      {courset.teacher}
                     </div>
                   ))}
                 </div>
               )}
             </div>
-           
+
           </div>
- 
-          <div style={{ width: "450px" ,marginTop:'10px'}}>
+
+          <div style={{ width: "450px", marginTop: '10px' }}>
             <div class="ResultTech-Text">รหัสวิชา/ชื่อวิชา</div>
             <div
               class="ResultTechsearchBar-searchBoxSub"
               style={{ display: "flex", alignItems: "center" }}
             >
               <input
-                      value={searchText1}
-                      onChange={handleSearchChangeCourse}
-                      type="text"
-                      placeholder="รหัสวิชา, ชื่อวิชา"
-                    />
-                    <button onClick={searchCourses}>
-                      <img src={searchIconCourse} alt="Search Icon" />
-                    </button>
-                    {searchResults1.length > 0 && (
-                      <div className="autocomplete-dropdown">
-                        {searchResults1.map((course, index) => (
-                          <div
-                            className="autocomplete-item"
-                            key={index}
-                            onClick={() => handleSelectCourse(course)}
-                          >
-                            {course.subject_id} - {course.subject_name}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                value={searchText1}
+                onChange={handleSearchChangeCourse}
+                type="text"
+                placeholder="รหัสวิชา, ชื่อวิชา"
+              />
+              <button onClick={searchCourses}>
+                <img src={searchIcon} alt="Search Icon" />
+              </button>
+              {searchResults1.length > 0 && (
+                <div className="autocomplete-dropdown">
+                  {searchResults1.map((course, index) => (
+                    <div
+                      className="autocomplete-item"
+                      key={index}
+                      onClick={() => handleSelectCourse(course)}
+                    >
+                      {course.subject_id} - {course.subject_name}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
- 
+
           <div className="ButtonChange">
-                {/* ตรวจสอบว่ากำลังค้นหาหรือไม่ */}
-                {searching ? (
-                  <p>Loading...</p>
-                ) : (
-                  <button
+            {/* ตรวจสอบว่ากำลังค้นหาหรือไม่ */}
+            {searching ? (
+              <p>Loading...</p>
+            ) : (
+              <button
+                style={{
+                  backgroundColor: "#127151",
+                  border: "5px",
+                  cursor: "pointer",
+                  width: "110px",
+                  height: "37px",
+                  borderRadius: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "5px 10px",
+                }}
+                onClick={() => handlesearch({ target: { value: searchText2 } })}>
+                <span
                   style={{
-                    backgroundColor: "#127151",
-                    border: "5px",
-                    cursor: "pointer",
-                    width: "110px",
-                    height: "37px",
-                    borderRadius: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "5px 10px",
+                    color: "white",
+                    fontSize: "16px",
+                    fontFamily: "Kanit"
                   }}
-                  onClick={() => handlesearch({ target: { value: searchText2 } })}>
-                    <span
-                  style={{ color: "white",
-                  fontSize: "16px",
-                  fontFamily: "Kanit" }}
-                >{ "search"}
+                >{"search"}
                 </span>
                 <img
                   src={newSearchIcon}
                   alt="New Search Icon"
                   style={{ width: "16px", height: "16px" }}
                 />
-                </button>
-                )}
-             {/* <table className="table " style={{ color:"black" }}>
+              </button>
+            )}
+            {/* <table className="table " style={{ color:"black" }}>
               <thead>
                 <tr>
                     <th>No.</th>
@@ -447,23 +453,23 @@ function ResultTeach() {
               </tbody>
             </table> */}
           </div>
-          </div>
- 
+        </div>
+
         <div>
           <div class="DateAdmin-textEdu">
             <p1>ผลการลงทะเบียนของอาจารย์ทั้งหมด</p1>{" "}
           </div>
           {/* <CheckRegisCoruse></CheckRegisCoruse> */}
           <div className='CheckRegisCoruse-right'>
-          {/* ตารางผลการลงทะเบียน */}
-              <header className="CheckRegisCoruse-Texthead">
+            {/* ตารางผลการลงทะเบียน */}
+            <header className="CheckRegisCoruse-Texthead">
               <ReactHTMLTableToExcel
                 id="test-table-xls-button"
                 className="download-table-xls-button btn btn-success mb-3"
                 table="table-to-xls"
                 filename="ผลการลงทะเบียน"
                 sheet="ผลการลงทะเบียน"
-                buttonText="EXPORT TO EXCEL"/>
+                buttonText="EXPORT TO EXCEL" />
               <table className="CheckRegisCoruse-bordered-table" id="table-to-xls">
                 <thead>
                   <tr>
@@ -482,63 +488,63 @@ function ResultTeach() {
                   </tr>
                 </thead>
                 <tbody>
-                {searchNameTable?.length > 0 ? (
+                  {searchNameTable?.length > 0 ? (
                     filterresult
-                        .filter(filterName => (
-                            filterName.teacher
-                            // Add more conditions for additional fields if needed
-                        ))
-                        .map((filterName, index) => (
-                            <tr key={index}>
-                                <td>{`${filterName.No}`}</td>
-                                <td>{`${filterName.idsubject}`}</td>
-                                <td>{`${filterName.name}`}</td>
-                                <td>{`${filterName.credit}`}</td>
-                                <td>{`${filterName.lab_lec}`}</td>
-                                <td>{`${filterName.sec}`}</td>
-                                <td className="CheckRegisCoruse-blue-text">{`${filterName.teacher}`}</td>
-                                <td>{`${filterName.n_people}`}</td>
-                                <td>{filterName.class}</td>
-                                <td className="CheckRegisCoruse-blue-text">{`${filterName.day}`}</td>
-                                <td>{`${filterName.time_start}`}-{`${filterName.time_end}`}</td>
-                                <td>{`${filterName.room}`}</td>
-                            </tr>
-                        ))
-                ) : (
+                      .filter(filterName => (
+                        filterName.teacher
+                        // Add more conditions for additional fields if needed
+                      ))
+                      .map((filterName, index) => (
+                        <tr key={index}>
+                          <td>{`${filterName.No}`}</td>
+                          <td>{`${filterName.idsubject}`}</td>
+                          <td>{`${filterName.name}`}</td>
+                          <td>{`${filterName.credit}`}</td>
+                          <td>{`${filterName.lab_lec}`}</td>
+                          <td>{`${filterName.sec}`}</td>
+                          <td className="CheckRegisCoruse-blue-text">{`${filterName.teacher}`}</td>
+                          <td>{`${filterName.n_people}`}</td>
+                          <td>{filterName.class}</td>
+                          <td className="CheckRegisCoruse-blue-text">{`${filterName.day}`}</td>
+                          <td>{`${filterName.time_start}`}-{`${filterName.time_end}`}</td>
+                          <td>{`${filterName.room}`}</td>
+                        </tr>
+                      ))
+                  ) : (
                     allname
-                        .filter(getcon => (
-                            getcon.name
-                            // Add more conditions for additional fields if needed
-                        ))
-                        .map((getcon, index) => (
-                            <tr key={index}>
-                                <td>{`${getcon.No}`}</td>
-                                <td>{`${getcon.idsubject}`}</td>
-                                <td>{`${getcon.name}`}</td>
-                                <td>{`${getcon.credit}`}</td>
-                                <td>{`${getcon.lab_lec}`}</td>
-                                <td>{`${getcon.sec}`}</td>
-                                <td className="CheckRegisCoruse-blue-text">{`${getcon.teacher}`}</td>
-                                <td>{`${getcon.n_people}`}</td>
-                                <td>{getcon.class}</td>
-                                <td className="CheckRegisCoruse-blue-text">{`${getcon.day}`}</td>
-                                <td>{`${getcon.time_start}`}-{`${getcon.time_end}`}</td>
-                                <td>{`${getcon.room}`}</td>
- 
- 
-                            </tr>
+                      .filter(getcon => (
+                        getcon.name
+                        // Add more conditions for additional fields if needed
+                      ))
+                      .map((getcon, index) => (
+                        <tr key={index}>
+                          <td>{`${getcon.No}`}</td>
+                          <td>{`${getcon.idsubject}`}</td>
+                          <td>{`${getcon.name}`}</td>
+                          <td>{`${getcon.credit}`}</td>
+                          <td>{`${getcon.lab_lec}`}</td>
+                          <td>{`${getcon.sec}`}</td>
+                          <td className="CheckRegisCoruse-blue-text">{`${getcon.teacher}`}</td>
+                          <td>{`${getcon.n_people}`}</td>
+                          <td>{getcon.class}</td>
+                          <td className="CheckRegisCoruse-blue-text">{`${getcon.day}`}</td>
+                          <td>{`${getcon.time_start}`}-{`${getcon.time_end}`}</td>
+                          <td>{`${getcon.room}`}</td>
+
+
+                        </tr>
                       ))
                   )}
- 
+
                 </tbody>
               </table>
-              </header>
-            </div>
+            </header>
           </div>
-           
- 
         </div>
+
+
       </div>
+    </div>
   );
 }
 
