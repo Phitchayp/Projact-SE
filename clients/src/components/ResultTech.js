@@ -14,14 +14,20 @@ function ResultTeach() {
   const [selectedValue6, setSelectedValue6] = useState("");
   const [selectedValue7, setSelectedValue7] = useState("");
   const [SelectDay, setSelectDay] = useState("");
+  const [selectedDay, setSelectedDay] = useState(""); 
+  
 
   const searchIconName = 'searchIconNameValue';
   const searchIconCourse = 'searchIconCourseValue';
 
 
-  const handleDropdownSelectDay = (event) => {
-    setSelectDay(event.target.value);
-  };
+
+
+const handleDropdownSelectDay = (event) => {
+  setSelectDay(event.target.value);
+  setSelectedDay(event.target.value); // เก็บค่าวันที่ที่เลือกจาก dropdown
+};
+
   const handleDropdownChange5 = (event) => {
     setSelectedValue5(event.target.value);
   };
@@ -365,6 +371,9 @@ function ResultTeach() {
             </div>
           </div>
 
+
+          
+
           <div className="ButtonChange">
             {/* ตรวจสอบว่ากำลังค้นหาหรือไม่ */}
             {searching ? (
@@ -488,53 +497,50 @@ function ResultTeach() {
                   </tr>
                 </thead>
                 <tbody>
-                  {searchNameTable?.length > 0 ? (
-                    filterresult
-                      .filter(filterName => (
-                        filterName.teacher
-                        // Add more conditions for additional fields if needed
-                      ))
-                      .map((filterName, index) => (
-                        <tr key={index}>
-                          <td>{`${filterName.No}`}</td>
-                          <td>{`${filterName.idsubject}`}</td>
-                          <td>{`${filterName.name}`}</td>
-                          <td>{`${filterName.credit}`}</td>
-                          <td>{`${filterName.lab_lec}`}</td>
-                          <td>{`${filterName.sec}`}</td>
-                          <td className="CheckRegisCoruse-blue-text">{`${filterName.teacher}`}</td>
-                          <td>{`${filterName.n_people}`}</td>
-                          <td>{filterName.class}</td>
-                          <td className="CheckRegisCoruse-blue-text">{`${filterName.day}`}</td>
-                          <td>{`${filterName.time_start}`}-{`${filterName.time_end}`}</td>
-                          <td>{`${filterName.room}`}</td>
-                        </tr>
-                      ))
-                  ) : (
-                    allname
-                      .filter(getcon => (
-                        getcon.name
-                        // Add more conditions for additional fields if needed
-                      ))
-                      .map((getcon, index) => (
-                        <tr key={index}>
-                          <td>{`${getcon.No}`}</td>
-                          <td>{`${getcon.idsubject}`}</td>
-                          <td>{`${getcon.name}`}</td>
-                          <td>{`${getcon.credit}`}</td>
-                          <td>{`${getcon.lab_lec}`}</td>
-                          <td>{`${getcon.sec}`}</td>
-                          <td className="CheckRegisCoruse-blue-text">{`${getcon.teacher}`}</td>
-                          <td>{`${getcon.n_people}`}</td>
-                          <td>{getcon.class}</td>
-                          <td className="CheckRegisCoruse-blue-text">{`${getcon.day}`}</td>
-                          <td>{`${getcon.time_start}`}-{`${getcon.time_end}`}</td>
-                          <td>{`${getcon.room}`}</td>
+                {searchNameTable?.length > 0 ? (
+  filterresult
+    .filter(filterName => (
+      filterName.day === selectedDay && filterName.teacher // กรองตามวันที่และข้อมูลผู้สอน
+    ))
+    .map((filterName, index) => (
+      <tr key={index}>
+        <td>{`${filterName.No}`}</td>
+        <td>{`${filterName.idsubject}`}</td>
+        <td>{`${filterName.name}`}</td>
+        <td>{`${filterName.credit}`}</td>
+        <td>{`${filterName.lab_lec}`}</td>
+        <td>{`${filterName.sec}`}</td>
+        <td className="CheckRegisCoruse-blue-text">{`${filterName.teacher}`}</td>
+        <td>{`${filterName.n_people}`}</td>
+        <td>{filterName.class}</td>
+        <td className="CheckRegisCoruse-blue-text">{`${filterName.day}`}</td>
+        <td>{`${filterName.time_start}`}-{`${filterName.time_end}`}</td>
+        <td>{`${filterName.room}`}</td>
+      </tr>
+    ))
+) : (
+  allname
+    .filter(getcon => (
+      getcon.day === selectedDay && getcon.name // กรองตามวันที่และข้อมูลวิชา
+    ))
+    .map((getcon, index) => (
+      <tr key={index}>
+        <td>{`${getcon.No}`}</td>
+        <td>{`${getcon.idsubject}`}</td>
+        <td>{`${getcon.name}`}</td>
+        <td>{`${getcon.credit}`}</td>
+        <td>{`${getcon.lab_lec}`}</td>
+        <td>{`${getcon.sec}`}</td>
+        <td className="CheckRegisCoruse-blue-text">{`${getcon.teacher}`}</td>
+        <td>{`${getcon.n_people}`}</td>
+        <td>{getcon.class}</td>
+        <td className="CheckRegisCoruse-blue-text">{`${getcon.day}`}</td>
+        <td>{`${getcon.time_start}`}-{`${getcon.time_end}`}</td>
+        <td>{`${getcon.room}`}</td>
+      </tr>
+    ))
+)}
 
-
-                        </tr>
-                      ))
-                  )}
 
                 </tbody>
               </table>
