@@ -206,10 +206,10 @@ function ResultRegisEdu() {
   const [selectedName, setSelectedName] = useState({
     name: "",
   });
-  const handleSelectName = (usersaj) => {
-    setSearchText2(`${usersaj.name}`);
+  const handleSelectName = (courset) => {
+    setSearchText2(`${courset.teacher}`);
     setSelectedName({
-      name: usersaj.name,
+      teacher: courset.teacher,
     });
       setSearchResults2([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือก
   };
@@ -315,13 +315,13 @@ function ResultRegisEdu() {
               </button>
               {searchResults2.length > 0 && (
                 <div className="autocomplete-dropdown">
-                  {searchResults2.map((usersaj, index) => (
+                  {searchResults2.map((courset, index) => (
                     <div
                       className="autocomplete-item"
                       key={index}
-                      onClick={() => handleSelectName(usersaj)}
+                      onClick={() => handleSelectName(courset)}
                     >
-                      {usersaj.name}
+                      {courset.teacher}
                     </div>
                   ))}
                 </div>

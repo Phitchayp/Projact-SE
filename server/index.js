@@ -7,11 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '123456',
-  database: 'databasese',
-  port: '3306'
+  // host: '127.0.0.1',
+  // user: 'root',
+  // password: '123456',
+  // database: 'databasese',
+  // port: '3306'
  //pond
   // host: 'localhost',
   // user: 'root',
@@ -28,10 +28,10 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  // host: 'localhost',
-  // user: 'root',
-  // password: '12345678',
-  // database: 'project_se',
+  host: 'localhost',
+  user: 'root',
+  password: '12345678',
+  database: 'project_se',
 
   // host: '192.168.43.237',
   // user: 'dbSE',
@@ -958,7 +958,7 @@ app.listen("3001", () => {
 
 app.get('/search-nameajarn', (req, res) => {
   const { query } = req.query; // รับคำค้นหาจาก query string
-  const sql = 'SELECT * FROM allusers WHERE id=2 and fullname LIKE ?';
+  const sql = 'SELECT * FROM courset WHERE teacher LIKE ?';
   db.query(sql, [`%${query}%`, `%${query}%`], (err, results) => {
     if (err) {
       console.error('Error searching name_ajarn:', err);
