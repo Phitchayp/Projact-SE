@@ -16,7 +16,7 @@ class RegisTa extends React.Component {
 
   componentDidMount() {
     this.fetchCourseSections();
-    
+
   }
   componentDidMount() {
     this.fetchData();
@@ -42,7 +42,7 @@ class RegisTa extends React.Component {
         practicalCourses: practicalResponse.data, // Data for 'ภาคปฏิบัติ'
         lectureData: lectureResponse.data, // Data for 'ภาคบรรยาย' or lecture courses
         registrationData: registrationResponse.data, // All registration data
-        
+
       });
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -87,79 +87,153 @@ class RegisTa extends React.Component {
   };
   handleDeleteRow = (courseId) => {
     Axios.delete(`http://localhost:3001/delete-course/${courseId}`)
-        .then(response => {
-            // Handle the successful deletion
-            console.log(response.data);
-            // Refresh the data in your component or remove the row from the state
-            this.setState(prevState => ({
-                lectureCourses: prevState.lectureCourses.filter(course => course.id !== courseId),
-                practicalCourses: prevState.practicalCourses.filter(course => course.id !== courseId),
-            }));
-        })
-        .catch(error => {
-            // Handle the error case
-            console.error('There was an error!', error);
-        });
-};
+      .then(response => {
+        // Handle the successful deletion
+        console.log(response.data);
+        // Refresh the data in your component or remove the row from the state
+        this.setState(prevState => ({
+          lectureCourses: prevState.lectureCourses.filter(course => course.id !== courseId),
+          practicalCourses: prevState.practicalCourses.filter(course => course.id !== courseId),
+        }));
+      })
+      .catch(error => {
+        // Handle the error case
+        console.error('There was an error!', error);
+      });
+  };
 
-  renderCourses = (courses) => {
+  renderCoursesLec = (courses) => {
     return courses.flatMap((course, index) => (
       Array.from({ length: course.section }, (_, sectionIndex) => (
         <tr key={`${index}-${sectionIndex}`}>
-        <td>
-          <div className="testtable-image-container">
-          <img
-        src={MyImage}
-        alt="Delete"
-        className="testtable-centered-image"
-        onClick={() => this.handleDeleteRow(course.id)}
-      />
-          </div>
-        </td>
-        <td>{course.years}</td> {/* Display the year data here */}
-        <td>{course.subject_id}</td>
-        <td>{course.subject_name}</td>
-        <td>{course.credit}</td>
-        <td>1</td>
-        <td>800</td>
-        <td>
-          <div className="testtable-inputNumNisit">
-            <InputNumNisit></InputNumNisit>
-          </div>
-        </td>
-        <td>
-        {course.branch}
-          <div>
-            <CheckBoxRe />
-          </div>
-        </td>
-        <td>
-          <div className="testtable-dropdownposition">
-            <select className="testtable-dropdown">
-              {/* 2. Dropdown เลือกวัน */}
-              <option value=""></option>
-              <option value="Monday">Mon</option>
-              <option value="Tuesday">Tue</option>
-              <option value="Wednesday">Wed</option>
-              <option value="Thursday">Thu</option>
-              <option value="Friday">Fri</option>
-              <option value="Friday">Sat</option>
-              <option value="Friday">Sun</option>
-            </select>
-          </div>
-        </td>
-        <td>
-          <div>
-            <div>
-              <TimePickerTa />
+          <td>
+            <div className="testtable-image-container">
+              <img
+                src={MyImage}
+                alt="Delete"
+                className="testtable-centered-image"
+                onClick={() => this.handleDeleteRow(course.id)}
+              />
             </div>
-          </div>
-        </td>
-        <td> </td>
+          </td>
+          <td>{course.years}</td> {/* Display the year data here */}
+          <td>{course.subject_id}</td>
+          <td>{course.subject_name}</td>
+          <td>{course.credit}</td>
+          <td>1</td>
+          <td>800</td>
+          <td>
+            <div className="testtable-inputNumNisit">
+              <InputNumNisit></InputNumNisit>
+            </div>
+          </td>
+          <td>
+            {course.branch}
+            <div>
+              <CheckBoxRe />
+            </div>
+          </td>
+          <td>
+            <div className="testtable-dropdownposition">
+              <select className="testtable-dropdown">
+                {/* 2. Dropdown เลือกวัน */}
+                <option value=""></option>
+                <option value="Monday">Mon</option>
+                <option value="Tuesday">Tue</option>
+                <option value="Wednesday">Wed</option>
+                <option value="Thursday">Thu</option>
+                <option value="Friday">Fri</option>
+                <option value="Friday">Sat</option>
+                <option value="Friday">Sun</option>
+              </select>
+            </div>
+          </td>
+          <td>
+            <div>
+              <div>
+                <TimePickerTa />
+              </div>
+            </div>
+          </td>
+          <td> </td>
         </tr>
-    ))
-  ));
-};
+      ))
+    ));
+  };
+
+  renderCoursesPrac = (courses) => {
+    return courses.flatMap((course, index) => (
+      Array.from({ length: course.section }, (_, sectionIndex) => (
+        <tr key={`${index}-${sectionIndex}`}>
+          <td>
+            <div className="testtable-image-container">
+              <img
+                src={MyImage}
+                alt="Delete"
+                className="testtable-centered-image"
+                onClick={() => this.handleDeleteRow(course.id)}
+              />
+            </div>
+          </td>
+          <td>{course.years}</td> {/* Display the year data here */}
+          <td>{course.subject_id}</td>
+          <td>{course.subject_name}</td>
+          <td>{course.credit}</td>
+          <td>1</td>
+          <td>800</td>
+          <td>
+            <div className="testtable-inputNumNisit">
+              <InputNumNisit></InputNumNisit>
+            </div>
+          </td>
+          <td>
+            {course.branch}
+            <div>
+              <CheckBoxRe />
+            </div>
+          </td>
+          <td>
+            <div className="testtable-dropdownposition">
+              <select className="testtable-dropdown">
+                {/* 2. Dropdown เลือกวัน */}
+                <option value=""></option>
+                <option value="Monday">Mon</option>
+                <option value="Tuesday">Tue</option>
+                <option value="Wednesday">Wed</option>
+                <option value="Thursday">Thu</option>
+                <option value="Friday">Fri</option>
+                <option value="Friday">Sat</option>
+                <option value="Friday">Sun</option>
+              </select>
+            </div>
+          </td>
+          <td>
+            <div>
+              <div>
+                <TimePickerTa />
+              </div>
+            </div>
+          </td>
+          <td>
+            <div className="testtable-dropdownposition">
+              <select className="testtable-dropdown">
+                {/* Dropdown เลือกห้องlab เปลี่ยนเองนะ */}
+                <option value=""></option>
+                <option value="Monday">Mon</option>
+                <option value="Tuesday">Tue</option>
+                <option value="Wednesday">Wed</option>
+                <option value="Thursday">Thu</option>
+                <option value="Friday">Fri</option>
+                <option value="Friday">Sat</option>
+                <option value="Friday">Sun</option>
+              </select>
+            </div>
+          </td>
+          <td> </td>
+        </tr>
+      ))
+    ));
+  };
 
   // handleDeleteRow = (event) => {
   //   // รับค่า index ของแถวที่คลิกที่ภาพ
@@ -210,33 +284,33 @@ class RegisTa extends React.Component {
                 <thead>
                   <tr>
                     <th> </th>
-                <th>หลักสูตร</th>
-                <th>รหัสวิชา</th>
-                <th>ชื่อวิชา</th>
-                <th>นก.</th>
-                <th>lec</th>
-                <th>sec</th>
-                <th>จำนวนนิสิต</th>
-                <th>สาขา,ชั้นปี</th>
-                <th>วัน</th>
-                <th>เวลา</th>
-                <th>หมายเหตุ</th>
+                    <th>หลักสูตร</th>
+                    <th>รหัสวิชา</th>
+                    <th>ชื่อวิชา</th>
+                    <th>นก.</th>
+                    <th>lec</th>
+                    <th>sec</th>
+                    <th>จำนวนนิสิต</th>
+                    <th>สาขา,ชั้นปี</th>
+                    <th>วัน</th>
+                    <th>เวลา</th>
+                    <th>หมายเหตุ</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {this.renderCourses(lectureCourses)}
+                  {this.renderCoursesLec(lectureCourses)}
                 </tbody>
               </table>
             </header>
             <div>
-          <div class="testtable-buttonchange">
-            <div class="RegisResultTable-saveButton">
-              <button id="saveButtonLec">
-                <p class="RegisResultTable-saveButtontext">บันทึก</p>
-              </button>
+              <div class="testtable-buttonchange">
+                <div class="RegisResultTable-saveButton">
+                  <button id="saveButtonLec">
+                    <p class="RegisResultTable-saveButtontext">บันทึก</p>
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
           </>
         )}
 
@@ -248,34 +322,34 @@ class RegisTa extends React.Component {
                 <thead>
                   <tr>
                     <th></th>
-                  <th>หลักสูตร</th>
-                  <th>รหัสวิชา</th>
-                  <th>ชื่อวิชา</th>
-                  <th>นก.</th>
-                  <th>lab</th>
-                  <th>sec</th>
-                  <th>จำนวนนิสิต</th>
-                  <th>สาขา,ชั้นปี</th>
-                  <th>วัน</th>
-                  <th>เวลา</th>
-                  <th>ห้องlab</th>
-                  <th>หมายเหตุ</th>
+                    <th>หลักสูตร</th>
+                    <th>รหัสวิชา</th>
+                    <th>ชื่อวิชา</th>
+                    <th>นก.</th>
+                    <th>lab</th>
+                    <th>sec</th>
+                    <th>จำนวนนิสิต</th>
+                    <th>สาขา,ชั้นปี</th>
+                    <th>วัน</th>
+                    <th>เวลา</th>
+                    <th>ห้องlab</th>
+                    <th>หมายเหตุ</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {this.renderCourses(practicalCourses)}
+                  {this.renderCoursesPrac(practicalCourses)}
                 </tbody>
               </table>
             </header>
-           <div>
-          <div class="testtable-buttonchange">
-            <div class="RegisResultTable-saveButton">
-              <button id="saveButtonLab">
-                <p class="RegisResultTable-saveButtontext">บันทึก</p>
-              </button>
+            <div>
+              <div class="testtable-buttonchange">
+                <div class="RegisResultTable-saveButton">
+                  <button id="saveButtonLab">
+                    <p class="RegisResultTable-saveButtontext">บันทึก</p>
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
           </>
         )}
 
