@@ -679,16 +679,38 @@ app.delete('/deletesub/:courses', (req, res) => {
 
 app.delete('/deleteopensuball/:courses', (req, res) => {
   const courses = req.params.courses;
-  db.query("DELETE FROM opencourse WHERE state = 1", [courses], (err, result) => {
-    if (err) {
-      console.error('Error deleting data:', err);
-      res.status(500).send('Error deleting data');
-    } else {
-      console.log('Deleted user with email:', courses);
-      res.status(200).send('Data deleted successfully');
-    }
-  });
+  const myyear2 = req.body.myyear2;
+  const termsearch = req.body.termsearch;
+
+  // ตรวจสอบว่า myyear2 และ termsearch ถูกส่งมาหรือไม่
+  if (!myyear2 || !termsearch) {
+      // ถ้าไม่มีการส่ง myyear2 หรือ termsearch มา
+      // ให้ลบข้อมูลที่ state = 1
+      db.query("DELETE FROM opencourse WHERE state = 1", (err, result) => {
+          if (err) {
+              console.error('Error deleting data:', err);
+              res.status(500).send('Error deleting data');
+          } else {
+              console.log('Deleted courses with state = 1');
+              res.status(200).send('Data deleted successfully');
+          }
+      });
+  } else {
+      // ถ้ามีการส่ง myyear2 และ termsearch มา
+      // ให้ลบข้อมูลที่ course_year = myyear2 และ term = termsearch
+      db.query("DELETE FROM opencourse WHERE course_year = ? AND term = ?", [myyear2, termsearch], (err, result) => {
+          if (err) {
+              console.error('Error deleting data:', err);
+              res.status(500).send('Error deleting data');
+          } else {
+              console.log('Deleted courses with myyear2:', myyear2, 'and termsearch:', termsearch);
+              res.status(200).send('Data deleted successfully');
+          }
+      });
+  }
 });
+
+
 
 app.delete('/deleteopencourse/:courses', (req, res) => {
   const courses = req.params.courses;

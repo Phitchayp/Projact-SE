@@ -274,42 +274,49 @@ function CheckboxOpenCourse() {
         console.log(courses)
     };
 
-    const handleDeleteCourseFinal = async (courses) => {
+    const handleDeleteCourseFinal = async (courses, myyear2, termsearch) => {
         try {
-            await axios.delete(`http://localhost:3001/deleteopensuball/${courses}`);
-            setCourses((prevsubjects) => prevsubjects.filter((courses) => courses.courseid !== courses));
-            console.log("Data delete successfully");
-
+            // แสดงป๊อปอัพยืนยันการลบ
             Swal.fire({
-                title: "คุณแน่ใจหรือไมว่าจะลบรายวิชาทั้งหมด?",
+                title: "คุณแน่ใจหรือไม่ว่าจะลบรายวิชาทั้งหมด?",
                 text: "คุณต้องการลบรายวิชาทั้งหมด",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, delete it!"
-              }).then((result) => {
-                
+            }).then((result) => {
                 if (result.isConfirmed) {
-                  Swal.fire({
-                    title: "Deleted!",
-                    text: "ลบรายวิชาออกทั้งหมดแล้ว",
-                    icon: "success"
-                  }).then((result) =>{
-                    window.location.reload();
-    
-                  });;
-                  
+                    // ลบข้อมูลโดยส่งค่า myyear2 และ termsearch ไปยังเซิร์ฟเวอร์
+                    axios.delete(`http://localhost:3001/deleteopensuball/${courses}`, {
+                        data: {
+                            myyear2: myyear2,
+                            termsearch: termsearch
+                        }
+                    }).then(() => {
+                        // หากลบข้อมูลสำเร็จ แสดงป๊อปอัพแจ้งลบสำเร็จ
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "ลบรายวิชาออกทั้งหมดแล้ว",
+                            icon: "success"
+                        }).then(() => {
+                            // หากยืนยันการลบ ทำการรีโหลดหน้าเว็บ
+                            window.location.reload();
+                        });
+                    }).catch((error) => {
+                        console.error('Error deleting data:', error);
+                        alert(`ลบข้อมูล ${courses} ไม่สำเร็จ`);
+                    });
                 }
-                
-              });
-
+            });
         } catch (error) {
             console.error('Error deleting data:', error);
             alert(`ลบข้อมูล ${courses} ไม่สำเร็จ`);
         }
-        console.log(courses)
+        console.log(courses);
     };
+    
+    
    
 
 
@@ -519,7 +526,7 @@ function CheckboxOpenCourse() {
                     <div class="CheckboxOpenCourse-changeButton2">
                         <div className='CheckboxOpenCourse-deleteButton2'>
                             <button id="deleteButtonOpenCourse2"
-                                onClick={handleDeleteCourseFinal}>
+                                onClick={() => handleDeleteCourseFinal(courses, myyear2, termsearch)}>
                                 <p class="CheckboxOpenCourse-saveButtontext">ลบข้อมูล</p>
                             </button>
                         </div>
