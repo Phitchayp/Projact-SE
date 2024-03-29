@@ -19,36 +19,73 @@ const Google = () => {
       sessionStorage.setItem("email", res.data.email);
       sessionStorage.setItem("name", res.data.fullname);
 
+      let redirectPath = "";
       if (res.data.role === 'admin') {
-        nav("/AdminNoti");
-        window.location.reload();
+        redirectPath = "/AdminNoti";
       } else if (res.data.role === 'edu') {
-        nav("/EduNoti");
-        window.location.reload();
+        redirectPath = "/EduNoti";
       } else if (res.data.role === 'teacher') {
-        nav("/TeacherNoti");
-        window.location.reload();
+        redirectPath = "/TeacherNoti";
       }
+  
+      // เรียกใช้ Swal.fire ก่อนที่จะเปลี่ยนเส้นทาง
+      Swal.fire({
+        title: "เข้าสู่ระบบสำเร็จ",
+        icon: "success",
+        confirmButtonColor: "#3CB371",
+        customClass: {
+          title: 'kanit-font',
+          content: 'kanit-font',
+          confirmButton: 'kanit-font',
+          popup: 'kanit-font'
+        }
+      }).then(() => {
+        // เปลี่ยนเส้นทางหลังจากที่ผู้ใช้กดปุ่มยืนยันใน Swal.fire
+        nav(redirectPath);
+        window.location.reload();
+      });
+  
     } catch (err) {
       if (err.response) {
         if (err.response.status === 404) {
           Swal.fire({
             icon: 'error',
-            title: 'Login ไม่สำเร็จ',
+            title: 'เข้าสู่ระบบไม่สำเร็จ',
             text: 'ไม่พบผู้ใช้งาน กรุณา Login ใหม่อีกครั้ง',
+            confirmButtonColor: "#3CB371",
+            customClass: {
+              title: 'kanit-font',
+              content: 'kanit-font',
+              confirmButton: 'kanit-font',
+              popup: 'kanit-font'
+            }
           });
         } else if (err.response.status === 408) {
           Swal.fire({
             icon: 'error',
-            title: 'Login ไม่สำเร็จ',
+            title: 'เข้าสู่ระบบไม่สำเร็จ',
             text: 'การร้องขอใช้งานหมดเวลา กรุณา Login ใหม่อีกครั้ง',
+            confirmButtonColor: "#3CB371",
+            customClass: {
+              title: 'kanit-font',
+              content: 'kanit-font',
+              confirmButton: 'kanit-font',
+              popup: 'kanit-font'
+            }
           });
         }
       } else {
         Swal.fire({
           icon: 'warning',
-          title: 'Login ไม่สำเร็จ',
+          title: 'เข้าสู่ระบบไม่สำเร็จ',
           text: 'เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณา Login ใหม่อีกครั้ง',
+          confirmButtonColor: "#3CB371",
+          customClass: {
+            title: 'kanit-font',
+            content: 'kanit-font',
+            confirmButton: 'kanit-font',
+            popup: 'kanit-font'
+          }
         });
       }
     }
