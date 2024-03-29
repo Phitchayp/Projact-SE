@@ -407,16 +407,16 @@ app.get('/getsubsearch1/:year/:term', (req, res) => {
 
 app.post("/opencourse", (req, res) => {
   const listCheck = req.body.listCheck; // รับข้อมูลที่ส่งมาจากหน้าเว็บ
-  const termChecked=req.body.termChecked;
-  const values = listCheck.map(item => [ item.courses,item.course_year, item.id, item.subjectName, item.credit, item.category]);
+  const termChecked = req.body.termChecked;
 
   // สร้างสตริงของคำสั่ง SQL ที่มี parameterized queries
-  const insertQuery = "INSERT INTO opencourse (courses,course_year, subject_id, subject_name, credit, category,term,state) VALUES ?";
+  const insertQuery = "INSERT INTO opencourse (courses, course_year, subject_id, subject_name, credit, category, term, state) VALUES ?";
   const selectQuery = "SELECT * FROM opencourse WHERE subject_id = ? AND subject_name = ? AND course_year = ?";
 
   // สร้าง Promise เพื่อให้มั่นใจว่าคำสั่ง SQL ถูกทำสำเร็จหรือไม่
   const insertValuesPromises = listCheck.map(item => {
     return new Promise((resolve, reject) => {
+      // ตรวจสอบว่ามีข้อมูลในฐานข้อมูลหรือไม่
       db.query(selectQuery, [item.id, item.subjectName, item.course_year], (checkErr, checkResult) => {
         if (checkErr) {
           console.error(checkErr);
@@ -424,9 +424,24 @@ app.post("/opencourse", (req, res) => {
         } else {
           if (checkResult.length > 0) {
             console.log("Data already exists for subject_id, subject_name, and course_year:", item.id, item.subjectName, item.course_year);
-            resolve({ id: item.id, exists: true }); // ส่งข้อมูลว่าข้อมูลมีอยู่แล้ว
+            // ตรวจสอบเงื่อนไขเพิ่มเติม หาก course_year, course ตรงกับที่มีในฐานข้อมูล แต่ term ไม่ตรงกับที่มีอยู่
+            if (checkResult[0].term !== termChecked) {
+              const singleValue = [[item.courses, item.course_year, item.id, item.subjectName, item.credit, item.category, termChecked, 1]];
+              db.query(insertQuery, [singleValue], (err, result) => {
+                if (err) {
+                  console.error(err);
+                  reject(err);
+                } else {
+                  console.log("Values Inserted");
+                  resolve(result);
+                }
+              });
+            } else {
+              resolve({ id: item.id, exists: true });
+            }
           } else {
-            const singleValue = [[ item.courses,item.course_year, item.id, item.subjectName, item.credit, item.category,termChecked,1]];
+            // ถ้าไม่มีข้อมูล ดำเนินการต่อเพื่อเพิ่มข้อมูลใหม่
+            const singleValue = [[item.courses, item.course_year, item.id, item.subjectName, item.credit, item.category, termChecked, 1]];
             db.query(insertQuery, [singleValue], (err, result) => {
               if (err) {
                 console.error(err);
@@ -453,6 +468,8 @@ app.post("/opencourse", (req, res) => {
       res.status(500).send("Error inserting values");
     });
 });
+
+
 
 app.delete("/deletesuball", (req, res) => {
   const listCheck = req.body.listCheck; // รับข้อมูลที่ส่งมาจากหน้าเว็บ
