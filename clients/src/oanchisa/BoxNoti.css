@@ -73,8 +73,10 @@ overflow-wrap: break-word;
 
 
 .btn-primary-noti {
-background-color: #127151;
-margin-right:15px
+background-color: #3CB371;
+margin-right:15px;
+font-family: 'kanit';
+
 }
 
 .btn-primary-noti:active {
@@ -82,8 +84,9 @@ background-color: #127151 !important;
 }
 
 .btn-secondary-noti {
-background-color: rgb(255, 0, 0);
+background-color:#B22222;
 margin-right:535px;
+font-family: 'kanit';
 }
 
 

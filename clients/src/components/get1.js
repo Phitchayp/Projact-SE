@@ -3,6 +3,7 @@ import Axios from "axios";
 import bin from '..//assets/bin.png';
 import userIcon from '..//assets/userIcon.png';
 import { AiOutlineUserDelete } from "react-icons/ai";
+import Swal from 'sweetalert2';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -18,16 +19,29 @@ const UserList = () => {
       });
   }, []); 
 
+
   const handleDeleteUser = async (userEmail) => {
     try {
       await Axios.delete(`http://localhost:3001/delete1/${userEmail}`);
       setUsers((prevUsers) => prevUsers.filter((user) => user.email !== userEmail));
+      Swal.fire({
+        title: "สำเร็จ",
+        text: "ข้อมูลผู้ใช้ถูกลบสำเร็จ",
+        icon: "success",
+        confirmButtonColor: "#3CB371",
+        customClass: {
+          title: 'kanit-font',
+          content: 'kanit-font',
+          confirmButton: 'kanit-font',
+          cancelButton: 'kanit-font',
+          popup: 'kanit-font'
+        }
+      });
     } catch (error) {
       console.error('Error deleting data:', error);
       alert(`ลบข้อมูล ${userEmail} ไม่สำเร็จ`);
     }
   };
-  
 
   return (
     <div>
@@ -50,9 +64,28 @@ const UserList = () => {
                 style={{ width: '30px', height: '30px', cursor: 'pointer',color:'black',marginRight:'8px' }}
                 
                 onClick={() => {
-                  if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลผู้ใช้ Email : ${user.email} นี้?`)) {
-                    handleDeleteUser(user.email);
-                  }
+                  Swal.fire({
+                    title: "ลบข้อมูลผู้ใช้งาน",
+                    text: `ต้องการลบข้อมูลผู้ใช้ Email : ${user.email}`,
+                    text2:' ออกจากระบบ?',
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3CB371",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "ยืนยัน",
+                    cancelButtonText: "ยกเลิก",
+                    customClass: {
+                      title: 'kanit-font',
+                      content: 'kanit-font',
+                      confirmButton: 'kanit-font',
+                      cancelButton: 'kanit-font',
+                      popup: 'kanit-font'
+                    }
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      handleDeleteUser(user.email);
+                    }
+                  });
                 }}
               />
             </li>
