@@ -93,7 +93,7 @@ function BoxNoti2() {
                     <h className='DateAdmin-text'>สร้างประกาศ</h>
                     <button className='box-noti' onClick={handleButtonClick} style={{ marginTop: '35px', marginLeft: '-40px' }}>
                         <img src={plus} className="plus" alt="plus" />
-                        <p className="text-under-img">เพิ่มประกาศใหม่</p>
+                        <p className="text-under-img" style={{fontFamily: 'Kanit, sans-serif'}}>เพิ่มประกาศใหม่</p>
                     </button>
                     <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
                         {boxes.map((box, index) => (
