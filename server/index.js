@@ -7,11 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  // host: '127.0.0.1',
-  // user: 'root',
-  // password: '123456',
-  // database: 'databasese',
-  // port: '3306'
+  host: '127.0.0.1',
+  user: 'root',
+  password: '123456',
+  database: 'databasese',
+  port: '3306'
  //pond
   // host: 'localhost',
   // user: 'root',
@@ -28,10 +28,10 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  host: 'localhost',
-  user: 'root',
-  password: '12345678',
-  database: 'project_se',
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
+  // database: 'project_se',
 
   // host: '192.168.43.237',
   // user: 'dbSE',
@@ -763,6 +763,17 @@ app.get('/courset', (req, res) => {
     }
   });
 });
+app.get('/roomdropdown', (req, res) => {
+  db.query("SELECT room FROM room", (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json(result); // ส่งผลลัพธ์กลับไปยังผู้ใช้
+      console.log("สำเร็จ")
+    }
+  });
+});
 
 
 app.get("/search-courses", (req, res) => {
@@ -812,6 +823,8 @@ app.post("/register", (req, res) => {
     years,
     credit,
     category,
+    course_year,
+    term,
     
   } = req.body;
 
@@ -825,6 +838,8 @@ app.post("/register", (req, res) => {
   if (!years) missingFields.push("years");
   if (!credit) missingFields.push("credit");
   if (!category) missingFields.push("category");
+  if (!course_year) missingFields.push("course_year");
+  if (!term) missingFields.push("term");
 
   if (missingFields.length > 0) {
     return res
@@ -833,7 +848,7 @@ app.post("/register", (req, res) => {
   }
 
   const query =
-    "INSERT INTO registration_records (subject_id, subject_name, section, lectureOrLab, branch, years, credit, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO registration_records (subject_id, subject_name, section, lectureOrLab, branch, years, credit, category,course_year,term) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?)";
 
   db.query(
     query,
@@ -846,6 +861,8 @@ app.post("/register", (req, res) => {
       years,
       credit,
       category,
+      course_year,
+      term,
     ],
     (err, results) => {
       if (err) {

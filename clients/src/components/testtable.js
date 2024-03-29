@@ -5,6 +5,7 @@ import MyImage from "../assets/Vector.png";
 import InputNumNisit from "./compoRegisCourse";
 import TimePickerTa from "./Timepicker";
 import CheckBoxRe from "./Checkbox";
+import TestTableDropdown from "./roomfromdb";
 import Axios from "axios";
 
 class RegisTa extends React.Component {
@@ -216,17 +217,11 @@ class RegisTa extends React.Component {
           </td>
           <td>
             <div className="testtable-dropdownposition">
-              <select className="testtable-dropdown">
-                {/* Dropdown เลือกห้องlab เปลี่ยนเองนะ */}
-                <option value=""></option>
-                <option value="Monday">Mon</option>
-                <option value="Tuesday">Tue</option>
-                <option value="Wednesday">Wed</option>
-                <option value="Thursday">Thu</option>
-                <option value="Friday">Fri</option>
-                <option value="Friday">Sat</option>
-                <option value="Friday">Sun</option>
-              </select>
+              
+              <TestTableDropdown />
+              {/* <TestTableDropdown onDropdownChange={handleDropdownChange} />
+              <p>Selected Room: {selectedRoom}</p> */}
+              
             </div>
           </td>
           <td> </td>
