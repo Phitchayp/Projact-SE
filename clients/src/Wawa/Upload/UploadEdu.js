@@ -54,7 +54,7 @@ const UploadEdu = ({selectcourse,selectedValue1}) => {
   //     }
   // };
   const handleButtonClick = () => {
-    if (!selectedValue1) {
+    if (!selectedValue1 || !selectcourse) {
       window.alert('กรุณากรอกข้อมูลให้ครบถ้วน');
       return; // ไม่ทำงานต่อไปหาก selectedValue1 ว่าง
     }
