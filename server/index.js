@@ -290,29 +290,43 @@ app.get('/getsubsearch/:year', (req, res) => {
 app.post("/uploaded", (req, res) => {
   const excelData = req.body.excelData;
   const selectedValue1 = req.body.selectedValue1;
-  const selectcourse=req.body.selectcourse;
+  const selectcourse = req.body.selectcourse;
 
   console.log(selectedValue1);
 
   const modifiedExcelData = excelData.map(data => {
-    // data.push(selectedValue1);
- 
-    return [selectcourse,selectedValue1, ...data];
+    return [selectcourse, selectedValue1, ...data];
   });
 
   const values = modifiedExcelData.map(() => "(?,?,?,?,?,?)").join(", ");
+  const sql = `INSERT INTO course (courses, course_year, subject_id, subject_name, credit, category) VALUES ${values}`;
 
-  const sql = `INSERT INTO course (courses,course_year,subject_id,subject_name,credit,category ) VALUES ${values}`;
+  // Check if the data to be inserted already exists in the database
+  const selectQuery = "SELECT * FROM course WHERE courses = ? AND course_year = ? AND (subject_id = ? OR subject_name = ?)";
+  db.query(selectQuery, [selectcourse, selectedValue1, modifiedExcelData[0][2], modifiedExcelData[0][3]], (selectErr, selectResult) => {
+    if (selectErr) {
+      console.error(selectErr);
+      res.status(500).send("Error checking existing data");
+      return;
+    }
 
-  db.query(sql, modifiedExcelData.flat(), (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send("Error inserting values");
+    // If data exists, send response accordingly
+    if (selectResult.length > 0) {
+      res.send("Data already exists, not inserted");
     } else {
-      res.send("Values Inserted");
+      // If data does not exist, proceed with insertion
+      db.query(sql, modifiedExcelData.flat(), (err, result) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send("Error inserting values");
+        } else {
+          res.send("Values Inserted");
+        }
+      });
     }
   });
 });
+
 
 
 

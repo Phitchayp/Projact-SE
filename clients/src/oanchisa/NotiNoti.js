@@ -47,7 +47,7 @@ function NotiNoti() {
                     {boxes.map((box, index) => (
                         <div key={box.id} style={notiBoxStyle}>
                             <p style={{ marginBottom: '20px' ,marginLeft: '20px',marginRight: '20px',color:'white',whiteSpace: 'pre-line',textAlign:'center'}}>{box.info}</p> 
-                            {index !== boxes.length - 1 && <hr style={{ margin: '10px 0', border: '1px solid white' }} />} 
+                            {index !== boxes.length - 1 } 
                         </div>
                     ))}
                 </div>

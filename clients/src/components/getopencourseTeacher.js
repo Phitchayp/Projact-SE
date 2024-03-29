@@ -32,10 +32,10 @@ const OpenCourseListTeacher =({A}) =>{
             {A.map((course) => (
                 <div key={course.courseid} className='Course-Items-open'>
                     <div className='checkbox-text'>{` ${course.courses}`}</div>
-                    <div className='checkbox-text'style={{marginLeft: '10px'}}>{` ${course.term}`}</div>
-                    <div className='checkbox-text'style={{ marginLeft: '10px' }}>{` ${course.course_year}`}</div>
-                    <div className='checkbox-text' style={{ marginLeft: '10px' }}>{`${course.subject_id} `}</div>
-                    <div className='checkbox-text' style={{ marginLeft: '10px' }}>{`${course.subject_name}`}</div>
+                    <div className='checkbox-text'style={{marginLeft: '20px'}}>{` ${course.term}`}</div>
+                    <div className='checkbox-text'style={{ marginLeft: '20px' }}>{` ${course.course_year}`}</div>
+                    <div className='checkbox-text' style={{ marginLeft: '20px' }}>{`${course.subject_id} `}</div>
+                    <div className='checkbox-text' style={{ marginLeft: '20px' }}>{`${course.subject_name}`}</div>
                     <div className='check-text2' >{`${course.credit}`}</div>
                     <div style={{ marginRight: '20px' }}>{`${course.category}`}</div>
                     
