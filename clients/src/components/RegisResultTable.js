@@ -89,7 +89,7 @@ function RegisResultTable() {
   // ฟังก์ชันสำหรับบันทึกข้อมูล
   const saveCourseRegistration = async () => {
     // Simple client-side validation
-    if (!selectedCourse.subject_id || !selectedCourse.subject_name || selectedYear.length === 0 || !selectedValues.section || !selectedValues.lectureOrLab || selectedBranch.length === 0 || !selectedCourse.credit || !selectedCourse.category) {
+    if (!selectedCourse.subject_id || !selectedCourse.subject_name || selectedYear.length === 0 || !selectedValues.section || !selectedValues.lectureOrLab || selectedBranch.length === 0 || !selectedCourse.credit || !selectedCourse.category || !selectyear || !selectterm ) {
       alert("Please fill out all required fields.");
       return; // Stop the function if validation fails
     }
@@ -106,17 +106,21 @@ function RegisResultTable() {
         section: selectedValues.section,
         lectureOrLab: selectedValues.lectureOrLab,
         branch: branchString,
-        credit: selectedCourse.credit, // เพิ่ม lec
-        category: selectedCourse.category, // เพิ่ม lab
+        credit: selectedCourse.credit,
+        category: selectedCourse.category,
+        course_year: selectyear,
+        term: selectterm,
       });
 
       alert("Registration successful!");
       window.location.reload();
     } catch (error) {
       console.error("Error saving course registration:", error);
-      alert("Failed to save course registration. Please try again."); // Provide a user-friendly error message
+      alert("Failed to save course registration. Please try again."); 
+
     }
-  };
+
+};
 
 
   const [selectedYear, setSelectedYear] = useState([]);
@@ -210,7 +214,7 @@ function RegisResultTable() {
                   </label>
                   {/* <div className="dropdownRegisResultTable "> */}
                     <div className="dropdown5" style={{ marginLeft: '1px', marginRight: '5px' }}>
-                      <select value={selectyear} onChange={handleDropdownChange5}>
+                      <select value={selectyear.course_year} onChange={(event) => handleDropdownChange5(event, "course_year")}>
                         <option value=""></option>
                         <option value="2569">2569</option>
                         <option value="2568">2568</option>
@@ -231,11 +235,10 @@ function RegisResultTable() {
                     </div>
 
                     <div className="dropdown6">
-                      <select value={selectterm} onChange={handleDropdownChange6}>
+                      <select value={selectterm.term} onChange={(event) => handleDropdownChange6(event, "term")}>
                         <option value=""></option>
                         <option value="ภาคต้น">ภาคต้น</option>
                         <option value="ภาคปลาย">ภาคปลาย</option>
-                        <option value="ทั้งหมด">ทั้งหมด</option>
                       </select>
                     </div>
                   {/* </div> */}
