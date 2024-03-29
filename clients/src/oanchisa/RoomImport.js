@@ -19,7 +19,7 @@ function handleClick(event) {
 }
 
 function RoomImport() {
-  const tableData = [2569,2568,2567,2566, 2565, 2564, 2563, 2562, 2561, 2560, 2559, 2558, 2557, 2556, 2555, 'ภาคต้น', 'ภาคปลาย', 'ภาคฤดูร้อน'];
+  const tableData = [2569, 2568, 2567, 2566, 2565, 2564, 2563, 2562, 2561, 2560, 2559, 2558, 2557, 2556, 2555, 'ภาคต้น', 'ภาคปลาย', 'ภาคฤดูร้อน'];
   const [selectedValue8, setSelectedValue8] = useState('');
   const [selectedValue9, setSelectedValue9] = useState('');
 
@@ -32,14 +32,16 @@ function RoomImport() {
   };
   return (
     <div className='turnleft-all'>
-      <h className='DateAdmin-text'>นำข้อมูลห้องเรียนเข้าสู่ระบบ</h>
+      <div>
+        <h className='DateAdmin-text'>นำข้อมูลห้องเรียนเข้าสู่ระบบ</h><p className='DateAdmin-Text'>*ไฟล์นามสกุล .xlsx เท่านั้น</p>
+      </div>
       <div>
         <UploadRoom />
       </div>
-      <h3 style={{ marginTop:'100px' ,color: '#8C3941',fontFamily: 'Kanit, sans-serif' }}>ห้องเรียนที่เปิดสอน</h3>
+      <h3 style={{ marginTop: '100px', color: '#8C3941' }}>ห้องเรียนที่เปิดสอน</h3>
 
       <div>
-        <RoomList/>
+        <RoomList />
       </div>
     </div>
   );
