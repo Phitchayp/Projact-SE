@@ -22,6 +22,7 @@ const CourseList = ({B}) => {
                 <div key={course.courseid} className='Course-Items-open'>
                     {/* <input type='checkbox' id={`checkText${course.courseid}`}/> */}
                     <div className='checkbox-text'>{`${course.courses}`}</div>
+                    <div className='checkbox-text'style={{marginLeft: '10px'}}>{` ${course.term}`}</div>
                     <div className='checkbox-text'style={{marginLeft: '10px'}}>{` ${course.course_year}`}</div>
                     <div className='checkbox-text' style={{marginLeft: '10px'}}>{`${course.subject_id} `}</div>
                     <div className='checkbox-text' style={{marginLeft: '10px'}}>{`${course.subject_name}`}</div>
