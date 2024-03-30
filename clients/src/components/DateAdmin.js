@@ -35,8 +35,15 @@ function DateAdmin() {
         if (!dayS || !dayF || !timeS || !timeF) {
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
+                title: 'ไม่สามารถบันทึกได้',
                 text: 'โปรดเลือกวันที่และเวลาให้ครบถ้วน',
+                customClass: {
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    popup: 'kanit-font'
+                  }
             });;
             return;
         }
@@ -46,8 +53,15 @@ function DateAdmin() {
             if (dayS > dayF) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
+                    title: 'ไม่สามารถบันทึกได้',
                     text: 'วันที่สิ้นสุดห้ามมาก่อนวันที่เริ่มต้น',
+                    customClass: {
+                        title: 'kanit-font',
+                        content: 'kanit-font',
+                        confirmButton: 'kanit-font',
+                        cancelButton: 'kanit-font',
+                        popup: 'kanit-font'
+                      }
                 });;
                 return;
             }
@@ -60,6 +74,13 @@ function DateAdmin() {
                         icon: 'error',
                         title: 'วันเดียวกัน',
                         text: 'เวลาเริ่มต้นต้องมาก่อนเวลาสิ้นสุด และเวลาห้ามเท่ากัน',
+                        customClass: {
+                            title: 'kanit-font',
+                            content: 'kanit-font',
+                            confirmButton: 'kanit-font',
+                            cancelButton: 'kanit-font',
+                            popup: 'kanit-font'
+                          }
                     });
                     return;
                 }
@@ -87,14 +108,28 @@ function DateAdmin() {
                 icon: 'success',
                 title: 'Success',
                 text: 'บันทึกเวลาเรียบร้อยแล้ว',
+                customClass: {
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    popup: 'kanit-font'
+                  }
             })
         }).catch(error => {
             console.error(error);
 
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
+                title: 'ไม่สามารถบันทึกได้',
                 text: 'ข้อมูลไม่ถูกต้อง',
+                customClass: {
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    popup: 'kanit-font'
+                  }
             });
         });
         console.log("save");
@@ -110,8 +145,15 @@ function DateAdmin() {
         if (!daySEdu || !dayFEdu || !timeSEdu || !timeFEdu) {
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
+                title: 'ไม่สามารถบันทึกได้',
                 text: 'โปรดเลือกวันที่และเวลาให้ครบถ้วน',
+                customClass: {
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    popup: 'kanit-font'
+                  }
             });;
             return;
         }
@@ -121,8 +163,15 @@ function DateAdmin() {
             if (daySEdu > dayFEdu) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
+                    title: 'ไม่สามารถบันทึกได้',
                     text: 'วันที่สิ้นสุดห้ามมาก่อนวันที่เริ่มต้น',
+                    customClass: {
+                        title: 'kanit-font',
+                        content: 'kanit-font',
+                        confirmButton: 'kanit-font',
+                        cancelButton: 'kanit-font',
+                        popup: 'kanit-font'
+                      }
                 });;
                 return;
             }
@@ -135,6 +184,13 @@ function DateAdmin() {
                         icon: 'error',
                         title: 'วันเดียวกัน',
                         text: 'เวลาเริ่มต้นต้องมาก่อนเวลาสิ้นสุด และเวลาห้ามเท่ากัน',
+                        customClass: {
+                            title: 'kanit-font',
+                            content: 'kanit-font',
+                            confirmButton: 'kanit-font',
+                            cancelButton: 'kanit-font',
+                            popup: 'kanit-font'
+                          }
                     });
                     return;
                 }
@@ -161,6 +217,13 @@ function DateAdmin() {
                 icon: 'success',
                 title: 'Success',
                 text: 'บันทึกเวลาเรียบร้อยแล้ว',
+                customClass: {
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    popup: 'kanit-font'
+                  }
             })
         })
         .catch(error => {
@@ -168,8 +231,15 @@ function DateAdmin() {
 
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
+                title: 'ไม่สามารถบันทึกได้',
                 text: 'ข้อมูลไม่ถูกต้อง',
+                customClass: {
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    popup: 'kanit-font'
+                  }
             });
         });
         console.log("save");
