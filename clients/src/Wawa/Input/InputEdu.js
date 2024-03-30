@@ -14,8 +14,7 @@ const InputEdu = ({ selectcourse1,selectedValue2, selectedValue3, selectedValue4
 
 
     const handleButtonAdd = () => {
-
-        if (!selectedValue2 || !idSubject || !subjectName || !selectedValue3 || !selectedValue4) {
+        if (!selectedValue2 || !idSubject || !subjectName || !selectedValue3 || !selectedValue4 || !selectcourse1) {
             window.alert('กรุณากรอกข้อมูลให้ครบถ้วน');
             return; // ไม่ทำงานต่อไปหากข้อมูลในตัวแปรใดตัวหนึ่งว่าง
         }
@@ -27,7 +26,7 @@ const InputEdu = ({ selectcourse1,selectedValue2, selectedValue3, selectedValue4
             window.alert('กรุณากรอกชื่อวิชาให้ถูกต้อง');
             return; // ไม่ทำงานต่อไปหาก subjectName ไม่ถูกต้อง
         }
-        window.alert('เพิ่มข้อมูลรายวิชาสำเร็จ')
+    
         Axios.post("http://127.0.0.1:3001/addsub", {
             selectcourse1: selectcourse1,
             selectedValue2: selectedValue2,
@@ -35,31 +34,32 @@ const InputEdu = ({ selectcourse1,selectedValue2, selectedValue3, selectedValue4
             subjectName: subjectName,
             selectedValue4: selectedValue4,
             selectedValue3: selectedValue3,
-        }).then(() => {
-            setsubjectList([
-                ...subjectList,
-                {
-                    selectcourse1: selectcourse1,
-                    selectedValue2: selectedValue2,
-                    idSubject: idSubject,
-                    subjectName: subjectName,
-                    selectedValue4: selectedValue4,
-                    selectedValue3: selectedValue3,
-                },
-            ]);
-            setIdSubject('');
-            setSubjectName('');
-            reloadPage();
-
+        }).then(response => {
+            if (response.data === "Data already exists, not inserted") {
+                window.alert('พบข้อมูลรายวิชานี้ในระบบอยู่แล้ว');
+            } else {
+                window.alert('เพิ่มข้อมูลรายวิชาสำเร็จ');
+                setsubjectList([
+                    ...subjectList,
+                    {
+                        selectcourse1: selectcourse1,
+                        selectedValue2: selectedValue2,
+                        idSubject: idSubject,
+                        subjectName: subjectName,
+                        selectedValue4: selectedValue4,
+                        selectedValue3: selectedValue3,
+                    },
+                ]);
+                setIdSubject('');
+                setSubjectName('');
+                reloadPage();
+            }
         }).catch(error => {
             console.error('Error adding subject:', error);
             window.alert('เกิดข้อผิดพลาดในการเพิ่มวิชา');
         });
-        console.log(selectedValue2);
-        console.log(selectedValue3);
-        console.log(selectedValue4);
-        console.log(subjectList);
     };
+    
 
     useEffect(() => {
         // ทำสั่งการที่คุณต้องการที่นี่ เช่น อัพเดต UI
