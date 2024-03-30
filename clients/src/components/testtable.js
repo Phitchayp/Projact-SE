@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./testtable.css"; // Import CSS file for table styling
 import MyImage from "../assets/Vector.png";
 // import RegisResultTable from './RegisResultTable';
@@ -103,130 +103,148 @@ class RegisTa extends React.Component {
       });
   };
 
+
   renderCoursesLec = (courses) => {
+    // const [selectedDay, setSelectedDay] = useState(""); 
+    // const handleDropdownDay = (event) => {
+    //   const selectedValue = event.target.value; // ค่าที่ถูกเลือกจาก dropdown
+    //   setSelectedDay(selectedValue); // เก็บค่าที่ถูกเลือกไว้ใน state
+    // };
+    
+
     return courses.flatMap((course, index) => (
-      Array.from({ length: course.section }, (_, sectionIndex) => (
-        <tr key={`${index}-${sectionIndex}`}>
-          <td>
-            <div className="testtable-image-container">
-              <img
-                src={MyImage}
-                alt="Delete"
-                className="testtable-centered-image"
-                onClick={() => this.handleDeleteRow(course.id)}
-              />
-            </div>
-          </td>
-          <td>{course.years}</td> {/* Display the year data here */}
-          <td>{course.subject_id}</td>
-          <td>{course.subject_name}</td>
-          <td>{course.credit}</td>
-          <td>1</td>
-          <td>800</td>
-          <td>
-            <div className="testtable-inputNumNisit">
-              <InputNumNisit></InputNumNisit>
-            </div>
-          </td>
-          <td>
-            {course.branch}
-            <div>
-              <CheckBoxRe />
-            </div>
-          </td>
-          <td>
-            <div className="testtable-dropdownposition">
-              <select className="testtable-dropdown">
-                {/* 2. Dropdown เลือกวัน */}
-                <option value=""></option>
-                <option value="Monday">Mon</option>
-                <option value="Tuesday">Tue</option>
-                <option value="Wednesday">Wed</option>
-                <option value="Thursday">Thu</option>
-                <option value="Friday">Fri</option>
-                <option value="Friday">Sat</option>
-                <option value="Friday">Sun</option>
-              </select>
-            </div>
-          </td>
-          <td>
-            <div>
-              <div>
-                <TimePickerTa />
+      Array.from({ length: course.section }, (_, sectionIndex) => {
+        const totalCredits = 800 + sectionIndex; // บวกค่าของ index และ sectionIndex เข้ากับ 800
+        const key = `${index}-${sectionIndex}`; // สร้าง key จากการรวม index และ sectionIndex
+  
+        return (
+          <tr key={key}>
+            <td>
+              <div className="testtable-image-container">
+                <img
+                  src={MyImage}
+                  alt="Delete"
+                  className="testtable-centered-image"
+                  onClick={() => this.handleDeleteRow(course.id)}
+                />
               </div>
-            </div>
-          </td>
-          <td> </td>
-        </tr>
-      ))
+            </td>
+            <td>{course.years}</td> {/* Display the year data here */}
+            <td>{course.subject_id}</td>
+            <td>{course.subject_name}</td>
+            <td>{course.credit}</td>
+            <td>1</td> {/* นับเป็น 800 ตลอด */}
+            <td>{totalCredits}</td> {/* แสดงผลรวมของ 800 และค่า index และ sectionIndex */}
+            <td>
+              <div className="testtable-inputNumNisit">
+                <InputNumNisit></InputNumNisit>
+              </div>
+            </td>
+            <td>
+              {course.branch}
+              <div>
+                <CheckBoxRe />
+              </div>
+            </td>
+            <td>
+              <div className="testtable-dropdownposition">
+                <select className="testtable-dropdown">
+                  {/* 2. Dropdown เลือกวัน */}
+                  <option value=""></option>
+                  <option value="Monday">Mon</option>
+                  <option value="Tuesday">Tue</option>
+                  <option value="Wednesday">Wed</option>
+                  <option value="Thursday">Thu</option>
+                  <option value="Friday">Fri</option>
+                  <option value="Friday">Sat</option>
+                  <option value="Friday">Sun</option>
+                </select>
+              </div>
+            </td>
+            <td>
+              <div>
+                <div>
+                  <TimePickerTa />
+                </div>
+              </div>
+            </td>
+            <td> </td>
+          </tr>
+        );
+      })
     ));
   };
+  
 
   renderCoursesPrac = (courses) => {
     return courses.flatMap((course, index) => (
-      Array.from({ length: course.section }, (_, sectionIndex) => (
-        <tr key={`${index}-${sectionIndex}`}>
-          <td>
-            <div className="testtable-image-container">
-              <img
-                src={MyImage}
-                alt="Delete"
-                className="testtable-centered-image"
-                onClick={() => this.handleDeleteRow(course.id)}
-              />
-            </div>
-          </td>
-          <td>{course.years}</td> {/* Display the year data here */}
-          <td>{course.subject_id}</td>
-          <td>{course.subject_name}</td>
-          <td>{course.credit}</td>
-          <td>1</td>
-          <td>800</td>
-          <td>
-            <div className="testtable-inputNumNisit">
-              <InputNumNisit></InputNumNisit>
-            </div>
-          </td>
-          <td>
-            {course.branch}
-            <div>
-              <CheckBoxRe />
-            </div>
-          </td>
-          <td>
-            <div className="testtable-dropdownposition">
-              <select className="testtable-dropdown">
-                {/* 2. Dropdown เลือกวัน */}
-                <option value=""></option>
-                <option value="Monday">Mon</option>
-                <option value="Tuesday">Tue</option>
-                <option value="Wednesday">Wed</option>
-                <option value="Thursday">Thu</option>
-                <option value="Friday">Fri</option>
-                <option value="Friday">Sat</option>
-                <option value="Friday">Sun</option>
-              </select>
-            </div>
-          </td>
-          <td>
-            <div>
-              <div>
-                <TimePickerTa />
+      Array.from({ length: course.section }, (_, sectionIndex) => {
+        const totalCredit = 830 + sectionIndex; // บวกค่าของ index และ sectionIndex เข้ากับ 800
+        const key = `${index}-${sectionIndex}`; // สร้าง key จากการรวม index และ sectionIndex
+        return(
+          <tr key={key}>
+            <td>
+              <div className="testtable-image-container">
+                <img
+                  src={MyImage}
+                  alt="Delete"
+                  className="testtable-centered-image"
+                  onClick={() => this.handleDeleteRow(course.id)}
+                />
               </div>
-            </div>
-          </td>
-          <td>
-            <div className="testtable-dropdownposition">
-              
-              <TestTableDropdown />
-              {/* <TestTableDropdown onDropdownChange={handleDropdownChange} />
-              <p>Selected Room: {selectedRoom}</p> */}
-              
-            </div>
-          </td>
-          <td> </td>
-        </tr>
-      ))
+            </td>
+            <td>{course.years}</td> {/* Display the year data here */}
+            <td>{course.subject_id}</td>
+            <td>{course.subject_name}</td>
+            <td>{course.credit}</td>
+            <td>1</td>
+            <td>{totalCredit}</td>
+            <td>
+              <div className="testtable-inputNumNisit">
+                <InputNumNisit></InputNumNisit>
+              </div>
+            </td>
+            <td>
+              {course.branch}
+              <div>
+                <CheckBoxRe />
+              </div>
+            </td>
+            <td>
+              <div className="testtable-dropdownposition">
+                <select className="testtable-dropdown">
+                  {/* 2. Dropdown เลือกวัน */}
+                  <option value=""></option>
+                  <option value="Monday">Mon</option>
+                  <option value="Tuesday">Tue</option>
+                  <option value="Wednesday">Wed</option>
+                  <option value="Thursday">Thu</option>
+                  <option value="Friday">Fri</option>
+                  <option value="Friday">Sat</option>
+                  <option value="Friday">Sun</option>
+                </select>
+              </div>
+            </td>
+            <td>
+              <div>
+                <div>
+                  <TimePickerTa />
+                </div>
+              </div>
+            </td>
+            <td>
+              <div className="testtable-dropdownposition">
+                
+                <TestTableDropdown />
+                {/* <TestTableDropdown onDropdownChange={handleDropdownChange} />
+                <p>Selected Room: {selectedRoom}</p> */}
+                
+              </div>
+            </td>
+            <td> </td>
+          </tr>
+        ); 
+     })
     ));
   };
 
@@ -238,6 +256,51 @@ class RegisTa extends React.Component {
   //     document.querySelector('.bordered-table').deleteRow(rowIndex);
   //   }
   // }
+  handleSaveButtonLec = async () => {
+    try {
+      // ดึงข้อมูลจาก lectureCourses
+      const coursesData = this.state.lectureCourses.map(course => ({
+        years: course.years,
+        subject_id: course.subject_id,
+        subject_name: course.subject_name,
+        credit: course.credit,
+       
+      }));
+  
+      // ส่งข้อมูลไปยังเซิร์ฟเวอร์
+      const response = await Axios.post("URL_TO_YOUR_API_ENDPOINT", coursesData);
+  
+      // ดำเนินการต่อเมื่อบันทึกสำเร็จ
+      console.log("บันทึกข้อมูลสำเร็จ:", response.data);
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการบันทึกข้อมูล:", error);
+     
+    }
+    // console.log(selectedDay);
+  };
+  
+  handleSaveButtonLab = async () => {
+    try {
+      // ดึงข้อมูลจาก practicalCourses
+      const coursesData = this.state.practicalCourses.map(course => ({
+        years: course.years,
+        subject_id: course.subject_id,
+        subject_name: course.subject_name,
+        credit: course.credit,
+        // รายละเอียดอื่น ๆ ที่ต้องการบันทึก
+      }));
+  
+      // ส่งข้อมูลไปยังเซิร์ฟเวอร์
+      const response = await Axios.post("URL_TO_YOUR_API_ENDPOINT", coursesData);
+  
+      // ดำเนินการต่อเมื่อบันทึกสำเร็จ
+      console.log("บันทึกข้อมูลสำเร็จ:", response.data);
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการบันทึกข้อมูล:", error);
+      // จัดการข้อผิดพลาดที่นี่
+    }
+  };
+  
   render() {
     const { lectureCourses, practicalCourses } = this.state;
 
@@ -268,6 +331,7 @@ class RegisTa extends React.Component {
         });
       }
     });
+
 
     return (
       <div className="testtable-turnleft-all">
@@ -300,8 +364,8 @@ class RegisTa extends React.Component {
             <div>
               <div class="testtable-buttonchange">
                 <div class="RegisResultTable-saveButton">
-                  <button id="saveButtonLec">
-                    <p class="RegisResultTable-saveButtontext">บันทึก</p>
+                  <button id="saveButtonLec" onClick={this.handleSaveButtonLec}>
+                    <p class="RegisResultTable-saveButtontext">บันทึก1</p>
                   </button>
                 </div>
               </div>
@@ -339,8 +403,8 @@ class RegisTa extends React.Component {
             <div>
               <div class="testtable-buttonchange">
                 <div class="RegisResultTable-saveButton">
-                  <button id="saveButtonLab">
-                    <p class="RegisResultTable-saveButtontext">บันทึก</p>
+                  <button id="saveButtonLab" onClick={this.handleSaveButtonLab}>
+                    <p class="RegisResultTable-saveButtontext">บันทึก2</p>
                   </button>
                 </div>
               </div>
@@ -378,15 +442,15 @@ class RegisTa extends React.Component {
                     />
                   </div>
                 </td>
-                <td>03603213-65</td>
-                <td>Algorithm Design and Analysis</td>
+                <td>1</td>
+                <td>Al</td>
                 <td>3</td>
-                <td>lec</td>
-                <td>800</td>
-                <td>100</td>
-                <td>2 3 4 x</td>
-                <td>Mon</td>
-                <td>9-12</td>
+                <td>l</td>
+                <td>8</td>
+                <td>1</td>
+                <td>2</td>
+                <td>M</td>
+                <td>9</td>
                 <td></td>
               </tr>
               <tr>
@@ -458,7 +522,7 @@ class RegisTa extends React.Component {
             </tbody>
           </table>
         </header>
-        <div>
+        {/* <div>
           <div class="testtable-buttonchange">
             <div class="RegisResultTable-saveButton">
               <button id="saveButtonSavecourse">
@@ -466,7 +530,7 @@ class RegisTa extends React.Component {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
     );
