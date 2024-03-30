@@ -12,7 +12,7 @@ const db = mysql.createConnection({
   // password: '123456',
   // database: 'databasese',
   // port: '3306'
- //pond
+  //pond
   // host: 'localhost',
   // user: 'root',
   // password: '12345678',
@@ -37,17 +37,11 @@ const db = mysql.createConnection({
   // user: 'dbSE',
   // password: 'root123456',
   // database: 'databasese',
-
-  // host: 'localhost',
-  // user: 'root',
-  // password: 'root',
-  // database: 'project_se',
-  // port: '3308'
 })
 
-db.connect((err)=>{
-  if(err){
-    console.log('Error connecting to MySQL database =',err)
+db.connect((err) => {
+  if (err) {
+    console.log('Error connecting to MySQL database =', err)
     return;
   }
   console.log('MySQL successfully')
@@ -59,122 +53,122 @@ app.post("/create", (req, res) => {
 
   // ตรวจสอบว่ามีอีเมลล์นี้ในฐานข้อมูลหรือไม่
   db.query(
-      "SELECT * FROM allusers WHERE email = ?",
-      [email],
-      (err, result) => {
-          if (err) {
-              console.error('เกิดข้อผิดพลาดในการทำคำสั่ง SQL:', err);
-              return res.status(500).send('Internal Server Error');
-          } else if (result.length > 0) {
-              // หากมีอีเมลล์นี้ในฐานข้อมูล
-              return res.status(409).send('Email already exists');
-          } else {
-              // หากไม่มีอีเมลล์นี้ในฐานข้อมูล ให้ทำการเพิ่มข้อมูล
-              db.query(
-                  "INSERT INTO allusers (id,email, fullname) VALUES (2,?, ?)",
-                  [email, fullName],
-                  (err, result) => {
-                      if (err) {
-                          console.error('เกิดข้อผิดพลาดในการเพิ่มข้อมูล:', err);
-                          return res.status(500).send('Failed to insert data');
-                      } else {
-                          return res.status(200).send('Values Inserted');
-                      }
-                  }
-              );
-          }
-      }
-  );
-  });
-
-  app.post("/upload", (req, res) => {
-    const excelData = req.body.excelData;
-
-    const values = excelData.map(() => "(2, ?)").join(", ");
-  
-    const sql = `INSERT INTO allusers (id,email, fullname) VALUES ${values}`;
-  
-    db.query(sql,excelData, (err, result) => {
+    "SELECT * FROM allusers WHERE email = ?",
+    [email],
+    (err, result) => {
       if (err) {
-        console.log(err);
-        res.status(500).send("Error inserting values");
+        console.error('เกิดข้อผิดพลาดในการทำคำสั่ง SQL:', err);
+        return res.status(500).send('Internal Server Error');
+      } else if (result.length > 0) {
+        // หากมีอีเมลล์นี้ในฐานข้อมูล
+        return res.status(409).send('Email already exists');
       } else {
-        res.send("Values Inserted");
-      }
-    });
-  });
-  
-  app.post("/creates", (req, res) => {
-    const fullName = req.body.fullName;
-    const email = req.body.email;
-
-    // ตรวจสอบว่ามีอีเมลล์นี้ในฐานข้อมูลหรือไม่
-    db.query(
-        "SELECT * FROM allusers WHERE email = ?",
-        [email],
-        (err, result) => {
+        // หากไม่มีอีเมลล์นี้ในฐานข้อมูล ให้ทำการเพิ่มข้อมูล
+        db.query(
+          "INSERT INTO allusers (id,email, fullname) VALUES (2,?, ?)",
+          [email, fullName],
+          (err, result) => {
             if (err) {
-                console.error('เกิดข้อผิดพลาดในการทำคำสั่ง SQL:', err);
-                return res.status(500).send('Internal Server Error');
-            } else if (result.length > 0) {
-                // หากมีอีเมลล์นี้ในฐานข้อมูล
-                return res.status(409).send('Email already exists');
+              console.error('เกิดข้อผิดพลาดในการเพิ่มข้อมูล:', err);
+              return res.status(500).send('Failed to insert data');
             } else {
-                // หากไม่มีอีเมลล์นี้ในฐานข้อมูล ให้ทำการเพิ่มข้อมูล
-                db.query(
-                    "INSERT INTO allusers (id,email, fullname) VALUES (3,?, ?)",
-                    [email, fullName],
-                    (err, result) => {
-                        if (err) {
-                            console.error('เกิดข้อผิดพลาดในการเพิ่มข้อมูล:', err);
-                            return res.status(500).send('Failed to insert data');
-                        } else {
-                            return res.status(200).send('Values Inserted');
-                        }
-                    }
-                );
+              return res.status(200).send('Values Inserted');
             }
-        }
-    );
+          }
+        );
+      }
+    }
+  );
 });
 
-  
+app.post("/upload", (req, res) => {
+  const excelData = req.body.excelData;
 
-  app.post("/uploads", (req, res) => {
-    const excelData = req.body.excelData;
+  const values = excelData.map(() => "(2, ?)").join(", ");
 
-    const values = excelData.map(() => "(3, ?)").join(", ");
-  
-    const sql = `INSERT INTO allusers (id,email, fullname) VALUES ${values}`;
-  
-    db.query(sql,excelData, (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send("Error inserting values");
-      } else {
-        res.send("Values Inserted");
-      }
-    });
+  const sql = `INSERT INTO allusers (id,email, fullname) VALUES ${values}`;
+
+  db.query(sql, excelData, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error inserting values");
+    } else {
+      res.send("Values Inserted");
+    }
   });
+});
 
+app.post("/creates", (req, res) => {
+  const fullName = req.body.fullName;
+  const email = req.body.email;
 
-
-app.get('/get',(req,res)=>{
-    db.query("SELECT*FROM allusers where id=2 ORDER BY fullname",(err,result)=>{
-        if(err){
-            console.log(err);
-        }else{
-            res.send(result);
-        }
-    })
-})
-app.get('/get1',(req,res)=>{
-  db.query("SELECT*FROM allusers where id=3 ORDER BY fullname",(err,result)=>{
-      if(err){
-          console.log(err);
-      }else{
-          res.send(result);
+  // ตรวจสอบว่ามีอีเมลล์นี้ในฐานข้อมูลหรือไม่
+  db.query(
+    "SELECT * FROM allusers WHERE email = ?",
+    [email],
+    (err, result) => {
+      if (err) {
+        console.error('เกิดข้อผิดพลาดในการทำคำสั่ง SQL:', err);
+        return res.status(500).send('Internal Server Error');
+      } else if (result.length > 0) {
+        // หากมีอีเมลล์นี้ในฐานข้อมูล
+        return res.status(409).send('Email already exists');
+      } else {
+        // หากไม่มีอีเมลล์นี้ในฐานข้อมูล ให้ทำการเพิ่มข้อมูล
+        db.query(
+          "INSERT INTO allusers (id,email, fullname) VALUES (3,?, ?)",
+          [email, fullName],
+          (err, result) => {
+            if (err) {
+              console.error('เกิดข้อผิดพลาดในการเพิ่มข้อมูล:', err);
+              return res.status(500).send('Failed to insert data');
+            } else {
+              return res.status(200).send('Values Inserted');
+            }
+          }
+        );
       }
+    }
+  );
+});
+
+
+
+app.post("/uploads", (req, res) => {
+  const excelData = req.body.excelData;
+
+  const values = excelData.map(() => "(3, ?)").join(", ");
+
+  const sql = `INSERT INTO allusers (id,email, fullname) VALUES ${values}`;
+
+  db.query(sql, excelData, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error inserting values");
+    } else {
+      res.send("Values Inserted");
+    }
+  });
+});
+
+
+
+app.get('/get', (req, res) => {
+  db.query("SELECT*FROM allusers where id=2 ORDER BY fullname", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  })
+})
+app.get('/get1', (req, res) => {
+  db.query("SELECT*FROM allusers where id=3 ORDER BY fullname", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
   })
 })
 
@@ -186,19 +180,19 @@ app.get('/searchsubject', (req, res) => {
   const sql = "SELECT * FROM course WHERE subject_name LIKE ?";
 
   db.query(sql, [`%${searchText}%`], (err, result) => {
-      if (err) {
-          console.log(err);
-          res.status(500).send('Internal Server Error');
+    if (err) {
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    } else {
+      // ตรวจสอบว่ามีข้อมูลหรือไม่
+      if (result.length > 0) {
+        // แปลงผลลัพธ์เป็น JSON
+        res.json(result);
       } else {
-          // ตรวจสอบว่ามีข้อมูลหรือไม่
-          if (result.length > 0) {
-              // แปลงผลลัพธ์เป็น JSON
-              res.json(result);
-          } else {
-              // ถ้าไม่มีข้อมูล
-              res.json({ message: 'No results found.' });
-          }
+        // ถ้าไม่มีข้อมูล
+        res.json({ message: 'No results found.' });
       }
+    }
   });
 });
 
@@ -235,7 +229,7 @@ app.get('/api/rowCount1', (req, res) => {
 
 app.post("/addroom", (req, res) => {
   const excelData = req.body.excelData;
-  
+
   // สร้างคำสั่ง SQL เพื่อลบข้อมูลที่มี state = 1 ออกจากตาราง room
   const deleteSql = `DELETE FROM room WHERE state = 1`;
 
@@ -283,8 +277,8 @@ app.get('/getOpenCourseList', (req, res) => {
 });
 
 app.get('/getsubsearch/:year', (req, res) => {
-  const {year} =req.params;
-  db.query("SELECT * FROM course where course_year = ? ORDER BY courseid",[year],(err, result) => {
+  const { year } = req.params;
+  db.query("SELECT * FROM course where course_year = ? ORDER BY courseid", [year], (err, result) => {
     if (err) {
       console.log(err);
     } else {
@@ -439,7 +433,7 @@ app.get('/getsubsearch1/:year/:term', (req, res) => {
     } else {
       res.send(result);
       console.log(term);
-     
+
     }
   });
 });
@@ -515,7 +509,7 @@ app.post("/opencourse", (req, res) => {
 app.delete("/deletesuball", (req, res) => {
   const listCheck = req.body.listCheck; // รับข้อมูลที่ส่งมาจากหน้าเว็บ
   const deleteQuery = "DELETE FROM course WHERE subject_id = ? AND subject_name = ? AND course_year = ?";
-  
+
   // สร้าง Promise เพื่อลบข้อมูลทั้งหมดใน listCheck
   const deleteValuesPromises = listCheck.map(item => {
     return new Promise((resolve, reject) => {
@@ -546,7 +540,7 @@ app.delete("/deletesuball", (req, res) => {
 app.delete("/deletesuball", (req, res) => {
   const listCheck = req.body.listCheck; // รับข้อมูลที่ส่งมาจากหน้าเว็บ
   const deleteQuery = "DELETE FROM course WHERE subject_id = ? AND subject_name = ? AND course_year = ?";
-  
+
   // สร้าง Promise เพื่อลบข้อมูลทั้งหมดใน listCheck
   const deleteValuesPromises = listCheck.map(item => {
     return new Promise((resolve, reject) => {
@@ -577,120 +571,122 @@ app.delete("/deletesuball", (req, res) => {
 
 
 app.get('/box', (req, res) => {
-    db.query("SELECT * FROM box", (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).json({ error: 'Internal Server Error' });
-      } else {
-        res.json(result); // ส่งผลลัพธ์กลับไปยังผู้ใช้
-      }
-    });
+  db.query("SELECT * FROM box", (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json(result); // ส่งผลลัพธ์กลับไปยังผู้ใช้
+    }
   });
+});
 
 app.post('/box1', (req, res) => {
-    const { inputValue } = req.body;
+  const { inputValue } = req.body;
 
-    if(!inputValue){
-      return res.status(400).json({ error: 'error'});
+  if (!inputValue) {
+    return res.status(400).json({ error: 'error' });
+  }
+
+  db.query("INSERT INTO `box` (id,info) VALUES (null,?)", [inputValue], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json({ success: true, message: 'Data saved successfully' });
+      console.log("บันทึกสำเร็จ")
     }
-  
-    db.query("INSERT INTO `box` (id,info) VALUES (null,?)", [inputValue], (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).json({ error: 'Internal Server Error' });
-      } else {
-        res.json({ success: true, message: 'Data saved successfully' });
-        console.log("บันทึกสำเร็จ")
-      }
-    });
   });
+});
 
 app.get('/time', (req, res) => {
-    db.query("SELECT * FROM time ", (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).json({ error: 'Internal Server Error' });
-      } else {
-        res.json(result); // ส่งผลลัพธ์กลับไปยังผู้ใช้
-        console.log("อ่านข้อมูลสำเร็จ")
-      }
-    });
-  });
-
-  app.post('/timeT', (req, res) => {
-    const { dayS, timeS, dayF, timeF } = req.body;
-
-    if(!dayS || !timeS || !dayF || !timeF){
-      return res.status(400).json({ error: 'error'});
+  db.query("SELECT * FROM time ", (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json(result); // ส่งผลลัพธ์กลับไปยังผู้ใช้
+      console.log("อ่านข้อมูลสำเร็จ")
     }
-  
-    db.query("DELETE FROM timeteacher WHERE state = 1", (deleteErr, deleteResult) => {
-      if (deleteErr) {
-        console.log(deleteErr);
-        return res.status(500).json({ error: 'Internal Server Error (Delete)' });
-      } else {
-        console.log("Deleted records successfully");
-        // หลังจากลบข้อมูลแล้ว ทำการแทรกข้อมูลใหม่
-        db.query("INSERT INTO timeteacher (`id`, `dayS`, `timeS`, `dayF`, `timeF`,`state`) VALUES (NULL, ? , ? ,? , ? ,1 )", [dayS, timeS, dayF, timeF], (insertErr, insertResult) => {
-          if (insertErr) {
-            console.log(insertErr);
-            return res.status(500).json({ error: 'Internal Server Error (Insert)' });
-          } else {
-            console.log("บันทึกสำเร็จ");
-            return res.json({ success: true, message: 'Data saved successfully' });
-          }
-        });
-      }
-    });
   });
+});
+
+app.post('/timeT', (req, res) => {
+  const { dayS, timeS, dayF, timeF } = req.body;
+
+  if (!dayS || !timeS || !dayF || !timeF) {
+    return res.status(400).json({ error: 'error' });
+  }
+
+  db.query("DELETE FROM timeteacher WHERE state = 1", (deleteErr, deleteResult) => {
+    if (deleteErr) {
+      console.log(deleteErr);
+      return res.status(500).json({ error: 'Internal Server Error (Delete)' });
+    } else {
+      console.log("Deleted records successfully");
+      // หลังจากลบข้อมูลแล้ว ทำการแทรกข้อมูลใหม่
+      db.query("INSERT INTO timeteacher (`id`, `dayS`, `timeS`, `dayF`, `timeF`,`state`) VALUES (NULL, ? , ? ,? , ? ,1 )", [dayS, timeS, dayF, timeF], (insertErr, insertResult) => {
+        if (insertErr) {
+          console.log(insertErr);
+          return res.status(500).json({ error: 'Internal Server Error (Insert)' });
+        } else {
+          console.log("บันทึกสำเร็จ");
+          return res.json({ success: true, message: 'Data saved successfully' });
+        }
+      });
+    }
+  });
+});
+
 
 
   app.post('/timeEdu', (req, res) => {
     const { dayS, timeS, dayF, timeF } = req.body;
 
-    if(!dayS || !timeS || !dayF || !timeF){
-      return res.status(400).json({ error: 'error'});
+
+  if (!dayS || !timeS || !dayF || !timeF) {
+    return res.status(400).json({ error: 'error' });
+  }
+
+  db.query("DELETE FROM timeedu WHERE state = 1", (deleteErr, deleteResult) => {
+    if (deleteErr) {
+      console.log(deleteErr);
+      return res.status(500).json({ error: 'Internal Server Error (Delete)' });
+    } else {
+      console.log("Deleted records successfully");
+      // หลังจากลบข้อมูลแล้ว ทำการแทรกข้อมูลใหม่
+      db.query("INSERT INTO timeedu (`id`, `dayS`, `timeS`, `dayF`, `timeF`,`state`) VALUES (NULL, ? , ? ,? , ? ,1 )", [dayS, timeS, dayF, timeF], (insertErr, insertResult) => {
+        if (insertErr) {
+          console.log(insertErr);
+          return res.status(500).json({ error: 'Internal Server Error (Insert)' });
+        } else {
+          console.log("บันทึกสำเร็จ");
+          return res.json({ success: true, message: 'Data saved successfully' });
+        }
+      });
     }
-  
-    db.query("DELETE FROM timeedu WHERE state = 1", (deleteErr, deleteResult) => {
-      if (deleteErr) {
-        console.log(deleteErr);
-        return res.status(500).json({ error: 'Internal Server Error (Delete)' });
-      } else {
-        console.log("Deleted records successfully");
-        // หลังจากลบข้อมูลแล้ว ทำการแทรกข้อมูลใหม่
-        db.query("INSERT INTO timeedu (`id`, `dayS`, `timeS`, `dayF`, `timeF`,`state`) VALUES (NULL, ? , ? ,? , ? ,1 )", [dayS, timeS, dayF, timeF], (insertErr, insertResult) => {
-          if (insertErr) {
-            console.log(insertErr);
-            return res.status(500).json({ error: 'Internal Server Error (Insert)' });
-          } else {
-            console.log("บันทึกสำเร็จ");
-            return res.json({ success: true, message: 'Data saved successfully' });
-          }
-        });
-      }
-    });
+  });
 });
 
 
-  app.delete('/box1/:boxId', (req, res) => {
-    const boxId = req.params.boxId;
-    // ทำการลบข้อมูลในฐานข้อมูล MySQL ตามดัชนีที่รับมาจาก params
-    // ส่งคำตอบกลับไปว่าลบข้อมูลสำเร็จหรือไม่
+app.delete('/box1/:boxId', (req, res) => {
+  const boxId = req.params.boxId;
+  // ทำการลบข้อมูลในฐานข้อมูล MySQL ตามดัชนีที่รับมาจาก params
+  // ส่งคำตอบกลับไปว่าลบข้อมูลสำเร็จหรือไม่
 
-    if(!boxId){
-        return res.status(400).json({ error: 'error'});
+  if (!boxId) {
+    return res.status(400).json({ error: 'error' });
+  }
+
+  db.query("DELETE FROM `box` WHERE id=?", [boxId], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json({ success: true, message: 'Data saved successfully' });
+      console.log("ลบสำเร็จ")
     }
-  
-    db.query("DELETE FROM `box` WHERE id=?", [boxId], (err, result) => {
-        if (err) {
-            console.log(err);
-            res.status(500).json({ error: 'Internal Server Error' });
-        } else {
-            res.json({ success: true, message: 'Data saved successfully' });
-            console.log("ลบสำเร็จ")
-        }
-    });
+  });
 });
 
 app.delete('/delete/:userEmail', (req, res) => {
@@ -726,29 +722,29 @@ app.delete('/deleteopensuball/:courses', (req, res) => {
 
   // ตรวจสอบว่า myyear2 และ termsearch ถูกส่งมาหรือไม่
   if (!myyear2 || !termsearch) {
-      // ถ้าไม่มีการส่ง myyear2 หรือ termsearch มา
-      // ให้ลบข้อมูลที่ state = 1
-      db.query("DELETE FROM opencourse WHERE state = 1", (err, result) => {
-          if (err) {
-              console.error('Error deleting data:', err);
-              res.status(500).send('Error deleting data');
-          } else {
-              console.log('Deleted courses with state = 1');
-              res.status(200).send('Data deleted successfully');
-          }
-      });
+    // ถ้าไม่มีการส่ง myyear2 หรือ termsearch มา
+    // ให้ลบข้อมูลที่ state = 1
+    db.query("DELETE FROM opencourse WHERE state = 1", (err, result) => {
+      if (err) {
+        console.error('Error deleting data:', err);
+        res.status(500).send('Error deleting data');
+      } else {
+        console.log('Deleted courses with state = 1');
+        res.status(200).send('Data deleted successfully');
+      }
+    });
   } else {
-      // ถ้ามีการส่ง myyear2 และ termsearch มา
-      // ให้ลบข้อมูลที่ course_year = myyear2 และ term = termsearch
-      db.query("DELETE FROM opencourse WHERE course_year = ? AND term = ?", [myyear2, termsearch], (err, result) => {
-          if (err) {
-              console.error('Error deleting data:', err);
-              res.status(500).send('Error deleting data');
-          } else {
-              console.log('Deleted courses with myyear2:', myyear2, 'and termsearch:', termsearch);
-              res.status(200).send('Data deleted successfully');
-          }
-      });
+    // ถ้ามีการส่ง myyear2 และ termsearch มา
+    // ให้ลบข้อมูลที่ course_year = myyear2 และ term = termsearch
+    db.query("DELETE FROM opencourse WHERE course_year = ? AND term = ?", [myyear2, termsearch], (err, result) => {
+      if (err) {
+        console.error('Error deleting data:', err);
+        res.status(500).send('Error deleting data');
+      } else {
+        console.log('Deleted courses with myyear2:', myyear2, 'and termsearch:', termsearch);
+        res.status(200).send('Data deleted successfully');
+      }
+    });
   }
 });
 
@@ -781,18 +777,18 @@ app.delete('/delete1/:userEmail', (req, res) => {
 });
 
 
-  
+
 app.get('/room', (req, res) => {
-    db.query("SELECT * FROM room", (err, result) => {
-      if (err) {
-        console.log(err);
-        res.status(500).json({ error: 'Internal Server Error' });
-      } else {
-        res.json(result); // ส่งผลลัพธ์กลับไปยังผู้ใช้
-        console.log("อ่านข้อมูลสำเร็จ")
-      }
-    });
+  db.query("SELECT * FROM room", (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json(result); // ส่งผลลัพธ์กลับไปยังผู้ใช้
+      console.log("อ่านข้อมูลสำเร็จ")
+    }
   });
+});
 
 app.get('/courset', (req, res) => {
   db.query("SELECT * FROM courset", (err, result) => {
@@ -824,21 +820,34 @@ app.get("/search-courses", (req, res) => {
     .split(",")
     .filter(course => ["55", "60", "65", "70"].includes(course));
 
-  if (courseValues.length === 0) {
+  if (courseValues.length === 0 || !selectterm || !selectyear) {
     return res.json([]);
   }
 
-  let sqlQuery = `SELECT DISTINCT subject_id, subject_name, credit, category FROM opencourse WHERE courses IN (${courseValues.map(() => '?').join(', ')})`;
+  let sqlQuery;
+  let queryParams = [selectyear, selectterm, ...courseValues];
 
-  let queryParams = [...courseValues];
-
-  // Add condition for selectterm and selectyear
-  sqlQuery += ` AND term = ? AND course_year = ?`;
-  queryParams.push(selectterm, selectyear);
+  if (courseValues.length > 1) {
+    // If there are multiple course values, use GROUP BY and HAVING COUNT(subject_id) > 1
+    sqlQuery = `
+      SELECT *
+      FROM opencourse
+      WHERE course_year = ? AND term = ? AND courses IN (${courseValues.map(() => '?').join(', ')})
+      GROUP BY subject_id
+      HAVING COUNT(subject_id) > 1
+    `;
+  } else {
+    // If there's only one course value, don't use GROUP BY and HAVING COUNT(subject_id) > 1
+    sqlQuery = `
+      SELECT *
+      FROM opencourse
+      WHERE course_year = ? AND term = ? AND courses IN (${courseValues.map(() => '?').join(', ')})
+    `;
+  }
 
   // If a search query is provided, extend the SQL query to include a search condition.
   if (query) {
-    sqlQuery += ` AND (subject_id LIKE ? OR subject_name LIKE ?)`;
+    sqlQuery += ` AND (subject_id LIKE ?) `;
     queryParams.push(`%${query}%`, `%${query}%`); // Add the search query to the parameters array for both subject_id and subject_name.
   }
 
@@ -847,10 +856,16 @@ app.get("/search-courses", (req, res) => {
       console.error("Error searching courses:", err);
       return res.status(500).send("Error searching courses");
     }
-    
+
     res.json(results);
   });
+  
+  console.log("sqlQuery:", sqlQuery);
+  console.log("queryParams:", queryParams);
 });
+
+
+
 
 
 
@@ -867,7 +882,7 @@ app.post("/register", (req, res) => {
     category,
     course_year,
     term,
-    
+
   } = req.body;
 
   // Check for missing data
@@ -1051,7 +1066,7 @@ app.get('/checkUserRole', (req, res) => {
 });
 
 app.listen("3001", () => {
-    console.log('Server is running on port 3001');
+  console.log('Server is running on port 3001');
 })
 
 app.get('/search-nameajarn', (req, res) => {
@@ -1062,7 +1077,7 @@ app.get('/search-nameajarn', (req, res) => {
       console.error('Error searching name_ajarn:', err);
       return res.status(500).send('Error searching name_ajarn');
     }
-    res.json(results); 
+    res.json(results);
   });
 });
 
@@ -1074,7 +1089,7 @@ app.get('/search-nameEdu', (req, res) => {
       console.error('Error searching name_edu:', err);
       return res.status(500).send('Error searching name_edu');
     }
-    res.json(results); 
+    res.json(results);
   });
 });
 
