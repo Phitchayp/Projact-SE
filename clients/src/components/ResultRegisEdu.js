@@ -14,10 +14,25 @@ function ResultRegisEdu() {
   const [selectedValue6, setSelectedValue6] = useState("");
   const [selectedValue7, setSelectedValue7] = useState("");
   const [SelectDay, setSelectDay] = useState("");
+  const [filteredDataByDay, setFilteredDataByDay] = useState([]);
+  
+
 
   const handleDropdownSelectDay = (event) => {
     setSelectDay(event.target.value);
   };
+  const filterDataByDay = (selectedDay) => {
+    if (selectedDay) {
+      const filteredData = allname.filter(item => item.day === selectedDay);
+      setFilteredDataByDay(filteredData);
+    } else {
+      setFilteredDataByDay(allname); // หากไม่ได้เลือกวันใด ๆ ให้แสดงข้อมูลทั้งหมด
+    }
+  };
+  useEffect(() => {
+    filterDataByDay(SelectDay);
+  }, [SelectDay]);
+
   const handleDropdownChange5 = (event) => {
     setSelectedValue5(event.target.value);
   };
@@ -43,6 +58,7 @@ function ResultRegisEdu() {
   const [filterresult, setFilterresult] = useState([]);
   const [searchNameTable, setSearchNameTable] = useState("");
   const [subject,setsubject] = useState("");
+  
   // กรองข้อมูลตามคำค้นหาที่ผู้ใช้ป้อนลงในช่องค้นหา และเก็บผลลัพธ์ไว้ใน filterdata
   const handlesearch = (event) => {
     const searchName = event.target.value.toLowerCase();
@@ -400,6 +416,7 @@ function ResultRegisEdu() {
                             );
                             setFilterresult(filterData);
                         } 
+                        
                     }}
                 >
                     <span
@@ -450,12 +467,16 @@ function ResultRegisEdu() {
                   </tr>
                 </thead>
                 <tbody>
+                
                 {searchNameTable?.length > 0 ? (
                     filterresult
                         .filter(filterName => (
                           searchText1 ? filterName.name.includes(searchText1) : true
                            
                             // Add more conditions for additional fields if needed
+                        ))
+                        .filter(filterName => (
+                          SelectDay ? filterName.day === SelectDay : true
                         ))
                         .map((filterName, index) => (
                             <tr key={index}>
@@ -473,12 +494,18 @@ function ResultRegisEdu() {
                                 <td>{`${filterName.room}`}</td>
                             </tr>
                         ))
+                        
                 ) : (
+                  
                     allname
                         .filter(getcon => (
                           searchText1 ? getcon.name.includes(searchText1) : true
                             // Add more conditions for additional fields if needed
                         ))
+                        .filter(getcon => (
+                          SelectDay ? getcon.day === SelectDay : true
+                          // Add more conditions for additional fields if needed
+                      ))
                         .map((getcon, index) => (
                             <tr key={index}>
                                 <td>{`${getcon.No}`}</td>
@@ -498,6 +525,9 @@ function ResultRegisEdu() {
                             </tr>
                       ))
                   )}
+
+
+    
 
                 </tbody>
               </table>
