@@ -5,6 +5,7 @@ import RegisTa from "./testtable";
 // import SearchBar from "./SearchBar";
 import "./SearchBar.css";
 import Axios from "axios";
+import Swal from 'sweetalert2';
 
 import searchIcon from "../assets/searchbar.svg"; // Import รูปไอคอน
 
@@ -39,18 +40,27 @@ function RegisResultTable() {
   const searchCourses = async () => {
     const years = selectedYear.join(',');
 
-
     try {
       const response = await Axios.get(
         `http://localhost:3001/search-courses?query=${encodeURIComponent(searchText)}&checkboxValue=${encodeURIComponent(years)}&selectterm=${encodeURIComponent(selectterm)}&selectyear=${encodeURIComponent(selectyear)}`
       );
-      setSearchResults(response.data); 
+
+      if (response.data.length === 0) {
+        setSearchResults([{ message: "ไม่พบผลลัพธ์" }]);
+      } else {
+        setSearchResults(response.data);
+      }
     } catch (error) {
       console.error("Error searching courses:", error);
     }
   };
 
-  
+
+
+
+
+
+
 
   const handleDropdownChange5 = (event) => {
     setSelectyear(event.target.value);
@@ -76,7 +86,15 @@ function RegisResultTable() {
     category: "",
   });
   const handleSelectCourse = (course) => {
+    if (!course.subject_id || !course.subject_name) {
+      setSearchText("");
+      setSelectedCourse({});
+      setSearchResults([]);
+      return;
+    }
+
     setSearchText(`${course.subject_id} - ${course.subject_name}`);
+
     setSelectedCourse({
       subject_id: course.subject_id,
       subject_name: course.subject_name,
@@ -84,14 +102,20 @@ function RegisResultTable() {
       category: course.category,
     });
     setSearchResults([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
+
   };
+
 
   // ฟังก์ชันสำหรับบันทึกข้อมูล
   const saveCourseRegistration = async () => {
     // Simple client-side validation
-    if (!selectedCourse.subject_id || !selectedCourse.subject_name || selectedYear.length === 0 || !selectedValues.section || !selectedValues.lectureOrLab || selectedBranch.length === 0 || !selectedCourse.credit || !selectedCourse.category || !selectyear || !selectterm ) {
-      alert("Please fill out all required fields.");
-      return; // Stop the function if validation fails
+    if (!selectedCourse.subject_id || !selectedCourse.subject_name || selectedYear.length === 0 || !selectedValues.section || !selectedValues.lectureOrLab || selectedBranch.length === 0 || !selectedCourse.credit || !selectedCourse.category || !selectyear || !selectterm) {
+      Swal.fire({
+        title: "warning",
+        text: "กรุณากรอกข้อมูลให้ครบถ้วน",
+        icon: "warning",
+      })
+      return; // ยกเลิกการทำงานหากข้อมูลไม่ครบถ้วน
     }
 
     // Convert array of years and branches to strings
@@ -111,16 +135,41 @@ function RegisResultTable() {
         course_year: selectyear,
         term: selectterm,
       });
-
-      alert("Registration successful!");
-      window.location.reload();
+      Swal.fire({
+        title: "เพิ่มรายวิชาสำเร็จ",
+        confirmButtonColor: "#3CB371",
+        customClass: {
+          title: 'kanit-font',
+          content: 'kanit-font',
+          confirmButton: 'kanit-font',
+          cancelButton: 'kanit-font',
+          popup: 'kanit-font'
+        }
+      }).then(() => {
+        // หลังจากกดปุ่มตกลงในป๊อปอัพ ให้รีโหลดหน้าเว็บ
+        window.location.reload();
+      });
     } catch (error) {
       console.error("Error saving course registration:", error);
-      alert("Failed to save course registration. Please try again."); 
-
+      Swal.fire({
+        title: "เพิ่มรายวิชาไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
+        confirmButtonColor: "#3CB371",
+        customClass: {
+          title: 'kanit-font',
+          content: 'kanit-font',
+          confirmButton: 'kanit-font',
+          cancelButton: 'kanit-font',
+          popup: 'kanit-font'
+        }
+      }).then(() => {
+        // หลังจากกดปุ่มตกลงในป๊อปอัพ ให้รีโหลดหน้าเว็บ
+        window.location.reload();
+      });
     }
 
-};
+
+
+  };
 
 
   const [selectedYear, setSelectedYear] = useState([]);
@@ -167,14 +216,14 @@ function RegisResultTable() {
   };
 
   return (
-    <div>
+    <div style={{ fontFamily: 'Kanit' }}>
       <div class="searchBar-texthead">
         <p1>ลงทะเบียนรายวิชา</p1>
       </div>
       <div style={{ marginTop: "35px" }}>
         <div class="searchBar-container">
           <div>
-            <div style={{ marginTop: "35px" }}>
+            <div style={{ marginTop: "35px", marginTop: '20px' }}>
               <div>
                 <div className="text5">
                   <a>หลักสูตร</a>
@@ -212,35 +261,45 @@ function RegisResultTable() {
                       onChange={handleCheckboxChange}
                     />
                   </label>
+                  <label>
+                    ปี70
+                    <input
+                      type="checkbox"
+                      name="years"
+                      value="70"
+                      checked={selectedYear.includes("70")}
+                      onChange={handleCheckboxChange}
+                    />
+                  </label>
                   {/* <div className="dropdownRegisResultTable "> */}
-                    <div className="dropdown5" style={{ marginLeft: '1px', marginRight: '5px' }}>
-                      <select value={selectyear.course_year} onChange={(event) => handleDropdownChange5(event, "course_year")}>
-                        <option value=""></option>
-                        <option value="2569">2569</option>
-                        <option value="2568">2568</option>
-                        <option value="2567">2567</option>
-                        <option value="2566">2566</option>
-                        <option value="2565">2565</option>
-                        <option value="2564">2564</option>
-                        <option value="2563">2563</option>
-                        <option value="2562">2562</option>
-                        <option value="2561">2561</option>
-                        <option value="2560">2560</option>
-                        <option value="2559">2559</option>
-                        <option value="2558">2558</option>
-                        <option value="2557">2557</option>
-                        <option value="2556">2556</option>
-                        <option value="2555">2555</option>
-                      </select>
-                    </div>
+                  <div className="dropdown5" style={{ marginLeft: '1px', marginRight: '5px' }}>
+                    <select value={selectyear.course_year} onChange={(event) => handleDropdownChange5(event, "course_year")}>
+                      <option value=""></option>
+                      <option value="2569">2569</option>
+                      <option value="2568">2568</option>
+                      <option value="2567">2567</option>
+                      <option value="2566">2566</option>
+                      <option value="2565">2565</option>
+                      <option value="2564">2564</option>
+                      <option value="2563">2563</option>
+                      <option value="2562">2562</option>
+                      <option value="2561">2561</option>
+                      <option value="2560">2560</option>
+                      <option value="2559">2559</option>
+                      <option value="2558">2558</option>
+                      <option value="2557">2557</option>
+                      <option value="2556">2556</option>
+                      <option value="2555">2555</option>
+                    </select>
+                  </div>
 
-                    <div className="dropdown6">
-                      <select value={selectterm.term} onChange={(event) => handleDropdownChange6(event, "term")}>
-                        <option value=""></option>
-                        <option value="ภาคต้น">ภาคต้น</option>
-                        <option value="ภาคปลาย">ภาคปลาย</option>
-                      </select>
-                    </div>
+                  <div className="dropdown6">
+                    <select value={selectterm.term} onChange={(event) => handleDropdownChange6(event, "term")}>
+                      <option value=""></option>
+                      <option value="ภาคต้น">ภาคต้น</option>
+                      <option value="ภาคปลาย">ภาคปลาย</option>
+                    </select>
+                  </div>
                   {/* </div> */}
                 </div>
 
@@ -261,7 +320,7 @@ function RegisResultTable() {
                     <button onClick={searchCourses}>
                       <img src={searchIcon} alt="Search Icon" />
                     </button>
-                    {searchResults.length > 0 && (
+                    {searchResults.length > 0 ? (
                       <div className="autocomplete-dropdown">
                         {searchResults.map((course, index) => (
                           <div
@@ -269,11 +328,24 @@ function RegisResultTable() {
                             key={index}
                             onClick={() => handleSelectCourse(course)}
                           >
-                            {course.subject_id} - {course.subject_name}
+                            {(course.subject_id !== undefined && course.subject_name !== undefined) ? (
+                              <>
+                                {course.subject_id} - {course.subject_name}
+                              </>
+                            ) : (
+                              "ไม่พบผลลัพธ์"
+                            )}
                           </div>
                         ))}
                       </div>
+                    ) : (
+                      null
                     )}
+
+
+
+
+
                   </div>
                 </div>
                 <div className="text7">

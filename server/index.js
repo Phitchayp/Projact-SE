@@ -813,10 +813,9 @@ app.get('/roomdropdown', (req, res) => {
 
 app.get("/search-courses", (req, res) => {
   const { query, checkboxValue, selectterm, selectyear } = req.query;
-
   const courseValues = checkboxValue
     .split(",")
-    .filter(course => ["55", "60", "65"].includes(course));
+    .filter(course => ["55", "60", "65", "70"].includes(course));
 
   if (courseValues.length === 0) {
     return res.json([]);
@@ -826,11 +825,9 @@ app.get("/search-courses", (req, res) => {
 
   let queryParams = [...courseValues];
 
-  // เพิ่มเงื่อนไขสำหรับ selectterm และ selectyear
-  if (selectterm && selectyear) {
-    sqlQuery += ` AND term = ? AND course_year = ?`;
-    queryParams.push(selectterm, selectyear);
-  }
+  // Add condition for selectterm and selectyear
+  sqlQuery += ` AND term = ? AND course_year = ?`;
+  queryParams.push(selectterm, selectyear);
 
   // If a search query is provided, extend the SQL query to include a search condition.
   if (query) {
@@ -843,9 +840,12 @@ app.get("/search-courses", (req, res) => {
       console.error("Error searching courses:", err);
       return res.status(500).send("Error searching courses");
     }
+    
     res.json(results);
   });
 });
+
+
 
 
 app.post("/register", (req, res) => {
