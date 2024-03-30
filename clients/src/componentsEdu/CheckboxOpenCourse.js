@@ -230,35 +230,48 @@ function CheckboxOpenCourse() {
     };
     
     
-
-
     const handleDeleteOpenCourse = async () => {
         try {
-            await axios.delete("http://127.0.0.1:3001/deletesuball", {
-                data: {
-                    listCheck: listCheck
-                }
+            // แสดงป๊อปอัพยืนยันการลบ
+            const confirmation = await Swal.fire({
+                title: "คุณแน่ใจหรือไม่ว่าจะลบรายวิชาทั้งหมด?",
+                text: "คุณต้องการลบรายวิชาทั้งหมด",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
             });
-
-            console.log("Data delete successfully");
-
-            Swal.fire({
-                title: "ลบข้อมูลสำเร็จ!",
-                text: "ลบรายวิชาที่สามารถเปิดสอน",
-                icon: "success",
-                customClass: {
-                    popup: 'kanit-font',
-                    header: 'kanit-font',
-                    title: 'kanit-font',
-                }
-            }).then(() => {
-                // หลังจากกดปุ่มตกลงใน Swal.fire ให้รีโหลดหน้าเว็บ
+    
+            // ถ้าผู้ใช้กดปุ่ม Confirm
+            if (confirmation.isConfirmed) {
+                // ลบข้อมูลในฐานข้อมูล
+                await axios.delete("http://127.0.0.1:3001/deletesuball", {
+                    data: {
+                        listCheck: listCheck
+                    }
+                });
+    
+                // แสดงป๊อปอัพแจ้งลบสำเร็จ
+                await Swal.fire({
+                    title: "Deleted!",
+                    text: "ลบรายวิชาออกทั้งหมดแล้ว",
+                    icon: "success"
+                }).then(() => {
+                    // หากยืนยันการลบ ทำการรีโหลดหน้าเว็บ
+                    window.location.reload();
+                });
+            }else{
                 window.location.reload();
-            });
+            }
         } catch (error) {
-            console.error("Error deleting data:", error);
+            console.error('Error deleting data:', error);
+            alert(`ลบข้อมูล ${courses} ไม่สำเร็จ`);
         }
+        console.log(courses);
     };
+    
+    
 
 
     const handleDeleteCourse = async (courses) => {
