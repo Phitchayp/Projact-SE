@@ -35,6 +35,8 @@ const UserList = () => {
           cancelButton: 'kanit-font',
           popup: 'kanit-font'
         }
+      }).then(() => {
+        window.location.reload();
       });
     } catch (error) {
       console.error('Error deleting data:', error);
@@ -85,7 +87,7 @@ const UserList = () => {
                     if (result.isConfirmed) {
                       handleDeleteUser(user.email);
                     }
-                  });
+                  })
                 }}
                 
               />

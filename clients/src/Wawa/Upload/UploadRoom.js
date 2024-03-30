@@ -70,7 +70,7 @@ const UploadRoom = ({ selectedValue8, selectedValue9 }) => {
       Swal.fire({
         icon: 'error',
         title: 'บันทึกไม่สำเร็จ',
-        text: `ข้อมูลใน Excel ต้องมี ${expectedColumnCount} คอลัมน์`,
+        text: `รูปแบบข้อมูลใน Excel ไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่`,
       });
       return; // ไม่ดำเนินการต่อไปหากจำนวนคอลัมน์ไม่ถูกต้อง
     }
