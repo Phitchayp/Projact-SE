@@ -6,6 +6,7 @@ import { FaRegSave } from "react-icons/fa";
 import * as XLSX from 'xlsx';
 import Axios from "axios";
 import InputEdu from '../Input/InputEdu';
+import Swal from 'sweetalert2';
 
 const UploadEdu = ({selectcourse,selectedValue1}) => {
   const [excelData, setExcelData] = useState(null);
@@ -15,6 +16,23 @@ const UploadEdu = ({selectcourse,selectedValue1}) => {
   
 
   const handleFileUpload = (file) => {
+    // ตรวจสอบว่ามีการเลือกไฟล์หรือไม่
+    if (!file) {
+      return; // ออกจากฟังก์ชันทันที
+    }
+    // ตรวจสอบนามสกุลของไฟล์
+    const allowedExtensions = ['.xlsx', '.xls'];
+    const fileExtension = '.' + file.name.split('.').pop();
+    // เช็คว่านามสกุลของไฟล์ไม่อยู่ในรายการนามสกุลที่อนุญาต
+    if (!allowedExtensions.includes(fileExtension)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'รูปแบบไฟล์ไม่ถูกต้อง',
+        text: 'โปรดเลือกไฟล์นามสกุล .xlsx เท่านั้น',
+      });
+      return;
+    }
+    // ดำเนินการต่อเมื่อไฟล์อยู่ในรูปแบบที่ถูกต้อง
     setFileName(file.name);
     const reader = new FileReader();
 
@@ -54,18 +72,32 @@ const UploadEdu = ({selectcourse,selectedValue1}) => {
   //     }
   // };
   const handleButtonClick = () => {
-    if (!selectedValue1 || !selectcourse) {
-      window.alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-      return; // ไม่ทำงานต่อไปหาก selectedValue1 ว่าง
+    // เช็คว่ามีข้อมูล excel และไฟล์มีนามสกุล .xlsx หรือไม่
+    if (!excelData || !fileName.endsWith('.xlsx')) {
+      Swal.fire({
+        icon: 'error',
+        title: 'บันทึกไม่สำเร็จ',
+        text: 'โปรดเลือกไฟล์นามสกุล .xlsx เท่านั้น',
+      });
+      return; // ไม่ดำเนินการต่อไปหากไม่มีข้อมูล excel หรือไฟล์ไม่ใช่ .xlsx
+    }
+
+    // เช็คว่าข้อมูลใน excel มีจำนวนคอลัมน์ถูกต้องหรือไม่ (ต้องมี 4 คอลัมน์)
+    const expectedColumnCount = 4; // จำนวนคอลัมน์ที่คาดหวัง
+    const actualColumnCount = excelData.length > 0 ? excelData[0].length : 0; // จำนวนคอลัมน์ในข้อมูล excel
+    if (actualColumnCount !== expectedColumnCount) {
+      Swal.fire({
+        icon: 'error',
+        title: 'บันทึกไม่สำเร็จ',
+        text: `รูปแบบข้อมูลใน Excel ไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่`,
+      });
+      return; // ไม่ดำเนินการต่อไปหากจำนวนคอลัมน์ไม่ถูกต้อง
     }
     Axios.post("http://localhost:3001/uploaded", {
         excelData: excelData,
         selectedValue1: selectedValue1,
         selectcourse:selectcourse
     }).then(() => {
-        window.alert('บันทึกข้อมูลรายวิชาสำเร็จ');
-        window.location.reload();
-        
         setsubjectList([
             ...subjectList,
             {
@@ -74,10 +106,21 @@ const UploadEdu = ({selectcourse,selectedValue1}) => {
                 // selectedValue1: selectedValue1,
             },
         ]);
-        
+        Swal.fire({
+          icon: 'success',
+          title: 'Upload ไฟล์ข้อมูลรายวิชาสำเร็จ',
+        }).then(() => {
+          window.location.reload();
+        }); // รีโหลดหน้าหลังจากบันทึกเสร็จสิ้น
     }).catch(error => {
-        console.error('Error saving data:', error);
-        window.alert('ข้อมูลไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่');
+      console.error('Error saving data:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'บันทึกไม่สำเร็จ',
+        text: 'ข้อมูลไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่',
+      }).then(() => {
+        window.location.reload();
+      }); // รีโหลดหน้าหลังจากบันทึกเสร็จสิ้น// รีโหลดหน้าหลังจากบันทึกไม่สำเร็จ
     });
 };
 
