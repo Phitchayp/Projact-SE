@@ -28,15 +28,16 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  host: 'localhost',
-  user: 'root',
-  password: '12345678',
-  database: 'project_se',
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
+  // database: 'project_se',
 
-  // host: '192.168.43.237',
-  // user: 'dbSE',
-  // password: 'root123456',
-  // database: 'databasese',
+  host: '10.64.79.183',
+  user: 'dbSE',
+  password: 'root123456',
+  database: 'project_se',
+  port: '3308',
 })
 
 db.connect((err) => {
@@ -634,6 +635,28 @@ app.post('/timeT', (req, res) => {
           return res.json({ success: true, message: 'Data saved successfully' });
         }
       });
+    }
+  });
+});
+
+
+app.get('/gettimeteacher', (req, res) => {
+  db.query("SELECT * FROM timeteacher ORDER BY id", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+
+app.get('/gettimeedu', (req, res) => {
+  db.query("SELECT * FROM timeedu ORDER BY id", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
     }
   });
 });
