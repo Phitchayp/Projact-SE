@@ -7,11 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '123456',
-  database: 'databasese',
-  port: '3306'
+  // host: '127.0.0.1',
+  // user: 'root',
+  // password: '123456',
+  // database: 'databasese',
+  // port: '3306'
  //pond
   // host: 'localhost',
   // user: 'root',
@@ -28,10 +28,10 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  // host: 'localhost',
-  // user: 'root',
-  // password: '12345678',
-  // database: 'project_se',
+  host: 'localhost',
+  user: 'root',
+  password: '12345678',
+  database: 'project_se',
 
   // host: '192.168.43.237',
   // user: 'dbSE',
@@ -333,25 +333,46 @@ app.post("/uploaded", (req, res) => {
 app.post("/addsub", (req, res) => {
   const idSubject = req.body.idSubject;
   const subjectName = req.body.subjectName;
-  const selectedValue2=req.body.selectedValue2;
-  const selectedValue3=req.body.selectedValue3;
-  const selectedValue4=req.body.selectedValue4;
-  const selectcourse1=req.body.selectcourse1;
+  const selectedValue2 = req.body.selectedValue2;
+  const selectedValue3 = req.body.selectedValue3;
+  const selectedValue4 = req.body.selectedValue4;
+  const selectcourse1 = req.body.selectcourse1;
 
-  db.query(
-    "INSERT INTO course (courses,course_year,subject_id,subject_name,credit,category ) VALUES (?,?,?,?,?,?)",
-    [selectcourse1,selectedValue2,idSubject,subjectName,selectedValue4,selectedValue3],
-    (err, result) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send("An error occurred while inserting values into the database.");
-      } else {
-        console.log(selectcourse1);
-        res.send("Values Inserted");
+  // Check if the data already exists in the database
+  const selectQuery = "SELECT * FROM course WHERE courses = ? AND course_year = ?";
+  db.query(selectQuery, [selectcourse1, selectedValue2], (selectErr, selectResult) => {
+    if (selectErr) {
+      console.error(selectErr);
+      res.status(500).send("An error occurred while checking existing data in the database.");
+      return;
+    }
+
+    // If data exists, check if subject_id or subject_name already exists
+    if (selectResult.length > 0) {
+      const isDuplicate = selectResult.some(data => data.subject_id === idSubject || data.subject_name === subjectName);
+      if (isDuplicate) {
+        res.send("Data already exists, not inserted");
+        return;
       }
     }
-  );
+
+    // If data does not exist or subject_id/subject_name is not duplicate, proceed with insertion
+    db.query(
+      "INSERT INTO course (courses, course_year, subject_id, subject_name, credit, category) VALUES (?, ?, ?, ?, ?, ?)",
+      [selectcourse1, selectedValue2, idSubject, subjectName, selectedValue4, selectedValue3],
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send("An error occurred while inserting values into the database.");
+        } else {
+          console.log(selectcourse1);
+          res.send("Values Inserted");
+        }
+      }
+    );
+  });
 });
+
 
 // app.post("/opencourse", (req, res) => {
 //   const setListCheck = req.body.setListCheck;
