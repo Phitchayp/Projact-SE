@@ -9,30 +9,16 @@ import Axios from "axios";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 function ResultRegisEdu() {
-  const tableData = [2569, 2568, 2567, 2566, 2565, 2564, 2563, 2562, 2561, 2560, 2559, 2558, 2557, 2556, 2555, 'วิชาบังคับ', 'วิชาเลือก', 'วิชาแกน',];
   const [selectedValue5, setSelectedValue5] = useState("");
   const [selectedValue6, setSelectedValue6] = useState("");
   const [selectedValue7, setSelectedValue7] = useState("");
   const [SelectDay, setSelectDay] = useState("");
-  const [filteredDataByDay, setFilteredDataByDay] = useState([]);
-  
-
+  const [selectedDay, setSelectedDay] = useState("");
 
   const handleDropdownSelectDay = (event) => {
     setSelectDay(event.target.value);
+    setSelectedDay(event.target.value);
   };
-  const filterDataByDay = (selectedDay) => {
-    if (selectedDay) {
-      const filteredData = allname.filter(item => item.day === selectedDay);
-      setFilteredDataByDay(filteredData);
-    } else {
-      setFilteredDataByDay(allname); // หากไม่ได้เลือกวันใด ๆ ให้แสดงข้อมูลทั้งหมด
-    }
-  };
-  useEffect(() => {
-    filterDataByDay(SelectDay);
-  }, [SelectDay]);
-
   const handleDropdownChange5 = (event) => {
     setSelectedValue5(event.target.value);
   };
@@ -56,26 +42,55 @@ function ResultRegisEdu() {
   const [searchResults1, setSearchResults1] = useState([]);
   const [allname, setAllname] = useState([]);
   const [filterresult, setFilterresult] = useState([]);
-  const [searchNameTable, setSearchNameTable] = useState("");
+  const [searchTable, setSearchTable] = useState("");
   const [subject,setsubject] = useState("");
-  
+
   // กรองข้อมูลตามคำค้นหาที่ผู้ใช้ป้อนลงในช่องค้นหา และเก็บผลลัพธ์ไว้ใน filterdata
   const handlesearch = (event) => {
     const searchName = event.target.value.toLowerCase();
     const searchsubject = event.target.value.toLowerCase();
     console.log(searchName&&searchsubject);
-    setSearchNameTable(searchName&&searchsubject);
-    if (searchName&&searchsubject !== "") {
-      const filterdata = allname.filter((item) => {
-        for (const key in item) {
-            if (typeof item[key] === 'string' && item[key].indexOf(searchName&&searchsubject) !== -1) {
-                return true;
-            }
-        }
-        return false;
-      });
-      setFilterresult(filterdata);
-    } else {
+    setSearchTable(searchName&&searchsubject&&selectedDay);
+    if (searchText1 && !searchText2 && !selectedDay) {
+      const filterData = allname.filter((item) => item.name === searchText1);
+      setFilterresult(filterData);
+    }
+    // กรณีที่มีการกรอกเฉพาะช่องค้นหาชื่ออาจารย์เท่านั้น
+    else if (!searchText1 && searchText2 && !selectedDay) {
+      const filterData = allname.filter((item) => item.teacher === searchText2);
+      setFilterresult(filterData);
+    }
+    // กรณีที่มีการเลือกวันเท่านั้น
+    else if (!searchText1 && !searchText2 && selectedDay) {
+      const filterData = allname.filter((item) => item.day === selectedDay);
+      setFilterresult(filterData);
+    }
+    // กรณีที่มีการกรอกช่องค้นหาชื่ออาจารย์และช่องค้นหาชื่อวิชาเท่านั้น
+    else if (searchText1 && searchText2 && !selectedDay) {
+      const filterData = allname.filter((item) => item.name === searchText1 && item.teacher === searchText2);
+      setFilterresult(filterData);
+    }
+    // กรณีที่มีการกรอกช่องค้นหาชื่อวิชาและเลือกวันเท่านั้น
+    else if (searchText1 && !searchText2 && selectedDay) {
+      const filterData = allname.filter((item) => item.name === searchText1 && item.day === selectedDay);
+      setFilterresult(filterData);
+    }
+    // กรณีที่มีการกรอกช่องค้นหาชื่ออาจารย์และเลือกวันเท่านั้น
+    else if (!searchText1 && searchText2 && selectedDay) {
+      const filterData = allname.filter((item) => item.teacher === searchText2 && item.day === selectedDay);
+      setFilterresult(filterData);
+    }
+    // กรณีที่มีการกรอกช่องค้นหาชื่ออาจารย์ ช่องค้นหาชื่อวิชา และเลือกวัน
+    else if (searchText1 && searchText2 && selectedDay) {
+      const filterData = allname.filter((item) => 
+        item.name === searchText1 && 
+        item.teacher === searchText2 &&
+        item.day === selectedDay
+      );
+      setFilterresult(filterData);
+    }
+    // กรณีที่ไม่ตรงเงื่อนไขใด ๆ ทั้งหมดให้แสดงผลข้อมูลทั้งหมด
+    else {
       setFilterresult(allname);
     }
   };
@@ -404,19 +419,34 @@ function ResultRegisEdu() {
                         padding: "5px 10px",
                     }}
                     onClick={() => {
-                        if (searchText1) {
-                            handlesearch({ target: { value: searchText1 } });
-                        } 
-                        if (searchText2) {
-                            handlesearch({ target: { value: searchText2 } });
-                        }
-                        if (searchText1 && searchText2) {
-                            const filterData = allname.filter(item => 
-                                item.name === searchText1 && item.teacher === searchText2
-                            );
-                            setFilterresult(filterData);
-                        } 
-                        
+                      if (searchText1 && searchText2) {
+                        // กรณีที่มีการกรอกทั้งช่องค้นหาวิชาและชื่ออาจารย์
+                        const filterData = allname.filter(item => 
+                            item.name === searchText1 && item.teacher === searchText2
+                        );
+                        setFilterresult(filterData);
+                      }else if (searchText1 && searchText2 && selectedDay) {
+                          // กรณีที่มีการกรอกทั้งช่องค้นหาวิชา ชื่ออาจารย์ และวัน
+                          const filterData = allname.filter(item => 
+                              item.name === searchText1 && 
+                              item.teacher === searchText2 &&
+                              item.day === selectedDay
+                          );
+                          setFilterresult(filterData);
+                      }else if (selectedDay && !searchText1 && !searchText2) {
+                        // กรณีที่มีการเลือกวันเท่านั้น
+                        const filterData = allname.filter(item => 
+                            item.day === selectedDay
+                        );
+                        setFilterresult(filterData);
+                      } else if (searchText1) {
+                          // กรณีที่มีการกรอกเฉพาะช่องค้นหาวิชา
+                          handlesearch({ target: { value: searchText1 } });
+                      } else if (searchText2) {
+                          // กรณีที่มีการกรอกเฉพาะช่องค้นหาชื่ออาจารย์
+                          handlesearch({ target: { value: searchText2 } });
+                      }
+                      
                     }}
                 >
                     <span
@@ -438,7 +468,7 @@ function ResultRegisEdu() {
           <div class="DateAdmin-textEdu">
             <p1>ผลการลงทะเบียนของอาจารย์ทั้งหมด</p1>{" "}
           </div>
-          {/* <CheckRegisCoruse></CheckRegisCoruse> */}
+          
           <div className='CheckRegisCoruse-right'>
           {/* ตารางผลการลงทะเบียน */}
               <header className="CheckRegisCoruse-Texthead">
@@ -467,17 +497,17 @@ function ResultRegisEdu() {
                   </tr>
                 </thead>
                 <tbody>
-                
-                {searchNameTable?.length > 0 ? (
+                {searchTable?.length > 0 ? (
                     filterresult
                         .filter(filterName => (
                           searchText1 ? filterName.name.includes(searchText1) : true
-                           
-                            // Add more conditions for additional fields if needed
                         ))
                         .filter(filterName => (
-                          SelectDay ? filterName.day === SelectDay : true
-                        ))
+                          selectedDay ? filterName.day.includes(selectedDay): true
+                        ))  
+                          
+              
+                        
                         .map((filterName, index) => (
                             <tr key={index}>
                                 <td>{`${filterName.No}`}</td>
@@ -494,18 +524,15 @@ function ResultRegisEdu() {
                                 <td>{`${filterName.room}`}</td>
                             </tr>
                         ))
-                        
                 ) : (
-                  
                     allname
                         .filter(getcon => (
                           searchText1 ? getcon.name.includes(searchText1) : true
-                            // Add more conditions for additional fields if needed
+                            
                         ))
                         .filter(getcon => (
-                          SelectDay ? getcon.day === SelectDay : true
-                          // Add more conditions for additional fields if needed
-                      ))
+                          selectedDay ? getcon.day.includes(selectedDay): true
+                        )) 
                         .map((getcon, index) => (
                             <tr key={index}>
                                 <td>{`${getcon.No}`}</td>
@@ -525,9 +552,6 @@ function ResultRegisEdu() {
                             </tr>
                       ))
                   )}
-
-
-    
 
                 </tbody>
               </table>
