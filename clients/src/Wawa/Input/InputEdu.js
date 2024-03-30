@@ -18,8 +18,8 @@ const InputEdu = ({ selectcourse1,selectedValue2, selectedValue3, selectedValue4
             window.alert('กรุณากรอกข้อมูลให้ครบถ้วน');
             return; // ไม่ทำงานต่อไปหากข้อมูลในตัวแปรใดตัวหนึ่งว่าง
         }
-        if (!/^\d{1,8}$/.test(idSubject)) {
-            window.alert('กรุณากรอกรหัสวิชาเป็นตัวเลขและไม่เกิน 8 ตัว');
+        if (!/^\d{8}$/.test(idSubject)) {
+            window.alert('กรุณากรอกรหัสวิชาเป็นตัวเลขให้ครบ 8 ตัว');
             return; // ไม่ทำงานต่อไปหากค่า idSubject ไม่เป็นจำนวนเต็มหรือเกิน 8 ตัว
         }
         if (!/^[\wก-๙-]+$/.test(subjectName)) {
