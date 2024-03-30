@@ -72,4 +72,6 @@
     display: none;
   }
   
-  
+  .swal-font {
+    font-family: 'Kanit', sans-serif !important;
+  }

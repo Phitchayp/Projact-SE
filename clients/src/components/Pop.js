@@ -5,6 +5,7 @@ import { CgFileDocument } from "react-icons/cg";
 import { FaRegSave } from "react-icons/fa";
 import * as XLSX from 'xlsx';
 import Axios from "axios";
+import Swal from 'sweetalert2';
 
 const Pop = ({ onClose }) => {
   const [email, setEmail] = useState('');
@@ -51,21 +52,52 @@ const Pop = ({ onClose }) => {
       },
       ]);
       onClose();
-      alert(`เพิ่มข้อมูลผู้ใช้เข้าสู่ระบบสำเร็จ`);
+      Swal.fire({
+        text: 'เพิ่มข้อมูลผู้ใช้เข้าสู่ระบบสำเร็จ',
+        customClass: {
+          popup: 'swal-font',
+          title: 'swal-font',
+          text: 'swal-font',
+        }
+      });
       window.location.reload()
     }).catch(error => {
       console.error('Error saving data:', error);
-      window.alert('ข้อมูลไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่');
+      Swal.fire({
+        icon: 'error',
+        title: 'ข้อมูลไม่ถูกต้อง',
+        text: 'กรุณาเลือกไฟล์ใหม่',
+        customClass: {
+          popup: 'swal-font',
+          title: 'swal-font',
+          text: 'swal-font',
+        }
+      });
   });
   };
 
   const handleButtonAdd = () => {
     if (!isValidEmail(email)) {
-      alert('กรุณาป้อนอีเมลที่ถูกต้อง');
+      Swal.fire({
+        text: 'กรุณาป้อนอีเมลที่ถูกต้อง',
+        customClass: {
+          popup: 'swal-font',
+          title: 'swal-font',
+          text: 'swal-font',
+        }
+      });
       return; // หยุดการทำงานถ้าอีเมลไม่ถูกต้อง
     }
     if (!email || !fullName) {
-      alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+      Swal.fire({
+        text: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+        customClass: {
+          popup: 'swal-font',
+          title: 'swal-font',
+          text: 'swal-font',
+        }
+      });
+      
       return;
     }
   
@@ -84,16 +116,37 @@ const Pop = ({ onClose }) => {
       ]);
       setEmail('');
       setFullName('');
-      onClose();
-      alert(`ทำการเพิ่มข้อมูลผู้ใช้ ${email} เข้าสู่ระบบ`);
-      window.location.reload()
-    })
-    .catch(error => {
+      Swal.fire({
+        icon: 'success', // กำหนด icon ของ Swal เป็น success
+        title:'สำเร็จ',
+        text: `เพิ่มข้อมูลผู้ใช้ ${email} เข้าสู่ระบบสำเร็จ`, // กำหนดข้อความตามที่ต้องการแสดง
+        showConfirmButton: true, // ซ่อนปุ่มยืนยัน
+        customClass: {
+          popup: 'swal-font',
+          title: 'swal-font',
+          text: 'swal-font',
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload(); // รีโหลดหน้าเว็บหลังจากคลิกปุ่ม "ตกลง"
+        }
+      });
+    }).catch(error => {
       // หากเกิดข้อผิดพลาดในการบันทึก
       if (error.response.status === 409) {
-        alert('อีเมลล์นี้มีในระบบอยู่แล้ว');
+        Swal.fire({
+          icon: 'error',
+          title: 'อีเมลล์นี้มีในระบบอยู่แล้ว',
+          customClass: {
+            popup: 'swal-font',
+            title: 'swal-font',
+            text: 'swal-font',
+          }
+        });
       } else {
         console.error('เกิดข้อผิดพลาดในการส่งคำขอ:', error);
+        
+
       }
     });
   };

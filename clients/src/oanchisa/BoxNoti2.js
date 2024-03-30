@@ -40,8 +40,27 @@ function BoxNoti2() {
             setInputValue('');
             handlePopupClose();
             setDataSaved(true);
-            window.alert('คุณต้องการเพิ่มประกาศใหม่'); // แสดงกล่องข้อความเมื่อบันทึกข้อมูลเสร็จสิ้น
-            window.location.reload(); // ย้อนกลับไปหน้าก่อนหน้านี้
+            Swal.fire({
+                title: "คุณต้องการเพิ่มประกาศใหม่",
+                text: "คุณแน่ใจหรือไม่ว่าต้องการเพิ่มประกาศใหม่?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ตกลง",
+                cancelButtonText: "ยกเลิก",
+                customClass: {
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    popup: 'kanit-font'
+                  }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.reload(); // ย้อนกลับไปหน้าก่อนหน้านี้
+                }
+            });
         } catch (error) {
             console.error('Error saving data:', error);
         }
@@ -59,9 +78,41 @@ function BoxNoti2() {
 
     const handleDeleteBox = async (boxId) => {
         try {
-            await axios.delete(`http://localhost:3001/box1/${boxId}`);
-            setBoxes((prevBoxes) => prevBoxes.filter((box) => box.id !== boxId));
-            setDataSaved(true);
+            Swal.fire({
+                title: "ลบข้อมูล",
+                text: "คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ตกลง",
+                cancelButtonText: "ยกเลิก",
+                customClass: {
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    popup: 'kanit-font'
+                  }
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await axios.delete(`http://localhost:3001/box1/${boxId}`);
+                    setBoxes((prevBoxes) => prevBoxes.filter((box) => box.id !== boxId));
+                    setDataSaved(true);
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "ข้อมูลประกาศถูกลบ",
+                        icon: "success",
+                        customClass: {
+                            title: 'kanit-font',
+                            content: 'kanit-font',
+                            confirmButton: 'kanit-font',
+                            cancelButton: 'kanit-font',
+                            popup: 'kanit-font'
+                          }
+                    });
+                }
+            });
         } catch (error) {
             console.error('Error deleting data:', error);
         }
@@ -89,7 +140,7 @@ function BoxNoti2() {
     return (
         <>
             <div>
-                <div className='turnleft-all'>
+                <div className='turnleft-all' style={{ fontFamily:'kanit' }}>
                     <h className='DateAdmin-text'>สร้างประกาศ</h>
                     <button className='box-noti' onClick={handleButtonClick} style={{ marginTop: '35px', marginLeft: '-40px' }}>
                         <img src={plus} className="plus" alt="plus" />
@@ -102,9 +153,7 @@ function BoxNoti2() {
                                     className="delete-icon-noti"
                                     style={{ position: 'absolute', cursor: 'pointer', color: 'white' }}
                                     onClick={() => {
-                                        if (window.confirm('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?')) {
-                                            handleDeleteBox(box.id);
-                                        }
+                                        handleDeleteBox(box.id);
                                     }}
                                 >
                                 </span>
@@ -124,9 +173,7 @@ function BoxNoti2() {
                                             justifyContent: 'center',
                                         }}
                                         onClick={() => {
-                                            if (window.confirm('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?')) {
-                                                handleDeleteBox(box.id);
-                                            }
+                                            handleDeleteBox(box.id);
                                         }}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
@@ -148,7 +195,7 @@ function BoxNoti2() {
                             <form onSubmit={handleFormSubmit} style={{ width: '100%' }}>
                                 <div className="form-group" style={{ width: '100%' }}>
                                     <textarea
-                                        className="form-control"
+                                        className="form-control" style={{ fontFamily:'kanit' }}
                                         id="inputField"
                                         value={inputValue}
                                         onChange={handleInputChange}
