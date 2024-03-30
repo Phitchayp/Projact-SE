@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './DateAdmin.css';
 import { ReactComponent as IconDate } from '../assets/fluent-mdl2--date-time.svg';
 import { ReactComponent as IconTime } from '../assets/time_clock.svg';
@@ -31,6 +31,61 @@ function DateAdmin() {
     const [dayFEdu, setDayFEdu] = useState("");
     const [timeFEdu, setTimeFEdu] = useState("");
 
+    const [teacherTime, setTeacherTime] = useState([]);
+    const [eduTime, seteduTime] = useState([]);
+
+
+    useEffect(() => {
+        // ดึงข้อมูลเวลาของอาจารย์จากฐานข้อมูล
+        Axios.get("http://localhost:3001/gettimeteacher")
+            .then(response => {
+                // เซ็ตข้อมูลเวลาของอาจารย์ใน state
+                setTeacherTime(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ไม่สามารถดึงข้อมูลได้',
+                    text: 'กรุณาลองใหม่อีกครั้ง',
+                    customClass: {
+                        title: 'kanit-font',
+                        content: 'kanit-font',
+                        confirmButton: 'kanit-font',
+                        cancelButton: 'kanit-font',
+                        popup: 'kanit-font'
+                    }
+                });
+            });
+    }, []);
+
+
+    useEffect(() => {
+        // ดึงข้อมูลเวลาของฝ่ายการศึกษาจากฐานข้อมูล
+        Axios.get("http://localhost:3001/gettimeedu")
+            .then(response => {
+                // เซ็ตข้อมูลเวลาของอาจารย์ใน state
+                seteduTime(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ไม่สามารถดึงข้อมูลได้',
+                    text: 'กรุณาลองใหม่อีกครั้ง',
+                    customClass: {
+                        title: 'kanit-font',
+                        content: 'kanit-font',
+                        confirmButton: 'kanit-font',
+                        cancelButton: 'kanit-font',
+                        popup: 'kanit-font'
+                    }
+                });
+            });
+    }, []);
+
+
+
     const handleButtonSaveTeacher = () => {
         if (!dayS || !dayF || !timeS || !timeF) {
             Swal.fire({
@@ -43,7 +98,7 @@ function DateAdmin() {
                     confirmButton: 'kanit-font',
                     cancelButton: 'kanit-font',
                     popup: 'kanit-font'
-                  }
+                }
             });;
             return;
         }
@@ -61,11 +116,11 @@ function DateAdmin() {
                         confirmButton: 'kanit-font',
                         cancelButton: 'kanit-font',
                         popup: 'kanit-font'
-                      }
+                    }
                 });;
                 return;
             }
-        
+
             // เงื่อนไขที่ 2: ถ้าเป็นวันเดียวกัน แต่เวลาเริ่มต้นไม่น้อยกว่าเวลาสิ้นสุด
             if (dayS === dayF) {
                 // ถ้าเป็นวันเดียวกันและเวลาเริ่มต้นไม่น้อยกว่าเวลาสิ้นสุด
@@ -80,18 +135,18 @@ function DateAdmin() {
                             confirmButton: 'kanit-font',
                             cancelButton: 'kanit-font',
                             popup: 'kanit-font'
-                          }
+                        }
                     });
                     return;
                 }
             }
         }
-        
+
         Axios.post("http://localhost:3001/timeT", {
-          dayS: dayS,
-          timeS: timeS,
-          dayF: dayF,
-          timeF: timeF,
+            dayS: dayS,
+            timeS: timeS,
+            dayF: dayF,
+            timeF: timeF,
         }).then(response => {
             console.log(response.data);
             // ทำการรีเซ็ตค่าในฟอร์มหลังจากส่งข้อมูลเรียบร้อย
@@ -103,7 +158,7 @@ function DateAdmin() {
             setTimeS("");
             setDayF("");
             setTimeF("");
-            
+
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
@@ -114,8 +169,11 @@ function DateAdmin() {
                     confirmButton: 'kanit-font',
                     cancelButton: 'kanit-font',
                     popup: 'kanit-font'
-                  }
-            })
+                }
+            }).then(() => {
+                // หลังจาก Swal.fire() แสดงแล้ว ให้รีเฟรชหน้า
+                window.location.reload();
+            });
         }).catch(error => {
             console.error(error);
 
@@ -129,7 +187,7 @@ function DateAdmin() {
                     confirmButton: 'kanit-font',
                     cancelButton: 'kanit-font',
                     popup: 'kanit-font'
-                  }
+                }
             });
         });
         console.log("save");
@@ -137,8 +195,8 @@ function DateAdmin() {
         console.log(dayF);
         console.log(timeS);
         console.log(timeF);
-        
-        
+
+
     };
 
     const handleButtonSaveEdu = () => {
@@ -153,7 +211,7 @@ function DateAdmin() {
                     confirmButton: 'kanit-font',
                     cancelButton: 'kanit-font',
                     popup: 'kanit-font'
-                  }
+                }
             });;
             return;
         }
@@ -171,11 +229,11 @@ function DateAdmin() {
                         confirmButton: 'kanit-font',
                         cancelButton: 'kanit-font',
                         popup: 'kanit-font'
-                      }
+                    }
                 });;
                 return;
             }
-        
+
             // เงื่อนไขที่ 2: ถ้าเป็นวันเดียวกัน แต่เวลาเริ่มต้นไม่น้อยกว่าเวลาสิ้นสุด
             if (daySEdu === dayFEdu) {
                 // ถ้าเป็นวันเดียวกันและเวลาเริ่มต้นไม่น้อยกว่าเวลาสิ้นสุด
@@ -190,17 +248,17 @@ function DateAdmin() {
                             confirmButton: 'kanit-font',
                             cancelButton: 'kanit-font',
                             popup: 'kanit-font'
-                          }
+                        }
                     });
                     return;
                 }
             }
         }
         Axios.post("http://localhost:3001/timeEdu", {
-          dayS: daySEdu,
-          timeS: timeSEdu,
-          dayF: dayFEdu,
-          timeF: timeFEdu,
+            dayS: daySEdu,
+            timeS: timeSEdu,
+            dayF: dayFEdu,
+            timeF: timeFEdu,
         }).then(response => {
             console.log(response.data);
             // ทำการรีเซ็ตค่าในฟอร์มหลังจากส่งข้อมูลเรียบร้อย
@@ -212,7 +270,7 @@ function DateAdmin() {
             setTimeSEdu("");
             setDayFEdu("");
             setTimeFEdu("");
-            
+
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
@@ -223,44 +281,47 @@ function DateAdmin() {
                     confirmButton: 'kanit-font',
                     cancelButton: 'kanit-font',
                     popup: 'kanit-font'
-                  }
-            })
-        })
-        .catch(error => {
-            console.error(error);
-
-            Swal.fire({
-                icon: 'error',
-                title: 'ไม่สามารถบันทึกได้',
-                text: 'ข้อมูลไม่ถูกต้อง',
-                customClass: {
-                    title: 'kanit-font',
-                    content: 'kanit-font',
-                    confirmButton: 'kanit-font',
-                    cancelButton: 'kanit-font',
-                    popup: 'kanit-font'
-                  }
+                }
+            }).then(() => {
+                // หลังจาก Swal.fire() แสดงแล้ว ให้รีเฟรชหน้า
+                window.location.reload();
             });
-        });
+        })
+            .catch(error => {
+                console.error(error);
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ไม่สามารถบันทึกได้',
+                    text: 'ข้อมูลไม่ถูกต้อง',
+                    customClass: {
+                        title: 'kanit-font',
+                        content: 'kanit-font',
+                        confirmButton: 'kanit-font',
+                        cancelButton: 'kanit-font',
+                        popup: 'kanit-font'
+                    }
+                });
+            });
         console.log("save");
         console.log(daySEdu);
         console.log(dayFEdu);
         console.log(timeSEdu);
         console.log(timeFEdu);
-        
-        
+
+
     };
 
     const handleStartDateChange = (date) => {
         setStartDate(date);
         setDayS(dayjs(date).format("YYYY-MM-DD"));
     };
-    
+
     const handleEndDateChange = (date) => {
         setEndDate(date);
         setDayF(dayjs(date).format("YYYY-MM-DD"));
     };
-    
+
     const handleStartTimeChange = (time) => {
         if (time) {
             setStartTime(time);
@@ -271,7 +332,7 @@ function DateAdmin() {
             setTimeS("");
         }
     };
-    
+
     const handleEndTimeChange = (time) => {
         if (time) {
             setEndTime(time);
@@ -287,12 +348,12 @@ function DateAdmin() {
         setStartDateEdu(date);
         setDaySEdu(dayjs(date).format("YYYY-MM-DD"));
     };
-    
+
     const handleEndDateChangeEdu = (date) => {
         setEndDateEdu(date);
         setDayFEdu(dayjs(date).format("YYYY-MM-DD"));
     };
-    
+
     const handleStartTimeChangeEdu = (time) => {
         if (time) {
             setStartTimeEdu(time);
@@ -303,7 +364,7 @@ function DateAdmin() {
             setTimeSEdu("");
         }
     };
-    
+
     const handleEndTimeChangeEdu = (time) => {
         if (time) {
             setEndTimeEdu(time);
@@ -320,181 +381,209 @@ function DateAdmin() {
             <div className='custom-date-picker-all2'>
                 <div className='Down-picker'>
                     <h className='text-header' >ระบบลงทะเบียน</h>
-                    
+
                     <div >
                         <p className='DateAdmin-text'>อาจารย์</p>
-                        <p className='DateAdmin-text2'>เวลาใช้งานการลงทะเบียน</p>
+                        {/* <p className='DateAdmin-text2'>เวลาใช้งานการลงทะเบียน</p> */}
                     </div>
-                    <div className='column-date'>
+                    <div className='container-time'>
                         <div>
-                            <div className='custom-date-picker-all'>
-                                <div>
-                                    <p className='DateAdmin-text3'>เริ่มต้น</p>
-                                </div>
-                                <div className="custom-date-picker-container">
-                                    <IconDate className="icon-date" />
-                                    <DatePicker
-                                        selected={startDate}
-                                        onChange={handleStartDateChange}
-                                        dateFormat="yyyy-MM-dd"
-                                        showYearDropdown
-                                        showMonthDropdown
-                                        dropdownMode="select"
-                                        placeholderText="เลือกวันที่เริ่มต้น"
-                                        className="custom-date-picker"
-                                    />
-                                </div>
-                                <div className='Down-picker'>
-                                    <p className='DateAdmin-text3'>สิ้นสุด</p>
-                                </div>
-                                <div className="custom-date-picker-container">
-                                    <IconDate className="icon-date" />
-                                    <DatePicker
-                                        selected={endDate}
-                                        onChange={handleEndDateChange}
-                                        dateFormat="yyyy-MM-dd"
-                                        showYearDropdown
-                                        showMonthDropdown
-                                        dropdownMode="select"
-                                        placeholderText="เลือกวันที่สิ้นสุด"
-                                        className="custom-date-picker"
-                                    />
-                                </div>
+                            <div>
+                                {teacherTime.length > 0 && teacherTime.map((time, index) => (
+                                    <div key={index} className="time-slot">
+                                        <div className="time-info" style={{ fontFamily: "kanit" }}>
+                                            <p>ระยะเวลาการใช้งานระบบปัจจุบันของ <span className="teacher">อาจารย์</span></p>
+                                            <p><span className="time-label">เริ่มต้น:</span> วันที่   {new Date(time.dayS).toLocaleDateString()}  , เวลา {time.timeS}  </p>
+                                            <p><span className="time-labe2">สิ้นสุด:</span> วันที่   {new Date(time.dayF).toLocaleDateString()}  , เวลา {time.timeF}  </p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
+
                         </div>
-                        <div className='custom-date-picker-all2' >
-                            <p className='DateAdmin-text3'>เริ่มต้น</p>
-                            <div >
-                                <div className="custom-date-picker-container" >
-                                    <IconTime className="icon-date" />
-                                    <TimePicker
-                                        selected={startTime}
-                                        onChange={handleStartTimeChange}
-                                        value={startTime}
-                                        defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
-                                        showNow={false}
-                                        format="HH:mm:ss"
-                                        use12Hours={false}
-                                        // suffixIcon={<i className="fas fa-wifi" />}
-                                        className="custom-time-picker"
-                                    />
-                                </div>
-                                <div className='Down-picker'>
-                                    <p className='DateAdmin-text3'>สิ้นสุด</p>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <IconTime className="icon-date" />
-                                    <TimePicker
-                                        selected={endTime}
-                                        onChange={handleEndTimeChange}
-                                        value={endTime}
-                                        defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
-                                        showNow={false}
-                                        format="HH:mm:ss"
-                                        use12Hours={false}
-                                        // suffixIcon={<i className="fas fa-wifi" />}
-                                        className="custom-time-picker"
-                                    />
+                        <div className='column-date'>
+
+
+                            <div>
+                                <div className='custom-date-picker-all'>
+                                    <div>
+                                        <p className='DateAdmin-text3'>เริ่มต้น</p>
+                                    </div>
+                                    <div className="custom-date-picker-container">
+                                        <IconDate className="icon-date" />
+                                        <DatePicker
+                                            selected={startDate}
+                                            onChange={handleStartDateChange}
+                                            dateFormat="yyyy-MM-dd"
+                                            showYearDropdown
+                                            showMonthDropdown
+                                            dropdownMode="select"
+                                            placeholderText="เลือกวันที่เริ่มต้น"
+                                            className="custom-date-picker"
+                                        />
+                                    </div>
+                                    <div className='Down-picker'>
+                                        <p className='DateAdmin-text3'>สิ้นสุด</p>
+                                    </div>
+                                    <div className="custom-date-picker-container">
+                                        <IconDate className="icon-date" />
+                                        <DatePicker
+                                            selected={endDate}
+                                            onChange={handleEndDateChange}
+                                            dateFormat="yyyy-MM-dd"
+                                            showYearDropdown
+                                            showMonthDropdown
+                                            dropdownMode="select"
+                                            placeholderText="เลือกวันที่สิ้นสุด"
+                                            className="custom-date-picker"
+                                        />
+                                    </div>
                                 </div>
                             </div>
+                            <div className='custom-date-picker-all2' >
+                                <p className='DateAdmin-text3'>เริ่มต้น</p>
+                                <div >
+                                    <div className="custom-date-picker-container" >
+                                        <IconTime className="icon-date" />
+                                        <TimePicker
+                                            selected={startTime}
+                                            onChange={handleStartTimeChange}
+                                            value={startTime}
+                                            defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
+                                            showNow={false}
+                                            format="HH:mm:ss"
+                                            use12Hours={false}
+                                            // suffixIcon={<i className="fas fa-wifi" />}
+                                            className="custom-time-picker"
+                                        />
+                                    </div>
+                                    <div className='Down-picker'>
+                                        <p className='DateAdmin-text3'>สิ้นสุด</p>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <IconTime className="icon-date" />
+                                        <TimePicker
+                                            selected={endTime}
+                                            onChange={handleEndTimeChange}
+                                            value={endTime}
+                                            defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
+                                            showNow={false}
+                                            format="HH:mm:ss"
+                                            use12Hours={false}
+                                            // suffixIcon={<i className="fas fa-wifi" />}
+                                            className="custom-time-picker"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <SaveTime onClick={handleButtonSaveTeacher} />
                         </div>
                     </div>
                 </div>
-                <div style={{marginTop:'10px',marginLeft:'25em',borderRadius:'20px'}}>
-                    <SaveTime onClick={handleButtonSaveTeacher} />
-                </div>
-                
                 <div className='line'></div>
 
                 <div className='Down-picker'>
                     <h className='text-header' >ระบบนำเข้ารายวิชา</h>
-                    
+
                     <div >
                         <p className='DateAdmin-text'>ฝ่ายการศึกษา</p>
-                        <p className='DateAdmin-text2'>เวลาใช้งานการนำเข้ารายวิชาและเวลาเปิดสอนรายวิชา</p>
+                        {/* <p className='DateAdmin-text2'>เวลาใช้งานการนำเข้ารายวิชาและเวลาเปิดสอนรายวิชา</p> */}
                     </div>
-                    <div className='column-date'>
+                    <div className='container-time'>
                         <div>
-                            <div className='custom-date-picker-all'>
-                                <div>
-                                    <p className='DateAdmin-text3'>เริ่มต้น</p>
+                            {eduTime.length > 0 && eduTime.map((time2, index) => (
+                                <div key={index} className="time-slot2">
+                                    <div className="time-info" style={{ fontFamily: "kanit" }}>
+                                        <p>ระยะเวลาการใช้งานระบบปัจจุบันของ <span className="teacher">ฝ่ายการศึกษา</span></p>
+                                        <p><span className="time-label">เริ่มต้น:</span> วันที่   {new Date(time2.dayS).toLocaleDateString()}  , เวลา {time2.timeS}  </p>
+                                        <p><span className="time-labe2">สิ้นสุด:</span> วันที่   {new Date(time2.dayF).toLocaleDateString()}  , เวลา {time2.timeF}  </p>
+                                    </div>
                                 </div>
-                                <div className="custom-date-picker-container">
-                                    <IconDate className="icon-date" />
-                                    <DatePicker
-                                        selected={startDateEdu}
-                                        onChange={handleStartDateChangeEdu}
-                                        dateFormat="yyyy-MM-dd"
-                                        showYearDropdown
-                                        showMonthDropdown
-                                        dropdownMode="select"
-                                        placeholderText="เลือกวันที่เริ่มต้น"
-                                        className="custom-date-picker"
-                                    />
-                                </div>
-                                <div className='Down-picker'>
-                                    <p className='DateAdmin-text3'>สิ้นสุด</p>
-                                </div>
-                                <div className="custom-date-picker-container">
-                                    <IconDate className="icon-date" />
-                                    <DatePicker
-                                        selected={endDateEdu}
-                                        onChange={handleEndDateChangeEdu}
-                                        dateFormat="yyyy-MM-dd"
-                                        showYearDropdown
-                                        showMonthDropdown
-                                        dropdownMode="select"
-                                        placeholderText="เลือกวันที่สิ้นสุด"
-                                        className="custom-date-picker"
-                                    />
-                                </div>
-                            </div>
+                            ))}
+
                         </div>
-                        <div className='custom-date-picker-all2' >
-                            <p className='DateAdmin-text3'>เริ่มต้น</p>
-                            <div >
-                                <div className="custom-date-picker-container" >
-                                    <IconTime className="icon-date" />
-                                    <TimePicker
-                                        selected={startTimeEdu}
-                                        onChange={handleStartTimeChangeEdu}
-                                        value={startTimeEdu}
-                                        defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
-                                        showNow={false}
-                                        format="HH:mm:ss"
-                                        use12Hours={false}
-                                        // suffixIcon={<i className="fas fa-wifi" />}
-                                        className="custom-time-picker"
-                                        clearIcon={null}
-                                    />
-                                </div>
-                                <div className='Down-picker'>
-                                    <p className='DateAdmin-text3'>สิ้นสุด</p>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <IconTime className="icon-date" />
-                                    <TimePicker
-                                        selected={endTimeEdu}
-                                        onChange={handleEndTimeChangeEdu}
-                                        value={endTimeEdu}
-                                        defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
-                                        showNow={false}
-                                        format="HH:mm:ss"
-                                        use12Hours={false}
-                                        // suffixIcon={<i className="fas fa-wifi" />}
-                                        className="custom-time-picker"
-                                        clearIcon={null}
-                                    />
+                        <div className='column-date'>
+
+                            <div>
+                                <div className='custom-date-picker-all'>
+                                    <div>
+                                        <p className='DateAdmin-text3'>เริ่มต้น</p>
+                                    </div>
+                                    <div className="custom-date-picker-container">
+                                        <IconDate className="icon-date" />
+                                        <DatePicker
+                                            selected={startDateEdu}
+                                            onChange={handleStartDateChangeEdu}
+                                            dateFormat="yyyy-MM-dd"
+                                            showYearDropdown
+                                            showMonthDropdown
+                                            dropdownMode="select"
+                                            placeholderText="เลือกวันที่เริ่มต้น"
+                                            className="custom-date-picker"
+                                        />
+                                    </div>
+                                    <div className='Down-picker'>
+                                        <p className='DateAdmin-text3'>สิ้นสุด</p>
+                                    </div>
+                                    <div className="custom-date-picker-container">
+                                        <IconDate className="icon-date" />
+                                        <DatePicker
+                                            selected={endDateEdu}
+                                            onChange={handleEndDateChangeEdu}
+                                            dateFormat="yyyy-MM-dd"
+                                            showYearDropdown
+                                            showMonthDropdown
+                                            dropdownMode="select"
+                                            placeholderText="เลือกวันที่สิ้นสุด"
+                                            className="custom-date-picker"
+                                        />
+                                    </div>
                                 </div>
                             </div>
+                            <div className='custom-date-picker-all2' >
+                                <p className='DateAdmin-text3'>เริ่มต้น</p>
+                                <div >
+                                    <div className="custom-date-picker-container" >
+                                        <IconTime className="icon-date" />
+                                        <TimePicker
+                                            selected={startTimeEdu}
+                                            onChange={handleStartTimeChangeEdu}
+                                            value={startTimeEdu}
+                                            defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
+                                            showNow={false}
+                                            format="HH:mm:ss"
+                                            use12Hours={false}
+                                            // suffixIcon={<i className="fas fa-wifi" />}
+                                            className="custom-time-picker"
+                                            clearIcon={null}
+                                        />
+                                    </div>
+                                    <div className='Down-picker'>
+                                        <p className='DateAdmin-text3'>สิ้นสุด</p>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <IconTime className="icon-date" />
+                                        <TimePicker
+                                            selected={endTimeEdu}
+                                            onChange={handleEndTimeChangeEdu}
+                                            value={endTimeEdu}
+                                            defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
+                                            showNow={false}
+                                            format="HH:mm:ss"
+                                            use12Hours={false}
+                                            // suffixIcon={<i className="fas fa-wifi" />}
+                                            className="custom-time-picker"
+                                            clearIcon={null}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <SaveTime onClick={handleButtonSaveEdu} />
                         </div>
                     </div>
-                </div>
-                <div style={{marginTop:'10px',marginLeft:'25em'}}>
-                    <SaveTime onClick={handleButtonSaveEdu} />
                 </div>
             </div>
-            
+
         </div>
     );
 }

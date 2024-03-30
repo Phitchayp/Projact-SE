@@ -7,7 +7,7 @@
 
 .DateAdmin-text2 {
   font-family: 'Kanit';
-  font-size: 12px;
+  font-size: 14px;
   margin-top: -15px;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .custom-date-picker-all {
-  margin-left: 20px;
+  margin-left: 60px;
   margin-top: 20px;
   margin-bottom: 50px;
 }
@@ -114,4 +114,67 @@
 
 .ant-picker-suffix {
   display: none;
+}
+
+
+
+
+.time-slot {
+  background-color: #459991;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+
+}
+
+
+
+.time-slot2 {
+  background-color: #d5838a;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+
+}
+
+
+.time-info {
+  margin-left: 20px;
+  font-family: kanit;
+  font-size: 14px;
+  color: white;
+}
+
+.time-label {
+  display: inline-block;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    padding: 1px 3px;
+    font-family: kanit;
+    background: #93aa89;
+}
+
+.time-labe2 {
+  display: inline-block;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  padding: 1px 5px;
+  font-family: kanit;
+  background: #994545;
+
+}
+
+
+.container-time{
+  width: 580px; /* กำหนดความกว้างของกล่อง */
+  height: 400px; /* กำหนดความสูงของกล่อง */
+  background-color: rgb(255, 255, 255); /* ตั้งสีพื้นหลังของกล่องเป็นสีขาว */
+  border-radius: 20px; /* เพิ่มมุมโค้งให้กับขอบของกล่อง */
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+
+}
+
+.teacher {
+  text-decoration: underline;
+  display: inline;
 }

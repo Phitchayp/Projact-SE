@@ -210,7 +210,7 @@ const Pop = ({ onClose }) => {
           )}
         </div>
 
-        <div className='right-addmin'>
+        <div className='right-addmin' style={{ fontFamily: 'Kanit'}}>
 
           <h1 style={{ fontFamily: 'Kanit', color: '#838383', fontSize: 'small' }}>
             <span style={{ color: '#8C3941' }}>เพิ่มรายชื่อผู้ใช้งาน</span> (*ครั้งละ 1 USER)
@@ -219,10 +219,10 @@ const Pop = ({ onClose }) => {
           <div>
             <label style={{ fontFamily: 'Kanit' ,fontSize: '15px', display: 'block',fontweight: 'bold' , marginBottom: '5px' }}>EMAIL:</label>
             <input
-              type="text"
+              type="text" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              style={{ marginBottom: '10px' }}
+              style={{ marginBottom: '10px',fontFamily: 'Kanit' }}
             />
           </div>
           <div>
@@ -231,6 +231,7 @@ const Pop = ({ onClose }) => {
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
+              style={{fontFamily: 'Kanit' }}
             />
           </div>
           <div style={{ display: 'flex', justifyContent: 'end', marginTop: 'auto' }}>
