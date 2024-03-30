@@ -638,8 +638,11 @@ app.post('/timeT', (req, res) => {
   });
 });
 
-app.post('/timeEdu', (req, res) => {
-  const { dayS, timeS, dayF, timeF } = req.body;
+
+
+  app.post('/timeEdu', (req, res) => {
+    const { dayS, timeS, dayF, timeF } = req.body;
+
 
   if (!dayS || !timeS || !dayF || !timeF) {
     return res.status(400).json({ error: 'error' });
