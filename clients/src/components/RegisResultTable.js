@@ -56,12 +56,6 @@ function RegisResultTable() {
   };
 
 
-
-
-
-
-
-
   const handleDropdownChange5 = (event) => {
     setSelectyear(event.target.value);
   };
@@ -180,7 +174,7 @@ function RegisResultTable() {
     if (name === "years") {
       if (checked) {
         // If less than 2 years are already selected, add the new selection
-        if (selectedYear.length < 2) {
+        if (selectedYear.length < 4) {
           setSelectedYear(prevSelectedYear => [...prevSelectedYear, value]);
         } else {
           // Optionally notify the user that they can't select more than 2 years
