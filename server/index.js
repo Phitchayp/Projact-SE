@@ -37,6 +37,12 @@ const db = mysql.createConnection({
   // user: 'dbSE',
   // password: 'root123456',
   // database: 'databasese',
+
+  // host: 'localhost',
+  // user: 'root',
+  // password: 'root',
+  // database: 'project_se',
+  // port: '3308'
 })
 
 db.connect((err)=>{
