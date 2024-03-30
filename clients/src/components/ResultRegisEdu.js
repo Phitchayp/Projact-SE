@@ -42,16 +42,17 @@ function ResultRegisEdu() {
   const [allname, setAllname] = useState([]);
   const [filterresult, setFilterresult] = useState([]);
   const [searchNameTable, setSearchNameTable] = useState("");
-
+  const [subject,setsubject] = useState("");
   // กรองข้อมูลตามคำค้นหาที่ผู้ใช้ป้อนลงในช่องค้นหา และเก็บผลลัพธ์ไว้ใน filterdata
   const handlesearch = (event) => {
-    const search = event.target.value;
-    console.log(search);
-    setSearchNameTable(search);
-    if (search !== "") {
+    const searchName = event.target.value.toLowerCase();
+    const searchsubject = event.target.value.toLowerCase();
+    console.log(searchName&&searchsubject);
+    setSearchNameTable(searchName&&searchsubject);
+    if (searchName&&searchsubject !== "") {
       const filterdata = allname.filter((item) => {
         for (const key in item) {
-            if (typeof item[key] === 'string' && item[key].indexOf(search) !== -1) {
+            if (typeof item[key] === 'string' && item[key].indexOf(searchName&&searchsubject) !== -1) {
                 return true;
             }
         }
@@ -62,7 +63,6 @@ function ResultRegisEdu() {
       setFilterresult(allname);
     }
   };
-
 
   useEffect(() => { 
     const getname = async () => {
@@ -90,10 +90,10 @@ function ResultRegisEdu() {
   
     try {
       const response1 = await Axios.get(
-        `http://localhost:3001/search-courses?query=${searchText1}`
+        `http://localhost:3001/courset?query=${searchText1}`
       );
       const response2 = await Axios.get(
-        `http://localhost:3001/search-nameajarn?query=${searchText2}`
+        `http://localhost:3001/courset?query=${searchText2}`
       );
       
       if (response1.data.length === 0 && response2.data.length === 0) {
@@ -130,12 +130,13 @@ function ResultRegisEdu() {
   });
 
   // แถบขาว
-  const searchCourses = async () => {
+  const searchCourses = async (event) => {
     try {
       const response = await Axios.get(
-        `http://localhost:3001/search-courses?query=${searchText1}`
+        `http://localhost:3001/courset?query=${searchText1}`
       );
-      setSearchResults1(response.data); // อัปเดต state ด้วยข้อมูลผลการค้นหา
+      setSearchResults1(response.data);
+      setsubject(event.target.value); // อัปเดต state ด้วยข้อมูลผลการค้นหา
       console.log(response.data.length)
       console.log(response.data)
     } catch (error) {
@@ -154,16 +155,14 @@ function ResultRegisEdu() {
   };
 
   const [selectedCourse, setSelectedCourse] = useState({
-    subject_id: "",
-    subject_name: "",
+    name: "",
   });
-  const handleSelectCourse = (course) => {
-    setSearchText1(`${course.subject_id} - ${course.subject_name}`);
+  const handleSelectCourse = (courset) => {
+    setSearchText1(`${courset.name}`);
     setSelectedCourse({
-      subject_id: course.subject_id,
-      subject_name: course.subject_name,
+      subject_name: courset.name,
     });
-    setSearchResults1([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
+      setSearchResults1([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
   };
   
  // --------------------searchbarName--------------------
@@ -185,7 +184,7 @@ function ResultRegisEdu() {
   const searchNameAjarn = async () => {
     try {
       const response = await Axios.get(
-        `http://localhost:3001/search-nameajarn?query=${searchText2}`
+        `http://localhost:3001/courset?query=${searchText2}`
       );
       setSearchResults2(response.data); // อัปเดต state ด้วยข้อมูลผลการค้นหา
     } catch (error) {
@@ -204,7 +203,7 @@ function ResultRegisEdu() {
   };
 
   const [selectedName, setSelectedName] = useState({
-    name: "",
+    teacher: "",
   });
   const handleSelectName = (courset) => {
     setSearchText2(`${courset.teacher}`);
@@ -315,7 +314,11 @@ function ResultRegisEdu() {
               </button>
               {searchResults2.length > 0 && (
                 <div className="autocomplete-dropdown">
-                  {searchResults2.map((courset, index) => (
+                  {searchResults2
+                  .filter((courset, index, self) =>
+                  self.findIndex((t) => t.teacher === courset.teacher) === index
+                  )
+                  .map((courset, index) => (
                     <div
                       className="autocomplete-item"
                       key={index}
@@ -347,107 +350,72 @@ function ResultRegisEdu() {
                     </button>
                     {searchResults1.length > 0 && (
                       <div className="autocomplete-dropdown">
-                        {searchResults1.map((course, index) => (
+                        {searchResults1
+                        .filter((courset, index, self) =>
+                        self.findIndex((n) => n.name === courset.name) === index
+                        )
+                        .map((courset, index) => (
                           <div
                             className="autocomplete-item"
                             key={index}
-                            onClick={() => handleSelectCourse(course)}
+                            onClick={() => handleSelectCourse(courset)}
                           >
-                            {course.subject_id} - {course.subject_name}
+                            {courset.name}
                           </div>
                         ))}
+                        
                       </div>
                     )}
             </div>
           </div>
 
           <div className="ButtonChange">
-                {/* ตรวจสอบว่ากำลังค้นหาหรือไม่ */}
-                {searching ? (
-                  <p>Loading...</p>
-                ) : (
-                  <button
-                  style={{
-                    backgroundColor: "#127151",
-                    border: "5px",
-                    cursor: "pointer",
-                    width: "110px",
-                    height: "37px",
-                    borderRadius: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "5px 10px",
-                  }}
-                  onClick={() => handlesearch({ target: { value: searchText2 } })}>
+            {/* ตรวจสอบว่ากำลังค้นหาหรือไม่ */}
+            {searching ? (
+                <p>Loading...</p>
+            ) : (
+                <button
+                    style={{
+                        backgroundColor: "#127151",
+                        border: "5px",
+                        cursor: "pointer",
+                        width: "110px",
+                        height: "37px",
+                        borderRadius: "10px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "5px 10px",
+                    }}
+                    onClick={() => {
+                        if (searchText1) {
+                            handlesearch({ target: { value: searchText1 } });
+                        } 
+                        if (searchText2) {
+                            handlesearch({ target: { value: searchText2 } });
+                        }
+                        if (searchText1 && searchText2) {
+                            const filterData = allname.filter(item => 
+                                item.name === searchText1 && item.teacher === searchText2
+                            );
+                            setFilterresult(filterData);
+                        } 
+                    }}
+                >
                     <span
-                  style={{ color: "white",
-                  fontSize: "16px",
-                  fontFamily: "Kanit" }}
-                >{ "search"}
-                </span>
-                <img
-                  src={newSearchIcon}
-                  alt="New Search Icon"
-                  style={{ width: "16px", height: "16px" }}
-                />
+                        style={{ color: "white", fontSize: "16px", fontFamily: "Kanit" }}
+                    >
+                        {"search"}
+                    </span>
+                    <img
+                        src={newSearchIcon}
+                        alt="New Search Icon"
+                        style={{ width: "16px", height: "16px" }}
+                    />
                 </button>
-                )}
-             {/* <table className="table " style={{ color:"black" }}>
-              <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>รหัสวิชา</th>
-                    <th>ชื่อวิชา</th>
-                    <th>นก.</th>
-                    <th>lab/lec</th>
-                    <th>sec</th>
-                    <th>ชื่อผู้สอน</th>
-                    <th>จำนวนนิสิต</th>
-                    <th>ชั้นปี</th>
-                    <th>วัน</th>
-                    <th>เวลา</th>
-                    <th>ห้องlab</th>
-                </tr>
-              </thead>
-              <tbody>
-                {serachcountry.length > 1
-                  ? filterresult.map((filtercountry, index) => (
-                    <tr key={index}>
-                        <td>{`${filtercountry.No}`}</td>
-                        <td>{`${filtercountry.idsubject}`}</td>
-                        <td>{`${filtercountry.name}`}</td>
-                        <td>{`${filtercountry.credit}`}</td>
-                        <td>{`${filtercountry.lab_lec}`}</td>
-                        <td>{`${filtercountry.sec}`}</td>
-                        <td className="CheckRegisCoruse-blue-text">{`${filtercountry.teacher}`}</td>
-                        <td>{`${filtercountry.n_people}`}</td>
-                        <td>{filtercountry.class}</td>
-                        <td className="CheckRegisCoruse-blue-text">{`${filtercountry.day}`}</td>
-                        <td>{`${filtercountry.time_start}`}-{`${filtercountry.time_end}`}</td>
-                        <td>{`${filtercountry.room}`}</td>
-                   </tr>
-                    ))
-                  : allcountry.map((getcon, index) => (
-                    <tr key={index}>
-                        <td>{`${getcon.No}`}</td>
-                        <td>{`${getcon.idsubject}`}</td>
-                        <td>{`${getcon.name}`}</td>
-                        <td>{`${getcon.credit}`}</td>
-                        <td>{`${getcon.lab_lec}`}</td>
-                        <td>{`${getcon.sec}`}</td>
-                        <td className="CheckRegisCoruse-blue-text">{`${getcon.teacher}`}</td>
-                        <td>{`${getcon.n_people}`}</td>
-                        <td>{getcon.class}</td>
-                        <td className="CheckRegisCoruse-blue-text">{`${getcon.day}`}</td>
-                        <td>{`${getcon.time_start}`}-{`${getcon.time_end}`}</td>
-                        <td>{`${getcon.room}`}</td>
-                  </tr>
-                    ))}
-              </tbody>
-            </table> */}
+            )}
           </div>
-          </div>
+        </div>
 
         <div>
           <div class="DateAdmin-textEdu">
@@ -485,7 +453,8 @@ function ResultRegisEdu() {
                 {searchNameTable?.length > 0 ? (
                     filterresult
                         .filter(filterName => (
-                            filterName.teacher
+                          searchText1 ? filterName.name.includes(searchText1) : true
+                           
                             // Add more conditions for additional fields if needed
                         ))
                         .map((filterName, index) => (
@@ -507,7 +476,7 @@ function ResultRegisEdu() {
                 ) : (
                     allname
                         .filter(getcon => (
-                            getcon.name
+                          searchText1 ? getcon.name.includes(searchText1) : true
                             // Add more conditions for additional fields if needed
                         ))
                         .map((getcon, index) => (
