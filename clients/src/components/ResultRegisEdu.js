@@ -3,32 +3,35 @@ import "./ResultRegisEdu.css";
 import CheckRegisCoruse from "./CheckRegisCoruse";
 import searchIconName from "../assets/searchbar.svg";
 import searchIconCourse from "../assets/searchbar.svg";
-import TimePickerRe from "./TimepickerResultSearch";
 import newSearchIcon from "../assets/newsearch.png";
 import Axios from "axios";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 function ResultRegisEdu() {
-  const [selectedValue5, setSelectedValue5] = useState("");
-  const [selectedValue6, setSelectedValue6] = useState("");
-  const [selectedValue7, setSelectedValue7] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedTerm, setSelectedTerm] = useState("");
+  const [selectTerm, setSelectTerm] = useState("");
+  const [selectedRoom, setSelectedRoom] = useState("");
+  const [selectRoom, setSelectRoom] = useState("");
   const [SelectDay, setSelectDay] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
 
+  
+  const handleDropdownChangeYear = (event) => {
+    setSelectedYear(event.target.value);
+  };
+  const handleDropdownChangeTerm = (event) => {
+    setSelectTerm(event.target.value);
+    setSelectedTerm(event.target.value);
+  };
+  const handleDropdownChangeRoom = (event) => {
+    setSelectRoom(event.target.value);
+    setSelectedRoom(event.target.value);
+    
+  };
   const handleDropdownSelectDay = (event) => {
     setSelectDay(event.target.value);
     setSelectedDay(event.target.value);
-  };
-  const handleDropdownChange5 = (event) => {
-    setSelectedValue5(event.target.value);
-  };
-
-  const handleDropdownChange6 = (event) => {
-    setSelectedValue6(event.target.value);
-  };
-
-  const handleDropdownChange7 = (event) => {
-    setSelectedValue7(event.target.value);
   };
 
   const [searchResults, setSearchResults] = useState([]);
@@ -44,13 +47,24 @@ function ResultRegisEdu() {
   const [filterresult, setFilterresult] = useState([]);
   const [searchTable, setSearchTable] = useState("");
   const [subject,setsubject] = useState("");
+  const [timestart,settime] = useState("");
+  const [searchText3, setSearchText3] = useState("");
+  const [searchResults3, setSearchResults3] = useState([]);
+
 
   // กรองข้อมูลตามคำค้นหาที่ผู้ใช้ป้อนลงในช่องค้นหา และเก็บผลลัพธ์ไว้ใน filterdata
   const handlesearch = (event) => {
     const searchName = event.target.value.toLowerCase();
     const searchsubject = event.target.value.toLowerCase();
     console.log(searchName&&searchsubject);
-    setSearchTable(searchName&&searchsubject&&selectedDay);
+    setSearchTable(searchName||searchsubject||selectedDay||selectedYear);
+    
+
+    if (selectedYear!==" ") {
+      // กรองข้อมูลปีที่ตรงกับข้อมูลปีในตาราง
+      const filterData = allname.filter((item) => item.course_year === selectedYear);
+      setFilterresult(filterData);
+    }
     if (searchText1 && !searchText2 && !selectedDay) {
       const filterData = allname.filter((item) => item.name === searchText1);
       setFilterresult(filterData);
@@ -146,7 +160,7 @@ function ResultRegisEdu() {
   };    
   
 
-  // ----------------searchbarCourse------------------------
+  // ----------------searchbarCourse----------------------------------------------------------------------------
 
   document.addEventListener("DOMContentLoaded", function () {
     var searchButton = document.getElementById("searchButton");
@@ -196,7 +210,7 @@ function ResultRegisEdu() {
       setSearchResults1([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
   };
   
- // --------------------searchbarName--------------------
+ // --------------------searchbarName--------------------------------------------------------------------------
   
   document.addEventListener("DOMContentLoaded", function () {
     var searchButton = document.getElementById("searchButton");
@@ -243,7 +257,55 @@ function ResultRegisEdu() {
     });
       setSearchResults2([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือก
   };
+
+  // ---------------------------------searchtime---------------------------------------------------------
+  document.addEventListener("DOMContentLoaded", function () {
+    var searchButton = document.getElementById("searchButton");
   
+    if (searchButton) {
+      searchButton.addEventListener("click", function () {
+        var searchText = document.getElementById("searchInput").value.trim();
+        console.log("คำค้นหา:", searchText);
+        // ทำสิ่งที่ต้องการกับ searchText ที่ได้รับจากผู้ใช้
+      });
+    }
+  });
+  
+  
+  const searchTime = async (event) => {
+    try {
+      const response = await Axios.get(
+        `http://localhost:3001/courset?query=${searchText3}`
+      );
+      setSearchResults3(response.data);
+      settime(event.target.value); // อัปเดต state ด้วยข้อมูลผลการค้นหา
+      console.log(response.data.length)
+      console.log(response.data)
+    } catch (error) {
+      console.error("Error searching courses:", error);
+    }
+  };
+  
+  const handleSearchChangeTime = (e) => {
+    setSearchText3(e.target.value);
+    if (e.target.value.length > 0) {
+      // แก้ไขตรงนี้เพื่อค้นหาทันทีที่ผู้ใช้พิมพ์
+      searchTime();
+    } else {
+      setSearchResults3([]); // หากช่องค้นหาว่าง, ล้างผลลัพธ์การค้นหา
+    }
+  };
+  
+  const [selectedTime, setSelectedTime] = useState({
+    name: "",
+  });
+  const handleSelectTime = (courset) => {
+    setSearchText3(`${courset.time_start}`);
+    setSelectedCourse({
+      time_start: courset.time_start,
+    });
+      setSearchResults3([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
+  };
 
 
   return (
@@ -254,12 +316,12 @@ function ResultRegisEdu() {
           <a style={{marginLeft:'-25px'}}>ภาคการศึกษา</a>
           <a style={{marginLeft:'-40px'}}>ห้อง</a>
           <a style={{marginLeft:'22px'}}>วัน</a>
-          <a style={{marginLeft:'35px'}}>เวลาเริ่มต้น</a>
-          <a style={{marginLeft:'-20px'}}>เวลาสิ้นสุด</a>
+          <a style={{marginLeft:'35px'}}>เวลา</a>
+          
         </div>
         <div class="flex-container">
           <div className="dropdown5" style={{marginLeft:'1px', marginRight:'5px'}}>
-            <select value={selectedValue5} onChange={handleDropdownChange5}>
+            <select value={selectedYear} onChange={handleDropdownChangeYear}>
               <option value=""></option>
               <option value="2569">2569</option>
               <option value="2568">2568</option>
@@ -279,23 +341,23 @@ function ResultRegisEdu() {
             </select>
           </div>
           <div className="dropdown6">
-            <select value={selectedValue6} onChange={handleDropdownChange6}>
+            <select value={selectedTerm} onChange={handleDropdownChangeTerm}>
               <option value=""></option>
               <option value="ภาคต้น">ภาคต้น</option>
               <option value="ภาคปลาย">ภาคปลาย</option>
-              <option value="ภาคฤดูร้อน">ทั้งหมด</option>
+              <option value="ทั้งหมด">ทั้งหมด</option>
             </select>
           </div>
 
           <div className="dropdown7">
-            <select value={selectedValue7} onChange={handleDropdownChange7}>
+            <select value={selectedRoom} onChange={handleDropdownChangeRoom}>
               <option value=""></option>
-              <option value="LABCOM1">Lab Com1</option>
-              <option value="LABCOM2">Lab Com 2</option>
-              <option value="LABCOM23">Lab Com 23</option>
-              <option value="LABCOMDAT">Lab Com Dat</option>
-              <option value="LABLOGIC15309">Lab Logic 15309</option>
-              <option value="LABLOGIC">Lab Logic</option>
+              <option value="LabCom1">LabCom1</option>
+              <option value="LabCom2">LabCom2</option>
+              <option value="LabCom23">LabCom23</option>
+              <option value="LabComDat">LabComDat</option>
+              <option value="LabLogic15309">LabLogic15309</option>
+              <option value="LabLogic">LabLogic</option>
               <option value="1969/1">1969/1</option>
               <option value="25202">25202</option>
             </select>
@@ -316,15 +378,40 @@ function ResultRegisEdu() {
           </div>
           <div>
             <div class="timepickers-container1">
-              <TimePickerRe></TimePickerRe>
+            <div style={{ width: "50px" ,marginTop:'10px'}}>
+            <div class="ResultTechsearchBar-searchBox"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <input
+                      value={searchText3}
+                      onChange={handleSearchChangeTime}
+                      type="text"
+                      placeholder="เริ่มต้น-สิ้นสุด"
+                    />
+                    {searchResults1.length > 0 && (
+                      <div className="autocomplete-dropdown">
+                        {searchResults1
+                        .filter((courset, index, self) =>
+                        self.findIndex((n) => n.time_start === courset.time_start-courset.time_end) === index
+                        )
+                        .map((courset, index) => (
+                          <div
+                            className="autocomplete-item"
+                            key={index}
+                            onClick={() => handleSelectTime(courset)}
+                          >
+                            {courset.time_start}
+                          </div>
+                        ))}
+                        
+                      </div>
+                    )}
             </div>
-            <div class="timepickers-container2">
-              <TimePickerRe></TimePickerRe>
-              
-      
             </div>
           </div>
         </div>
+      </div>
+
 
         <div className="ChangePosition3" >
           <div style={{ width: "230px" ,marginTop:'10px'}}>
@@ -419,6 +506,12 @@ function ResultRegisEdu() {
                         padding: "5px 10px",
                     }}
                     onClick={() => {
+                      if (selectedYear !=="") {
+                        const filterData = allname.filter(item => 
+                            item.course_year === selectedYear
+                        );
+                        setFilterresult(filterData);
+                      }
                       if (searchText1 && searchText2) {
                         // กรณีที่มีการกรอกทั้งช่องค้นหาวิชาและชื่ออาจารย์
                         const filterData = allname.filter(item => 
@@ -433,7 +526,7 @@ function ResultRegisEdu() {
                               item.day === selectedDay
                           );
                           setFilterresult(filterData);
-                      }else if (selectedDay && !searchText1 && !searchText2) {
+                      } else if (selectedDay && !searchText1 && !searchText2) {
                         // กรณีที่มีการเลือกวันเท่านั้น
                         const filterData = allname.filter(item => 
                             item.day === selectedDay
@@ -505,7 +598,15 @@ function ResultRegisEdu() {
                         .filter(filterName => (
                           selectedDay ? filterName.day.includes(selectedDay): true
                         ))  
-                          
+                        .filter(filterName => (
+                          selectedYear ? filterName.course_year === selectedYear : true
+                        ))  
+                        .filter(filterName => (
+                          selectedRoom ? filterName.room === selectedRoom: true
+                        ))
+                        .filter(filterName => (
+                          selectedTerm ? filterName.term === selectedTerm: true
+                        ))   
               
                         
                         .map((filterName, index) => (
@@ -533,6 +634,20 @@ function ResultRegisEdu() {
                         .filter(getcon => (
                           selectedDay ? getcon.day.includes(selectedDay): true
                         )) 
+                        .filter(getcon => (
+                          selectedYear ? getcon.course_year === selectedYear : true
+                        ))
+                        .filter(filterName => (
+                          searchText3 ? filterName.time_start.includes(searchText3) : true 
+                        ))
+                        .filter(getcon => (
+                          selectedRoom ? getcon.room === selectedRoom : true
+                        ))
+                        .filter(getcon => (
+                          selectedTerm ? getcon.term === selectedTerm : true
+                        ))
+
+
                         .map((getcon, index) => (
                             <tr key={index}>
                                 <td>{`${getcon.No}`}</td>
@@ -547,8 +662,6 @@ function ResultRegisEdu() {
                                 <td className="CheckRegisCoruse-blue-text">{`${getcon.day}`}</td>
                                 <td>{`${getcon.time_start}`}-{`${getcon.time_end}`}</td>
                                 <td>{`${getcon.room}`}</td>
-
-
                             </tr>
                       ))
                   )}
@@ -565,3 +678,4 @@ function ResultRegisEdu() {
   );
 }
 export default ResultRegisEdu;
+
