@@ -36,16 +36,16 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  // host: 'localhost',
-  // user: 'root',
-  // password: '12345678',
-  // database: 'project_se',
-
-  host: '10.64.79.183',
-  user: 'dbSE',
-  password: 'root123456',
+  host: 'localhost',
+  user: 'root',
+  password: '12345678',
   database: 'project_se',
-  port: '3308',
+
+  // host: '10.64.79.183',
+  // user: 'dbSE',
+  // password: 'root123456',
+  // database: 'project_se',
+  // port: '3308',
 })
 
 db.connect((err) => {
@@ -621,9 +621,9 @@ app.get('/time', (req, res) => {
 });
 
 app.post('/timeT', (req, res) => {
-  const { dayS, timeS, dayF, timeF } = req.body;
+  const { dayS, timeS, dayF, timeF ,selectyear,selectterm} = req.body;
 
-  if (!dayS || !timeS || !dayF || !timeF) {
+  if (!dayS || !timeS || !dayF || !timeF || !selectterm || !selectyear) {
     return res.status(400).json({ error: 'error' });
   }
 
@@ -634,7 +634,7 @@ app.post('/timeT', (req, res) => {
     } else {
       console.log("Deleted records successfully");
       // หลังจากลบข้อมูลแล้ว ทำการแทรกข้อมูลใหม่
-      db.query("INSERT INTO timeteacher (`id`, `dayS`, `timeS`, `dayF`, `timeF`,`state`) VALUES (NULL, ? , ? ,? , ? ,1 )", [dayS, timeS, dayF, timeF], (insertErr, insertResult) => {
+      db.query("INSERT INTO timeteacher (`id`, `dayS`, `timeS`, `dayF`, `timeF`,course_year,`term`,`state`) VALUES (NULL, ? , ? ,? ,? ,?, ? ,1 )", [dayS, timeS, dayF, timeF,selectyear,selectterm], (insertErr, insertResult) => {
         if (insertErr) {
           console.log(insertErr);
           return res.status(500).json({ error: 'Internal Server Error (Insert)' });
@@ -1008,65 +1008,77 @@ app.post("/register", (req, res) => {
       .send(`Missing required fields: ${missingFields.join(", ")}`);
   }
 
-  // Find the latest sec_num for the given subject_id and subject_name
-  const latestSecNumQuery = "SELECT MAX(sec_num) AS max_sec_num FROM registration_records WHERE subject_id = ? AND subject_name = ? AND lectureOrLab = ?";
-  db.query(latestSecNumQuery, [subject_id, subject_name,lectureOrLab], (err, results) => {
-    if (err) {
-      console.error("Error querying latest sec_num:", err);
-      return res.status(500).send("Error querying latest sec_num");
+  // Check if the course_year and term match the ones in the timeteacher table
+  const checkQuery = "SELECT * FROM timeteacher WHERE course_year = ? AND term = ?";
+  db.query(checkQuery, [course_year, term], (checkErr, checkResults) => {
+    if (checkErr) {
+      console.error("Error checking timeteacher table:", checkErr);
+      return res.status(500).send("Error checking timeteacher table");
     }
 
-    // let sec_num = results[0].max_sec_num || 799; // หากไม่มีข้อมูลในฐานข้อมูลให้เริ่มต้นที่ 799
+    if (checkResults.length === 0) {
+      return res.status(400).send("Invalid course_year or term");
+    }
 
-    // เริ่มบวกค่า sec_num ตามเงื่อนไขของ lectureOrLab
-    if (lectureOrLab === "ภาคปฏิบัติ") {
-      sec_num = results[0].max_sec_num || 829; // เริ่มต้นที่ 800
-    } else {  
-      sec_num = results[0].max_sec_num || 799; // เริ่มต้นที่ 830
-    } 
+    // Find the latest sec_num for the given subject_id and subject_name
+    const latestSecNumQuery = "SELECT MAX(sec_num) AS max_sec_num FROM registration_records WHERE subject_id = ? AND subject_name = ? AND lectureOrLab = ?";
+    db.query(latestSecNumQuery, [subject_id, subject_name, lectureOrLab], (err, results) => {
+      if (err) {
+        console.error("Error querying latest sec_num:", err);
+        return res.status(500).send("Error querying latest sec_num");
+      }
 
-    // Loop through each section
-    for (let i = 0; i < section; i++) {
-      sec_num++;
-      const query =
-        "INSERT INTO registration_records (subject_id, subject_name, section, sec_num, lectureOrLab, branch, years, credit, category, course_year, term) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      let sec_num;
+      if (lectureOrLab === "ภาคปฏิบัติ") {
+        sec_num = results[0].max_sec_num || 829; // เริ่มต้นที่ 800
+      } else {  
+        sec_num = results[0].max_sec_num || 799; // เริ่มต้นที่ 830
+      } 
 
-      db.query(
-        query,
-        [
-          subject_id,
-          subject_name,
-          1,
-          sec_num, // ใช้ค่า sec_num ที่ได้จากการคำนวณ
-          lectureOrLab,
-          branch,
-          years,
-          credit,
-          category,
-          course_year,
-          term,
-        ],
-        (err, results) => {
-          if (err) {
-            console.error("Failed to insert registration_records:", err);
-            return res
-              .status(500)
-              .send(
-                "Error saving registration_records. Please contact support if this issue persists."
-              );
+      // Loop through each section
+      for (let i = 0; i < section; i++) {
+        sec_num++;
+        const query =
+          "INSERT INTO registration_records (subject_id, subject_name, section, sec_num, lectureOrLab, branch, years, credit, category, course_year, term) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        db.query(
+          query,
+          [
+            subject_id,
+            subject_name,
+            1,
+            sec_num, // ใช้ค่า sec_num ที่ได้จากการคำนวณ
+            lectureOrLab,
+            branch,
+            years,
+            credit,
+            category,
+            course_year,
+            term,
+          ],
+          (err, results) => {
+            if (err) {
+              console.error("Failed to insert registration_records:", err);
+              return res
+                .status(500)
+                .send(
+                  "Error saving registration_records. Please contact support if this issue persists."
+                );
+            }
+            sec_num++; // เพิ่มค่า sec_num ไป 1 สำหรับแต่ละ section
           }
-          sec_num++; // เพิ่มค่า sec_num ไป 1 สำหรับแต่ละ section
-        }
-      );
-    }
+        );
+      }
 
-    res
-      .status(201)
-      .send({
-        message: "Registration successful for all sections",
-      });
+      res
+        .status(201)
+        .send({
+          message: "Registration successful for all sections",
+        });
+    });
   });
 });
+
 
 
 // GET endpoint for retrieving all registration data

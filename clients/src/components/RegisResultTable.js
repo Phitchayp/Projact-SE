@@ -167,8 +167,9 @@ function RegisResultTable() {
     } catch (error) {
       console.error("Error saving course registration:", error);
       Swal.fire({
-        title: "เพิ่มรายวิชาไม่สำเร็จ กรุณาลองใหม่อีกครั้ง",
-        confirmButtonColor: "#3CB371",
+        title: "เพิ่มรายวิชาไม่สำเร็จ ",
+        text:'กรุณตรวจสอบข้อมูลให้ถูกต้อง',
+        confirmButtonColor: "#8C3941",
         customClass: {
           title: 'kanit-font',
           content: 'kanit-font',
