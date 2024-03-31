@@ -281,6 +281,7 @@ function ResultTeacher() {
           setCourses2(response.data);
           console.log("เปิดสอน" + myyear2 + "เทอม" + termsearch); // แสดงปีการศึกษาและเทอมที่เลือก
           fetchData();
+          <ResultTableTeacherRed myyear2={myyear2} termsearch={termsearch}/>
           
         } ,[myyear2, termsearch])
         .catch((error) => {
@@ -463,7 +464,7 @@ function ResultTeacher() {
         </table>
       </div>
       <div className="ResultTableTeacherRed-left">
-        <ResultTableTeacherRed></ResultTableTeacherRed>
+      <ResultTableTeacherRed myyear2={myyear2} termsearch={termsearch} />
       </div>
     </div>
   );

@@ -7,11 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '123456',
-  database: 'databasese',
-  port: '3306'
+  // host: '127.0.0.1',
+  // user: 'root',
+  // password: '123456',
+  // database: 'databasese',
+  // port: '3306'
   //pond
   // host: 'localhost',
   // user: 'root',
@@ -1120,6 +1120,18 @@ app.get("/course-sections/:courseId", (req, res) => {
     if (err) {
       console.error("Failed to retrieve sections:", err);
       return res.status(500).send("Error retrieving sections");
+    }
+    res.json(results);
+  });
+});
+
+
+app.get('/regisTearTerm', (req, res) => {
+  const query = 'SELECT * FROM courset';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Failed to retrieve registration data: ', err);
+      return res.status(500).send('Error retrieving registration data');
     }
     res.json(results);
   });
