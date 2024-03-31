@@ -1,62 +1,43 @@
 import React, { useState, useEffect } from "react";
 import "./ResultTech.css";
+import CheckRegisCoruse from "./CheckRegisCoruse";
 import searchIconName from "../assets/searchbar.svg";
 import searchIconCourse from "../assets/searchbar.svg";
-import TimePickerRe from "./TimepickerResultSearch";
 import newSearchIcon from "../assets/newsearch.png";
 import Axios from "axios";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import Roomsearch from "./roomsearch";
 
 
 function ResultTeach() {
-  const tableData = [2569, 2568, 2567, 2566, 2565, 2564, 2563, 2562, 2561, 2560, 2559, 2558, 2557, 2556, 2555, 'วิชาบังคับ', 'วิชาเลือก', 'วิชาแกน',];
-  const [selectedValue5, setSelectedValue5] = useState("");
-  const [selectedValue6, setSelectedValue6] = useState("");
-  const [selectedValue7, setFilteredDataByRoom] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectYear, setSelectYear] = useState("");
+  const [selectedTerm, setSelectedTerm] = useState("");
+  const [selectTerm, setSelectTerm] = useState("");
+  const [selectedRoom, setSelectedRoom] = useState("");
+  const [selectRoom, setSelectRoom] = useState("");
   const [SelectDay, setSelectDay] = useState("");
-  const [filteredDataByDay, setFilteredDataByDay] = useState([]);
-  const [SelectRoom, setSelectRoom] = useState("");
+  const [selectedDay, setSelectedDay] = useState("");
   
 
-///////////////////////Day
+  const handleDropdownChangeYear = (event) => {
+    setSelectYear(event.target.value);
+    setSelectedYear(event.target.value);
+  };
+  const handleDropdownChangeTerm = (event) => {
+    setSelectTerm(event.target.value);
+    setSelectedTerm(event.target.value);
+  };
+  const handleDropdownChangeRoom = (event) => {
+    setSelectRoom(event.target.value);
+    setSelectedRoom(event.target.value);
+    
+  };
   const handleDropdownSelectDay = (event) => {
     setSelectDay(event.target.value);
-  };
-  const filterDataByDay = (selectedDay) => {
-    if (selectedDay) {
-      const filteredData = allname.filter(item => item.day === selectedDay);
-      setFilteredDataByDay(filteredData);
-    } else {
-      setFilteredDataByDay(allname); // หากไม่ได้เลือกวันใด ๆ ให้แสดงข้อมูลทั้งหมด
-    }
-  };
-  useEffect(() => {
-    filterDataByDay(SelectDay);
-  }, [SelectDay]);
-
-  const handleDropdownChange5 = (event) => {
-    setSelectedValue5(event.target.value);
+    setSelectedDay(event.target.value);
   };
 
-  const handleDropdownChange6 = (event) => {
-    setSelectedValue6(event.target.value);
-  };
-
-  ///////////////////////Room
-  const handleDropdownChange7 = (event) => {
-    setSelectRoom(event.target.value);
-  };
-  const filterDataByRoom = (selectedRoom) => {
-    if (selectedRoom) {
-      const filteredDataroom = allname.filter(item => item.room === selectedRoom);
-      setFilteredDataByRoom(filteredDataroom);
-    } else {
-      setFilteredDataByRoom(allname); // หากไม่ได้เลือกห้องใด ๆ ให้แสดงข้อมูลทั้งหมด
-    }
-  };
-  useEffect(() => {
-    filterDataByRoom(SelectRoom);
-  }, [SelectRoom]);
 
 
   const [searchResults, setSearchResults] = useState([]);
@@ -67,32 +48,68 @@ function ResultTeach() {
   const [selectedValue13, setSelectedValue13] = useState("");
   // แถบขาว
   const [searchText1, setSearchText1] = useState("");
-  const [searchText3, setSearchText3] = useState("");
   const [searchResults1, setSearchResults1] = useState([]);
-  const [searchResults3, setSearchResults3] = useState([]);
   const [allname, setAllname] = useState([]);
   const [filterresult, setFilterresult] = useState([]);
-  const [searchNameTable, setSearchNameTable] = useState("");
+  const [searchTable, setSearchTable] = useState("");
   const [subject,setsubject] = useState("");
   const [timestart,settime] = useState("");
+  const [searchText3, setSearchText3] = useState("");
+  const [searchResults3, setSearchResults3] = useState([]);
   
   // กรองข้อมูลตามคำค้นหาที่ผู้ใช้ป้อนลงในช่องค้นหา และเก็บผลลัพธ์ไว้ใน filterdata
   const handlesearch = (event) => {
     const searchName = event.target.value.toLowerCase();
     const searchsubject = event.target.value.toLowerCase();
     console.log(searchName&&searchsubject);
-    setSearchNameTable(searchName&&searchsubject);
-    if (searchName&&searchsubject !== "") {
-      const filterdata = allname.filter((item) => {
-        for (const key in item) {
-            if (typeof item[key] === 'string' && item[key].indexOf(searchName&&searchsubject) !== -1) {
-                return true;
-            }
-        }
-        return false;
-      });
-      setFilterresult(filterdata);
-    } else {
+    setSearchTable(searchName||searchsubject||selectedDay||selectedYear);
+    
+
+    if (selectedYear!==" ") {
+      // กรองข้อมูลปีที่ตรงกับข้อมูลปีในตาราง
+      const filterData = allname.filter((item) => item.course_year === selectedYear);
+      setFilterresult(filterData);
+    }
+    if (searchText1 && !searchText2 && !selectedDay) {
+      const filterData = allname.filter((item) => item.name === searchText1);
+      setFilterresult(filterData);
+    }
+    // กรณีที่มีการกรอกเฉพาะช่องค้นหาชื่ออาจารย์เท่านั้น
+    else if (!searchText1 && searchText2 && !selectedDay) {
+      const filterData = allname.filter((item) => item.teacher === searchText2);
+      setFilterresult(filterData);
+    }
+    // กรณีที่มีการเลือกวันเท่านั้น
+    else if (!searchText1 && !searchText2 && selectedDay) {
+      const filterData = allname.filter((item) => item.day === selectedDay);
+      setFilterresult(filterData);
+    }
+    // กรณีที่มีการกรอกช่องค้นหาชื่ออาจารย์และช่องค้นหาชื่อวิชาเท่านั้น
+    else if (searchText1 && searchText2 && !selectedDay) {
+      const filterData = allname.filter((item) => item.name === searchText1 && item.teacher === searchText2);
+      setFilterresult(filterData);
+    }
+    // กรณีที่มีการกรอกช่องค้นหาชื่อวิชาและเลือกวันเท่านั้น
+    else if (searchText1 && !searchText2 && selectedDay) {
+      const filterData = allname.filter((item) => item.name === searchText1 && item.day === selectedDay);
+      setFilterresult(filterData);
+    }
+    // กรณีที่มีการกรอกช่องค้นหาชื่ออาจารย์และเลือกวันเท่านั้น
+    else if (!searchText1 && searchText2 && selectedDay) {
+      const filterData = allname.filter((item) => item.teacher === searchText2 && item.day === selectedDay);
+      setFilterresult(filterData);
+    }
+    // กรณีที่มีการกรอกช่องค้นหาชื่ออาจารย์ ช่องค้นหาชื่อวิชา และเลือกวัน
+    else if (searchText1 && searchText2 && selectedDay) {
+      const filterData = allname.filter((item) => 
+        item.name === searchText1 && 
+        item.teacher === searchText2 &&
+        item.day === selectedDay
+      );
+      setFilterresult(filterData);
+    }
+    // กรณีที่ไม่ตรงเงื่อนไขใด ๆ ทั้งหมดให้แสดงผลข้อมูลทั้งหมด
+    else {
       setFilterresult(allname);
     }
   };
@@ -148,7 +165,7 @@ function ResultTeach() {
   };    
   
 
-  // ----------------searchbarCourse------------------------
+  // ----------------searchbarCourse----------------------------------------------------------------------------
 
   document.addEventListener("DOMContentLoaded", function () {
     var searchButton = document.getElementById("searchButton");
@@ -198,7 +215,7 @@ function ResultTeach() {
       setSearchResults1([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
   };
   
- // --------------------searchbarName--------------------
+ // --------------------searchbarName--------------------------------------------------------------------------
   
   document.addEventListener("DOMContentLoaded", function () {
     var searchButton = document.getElementById("searchButton");
@@ -245,57 +262,55 @@ function ResultTeach() {
     });
       setSearchResults2([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือก
   };
+
+  // ---------------------------------searchtime---------------------------------------------------------
+  document.addEventListener("DOMContentLoaded", function () {
+    var searchButton = document.getElementById("searchButton");
   
-
- // --------------------searchbarTime--------------------
-  
- document.addEventListener("DOMContentLoaded", function () {
-  var searchButton = document.getElementById("searchButton");
-
-  if (searchButton) {
-    searchButton.addEventListener("click", function () {
-      var searchText = document.getElementById("searchInput").value.trim();
-      console.log("คำค้นหา:", searchText);
-      // ทำสิ่งที่ต้องการกับ searchText ที่ได้รับจากผู้ใช้
-    });
-  }
-});
-
-// แถบขาว
-const searchTime = async (event) => {
-  try {
-    const response = await Axios.get(
-      `http://localhost:3001/courset?query=${searchText3}`
-    );
-    setSearchResults3(response.data);
-    settime(event.target.value); // อัปเดต state ด้วยข้อมูลผลการค้นหา
-    console.log(response.data.length)
-    console.log(response.data)
-  } catch (error) {
-    console.error("Error searching courses:", error);
-  }
-};
-
-const handleSearchChangeTime = (e) => {
-  setSearchText3(e.target.value);
-  if (e.target.value.length > 0) {
-    // แก้ไขตรงนี้เพื่อค้นหาทันทีที่ผู้ใช้พิมพ์
-    searchTime();
-  } else {
-    setSearchResults3([]); // หากช่องค้นหาว่าง, ล้างผลลัพธ์การค้นหา
-  }
-};
-
-const [selectedTime, setSelectedTime] = useState({
-  name: "",
-});
-const handleSelectTime = (courset) => {
-  setSearchText3(`${courset.time_start}`);
-  setSelectedCourse({
-    time_start: courset.time_start,
+    if (searchButton) {
+      searchButton.addEventListener("click", function () {
+        var searchText = document.getElementById("searchInput").value.trim();
+        console.log("คำค้นหา:", searchText);
+        // ทำสิ่งที่ต้องการกับ searchText ที่ได้รับจากผู้ใช้
+      });
+    }
   });
-    setSearchResults3([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
-};
+  
+  
+  const searchTime = async (event) => {
+    try {
+      const response = await Axios.get(
+        `http://localhost:3001/courset?query=${searchText3}`
+      );
+      setSearchResults3(response.data);
+      settime(event.target.value); // อัปเดต state ด้วยข้อมูลผลการค้นหา
+      console.log(response.data.length)
+      console.log(response.data)
+    } catch (error) {
+      console.error("Error searching courses:", error);
+    }
+  };
+  
+  const handleSearchChangeTime = (e) => {
+    setSearchText3(e.target.value);
+    if (e.target.value.length > 0) {
+      // แก้ไขตรงนี้เพื่อค้นหาทันทีที่ผู้ใช้พิมพ์
+      searchTime();
+    } else {
+      setSearchResults3([]); // หากช่องค้นหาว่าง, ล้างผลลัพธ์การค้นหา
+    }
+  };
+  
+  const [selectedTime, setSelectedTime] = useState({
+    name: "",
+  });
+  const handleSelectTime = (courset) => {
+    setSearchText3(`${courset.time_start}`);
+    setSelectedCourse({
+      time_start: courset.time_start,
+    });
+      setSearchResults3([]); // ล้างผลลัพธ์การค้นหาหลังจากเลือกวิชา
+  };
 
   return (
     <div>
@@ -309,7 +324,7 @@ const handleSelectTime = (courset) => {
         </div>
         <div class="flex-container">
           <div className="dropdown5" style={{marginLeft:'1px', marginRight:'5px'}}>
-            <select value={selectedValue5} onChange={handleDropdownChange5}>
+            <select value={selectedYear} onChange={handleDropdownChangeYear}>
               <option value=""></option>
               <option value="2569">2569</option>
               <option value="2568">2568</option>
@@ -329,26 +344,18 @@ const handleSelectTime = (courset) => {
             </select>
           </div>
           <div className="dropdown6">
-            <select value={selectedValue6} onChange={handleDropdownChange6}>
+            <select value={selectedTerm} onChange={handleDropdownChangeTerm}>
               <option value=""></option>
               <option value="ภาคต้น">ภาคต้น</option>
               <option value="ภาคปลาย">ภาคปลาย</option>
-              <option value="ภาคฤดูร้อน">ทั้งหมด</option>
+              <option value="ทั้งหมด">ทั้งหมด</option>
             </select>
           </div>
 
           <div className="dropdown7">
-            <select value={SelectRoom} onChange={handleDropdownChange7}>
-              <option value=""></option>
-              <option value="LABCOM1">LabCom1</option>
-              <option value="LABCOM2">LabCom2</option>
-              <option value="LABCOM23">Lab Com 23</option>
-              <option value="LABCOMDAT">Lab Com Dat</option>
-              <option value="LABLOGIC15309">Lab Logic 15309</option>
-              <option value="LABLOGIC">Lab Logic</option>
-              <option value="1969/1">1969/1</option>
-              <option value="25202">25202</option>
-            </select>
+            <div value={Roomsearch} onChange={handleDropdownChangeRoom}>
+            <Roomsearch/>
+            </div>
 
           </div>
           <div className="dropdownDay">
@@ -490,19 +497,40 @@ const handleSelectTime = (courset) => {
                         padding: "5px 10px",
                     }}
                     onClick={() => {
-                        if (searchText1) {
-                            handlesearch({ target: { value: searchText1 } });
-                        } 
-                        if (searchText2) {
-                            handlesearch({ target: { value: searchText2 } });
-                        }
-                        if (searchText1 && searchText2) {
-                            const filterData = allname.filter(item => 
-                                item.name === searchText1 && item.teacher === searchText2
-                            );
-                            setFilterresult(filterData);
-                        } 
-                        
+                      if (selectedYear !=="") {
+                        const filterData = allname.filter(item => 
+                            item.course_year === selectedYear
+                        );
+                        setFilterresult(filterData);
+                      }
+                      if (searchText1 && searchText2) {
+                        // กรณีที่มีการกรอกทั้งช่องค้นหาวิชาและชื่ออาจารย์
+                        const filterData = allname.filter(item => 
+                            item.name === searchText1 && item.teacher === searchText2
+                        );
+                        setFilterresult(filterData);
+                      }else if (searchText1 && searchText2 && selectedDay) {
+                          // กรณีที่มีการกรอกทั้งช่องค้นหาวิชา ชื่ออาจารย์ และวัน
+                          const filterData = allname.filter(item => 
+                              item.name === searchText1 && 
+                              item.teacher === searchText2 &&
+                              item.day === selectedDay
+                          );
+                          setFilterresult(filterData);
+                      } else if (selectedDay && !searchText1 && !searchText2) {
+                        // กรณีที่มีการเลือกวันเท่านั้น
+                        const filterData = allname.filter(item => 
+                            item.day === selectedDay
+                        );
+                        setFilterresult(filterData);
+                      } else if (searchText1) {
+                          // กรณีที่มีการกรอกเฉพาะช่องค้นหาวิชา
+                          handlesearch({ target: { value: searchText1 } });
+                      } else if (searchText2) {
+                          // กรณีที่มีการกรอกเฉพาะช่องค้นหาชื่ออาจารย์
+                          handlesearch({ target: { value: searchText2 } });
+                      }
+                      
                     }}
                 >
                     <span
@@ -554,8 +582,25 @@ const handleSelectTime = (courset) => {
                 </thead>
                 <tbody>
                 
-                {searchNameTable?.length > 0 ? (
+                {searchTable?.length > 0 ? (
                     filterresult
+                        .filter(filterName => (
+                          searchText1 ? filterName.name.includes(searchText1) : true
+                        ))
+                        .filter(filterName => (
+                          selectedDay ? filterName.day.includes(selectedDay): true
+                        ))  
+                        .filter(filterName => (
+                          selectedYear ? filterName.course_year === selectedYear : true
+                        ))  
+                        .filter(filterName => (
+                          selectedRoom ? filterName.room === selectedRoom: true
+                        ))
+                        .filter(filterName => (
+                          selectedTerm ? filterName.term === selectedTerm: true
+                        ))   
+              
+                        
                         .map((filterName, index) => (
                             <tr key={index}>
                                 <td>{`${filterName.No}`}</td>
@@ -572,30 +617,29 @@ const handleSelectTime = (courset) => {
                                 <td>{`${filterName.room}`}</td>
                             </tr>
                         ))
-                        
                 ) : (
-                  
                     allname
                         .filter(getcon => (
                           searchText1 ? getcon.name.includes(searchText1) : true
-                            // Add more conditions for additional fields if needed
-                        ))
-                        .filter(filterName => (
-                          searchText2 ? filterName.teacher.includes(searchText2) : true     
-                            // Add more conditions for additional fields if needed
-                        ))
-                        .filter(filterName => (
-                          searchText3 ? filterName.time_start.includes(searchText3) : true     
-                            // Add more conditions for additional fields if needed
+                            
                         ))
                         .filter(getcon => (
-                          SelectDay ? getcon.day === SelectDay : true
-                          // Add more conditions for additional fields if needed
+                          selectedDay ? getcon.day.includes(selectedDay): true
+                        )) 
+                        .filter(getcon => (
+                          selectedYear ? getcon.course_year === selectedYear : true
+                        ))
+                        .filter(filterName => (
+                          searchText3 ? filterName.time_start.includes(searchText3) : true 
                         ))
                         .filter(getcon => (
-                          SelectRoom ? getcon.room === SelectRoom : true
-                          // Add more conditions for additional fields if needed
+                          selectedRoom ? getcon.room === selectedRoom : true
                         ))
+                        .filter(getcon => (
+                          selectedTerm ? getcon.term === selectedTerm : true
+                        ))
+
+
                         .map((getcon, index) => (
                             <tr key={index}>
                                 <td>{`${getcon.No}`}</td>
