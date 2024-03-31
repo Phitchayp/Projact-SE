@@ -11,6 +11,7 @@ import RegisResultTable from "./RegisResultTable";
 
 class RegisTa extends React.Component {
   state = {
+    registrationData: [],
     courseSections: [], // Array to hold the number of sections for each course
     lectureCourses: [], // ข้อมูลภาคบรรยาย
     practicalCourses: [], // ข้อมูลภาคปฏิบัติ
@@ -33,7 +34,7 @@ class RegisTa extends React.Component {
       const lectureResponse = await Axios.get(
         "http://localhost:3001/lecture-courses"
       );
-      const registrationResponse = await Axios.get(
+      const registrationData = await Axios.get(
         "http://localhost:3001/registration-data"
       );
       const resultsResponse = await Axios.get(
@@ -41,9 +42,10 @@ class RegisTa extends React.Component {
       );
 
       this.setState({
+        registrationData:registrationData.data,
         practicalCourses: practicalResponse.data, // Data for 'ภาคปฏิบัติ'
         lectureData: lectureResponse.data, // Data for 'ภาคบรรยาย' or lecture courses
-        registrationData: registrationResponse.data, // All registration data
+        
 
       });
     } catch (error) {
@@ -58,10 +60,11 @@ class RegisTa extends React.Component {
   fetchCourses = async () => {
     try {
       // สมมติมี endpoint แยกสำหรับภาคบรรยายและภาคปฏิบัติ
-      
+      const registrationData=await Axios.get("http://localhost:3001/registration-data");
       const lectureResponse = await Axios.get("http://localhost:3001/lecture-courses");
       const practicalResponse = await Axios.get("http://localhost:3001/lab-courses");
       this.setState({
+        registrationData:registrationData.data,
         lectureCourses: lectureResponse.data,
         practicalCourses: practicalResponse.data,
       });
@@ -116,6 +119,21 @@ class RegisTa extends React.Component {
         console.error('There was an error!', error);
       });
   };
+  handleDeleteRow1 = (courseId) => {
+    Axios.delete(`http://localhost:3001/delete-courset/${courseId}`)
+      .then(response => {
+        // Handle the successful deletion
+        console.log(response.data);
+        // Refresh the data in your component or remove the row from the state
+        this.setState(prevState => ({
+          registrationData:prevState.registrationData.filter(course => course.id !== courseId),
+        }));
+      })
+      .catch(error => {
+        // Handle the error case
+        console.error('There was an error!', error);
+      });
+  };
 
 
 
@@ -123,9 +141,7 @@ class RegisTa extends React.Component {
 
     return courses.flatMap((course, index) => (
       Array.from({ length: course.section }, (_, sectionIndex) => {
-        const totalCredits = 800 + sectionIndex; 
         const key = `${index}-${sectionIndex}`; 
-  
         return (
           <tr key={key}>
             <td>
@@ -188,7 +204,6 @@ class RegisTa extends React.Component {
   renderCoursesPrac = (courses) => {
     return courses.flatMap((course, index) => (
       Array.from({ length: course.section }, (_, sectionIndex) => {
-        const totalCredit = 830 + sectionIndex; // บวกค่าของ index และ sectionIndex เข้ากับ 800
         const key = `${index}-${sectionIndex}`; // สร้าง key จากการรวม index และ sectionIndex
         return(
           <tr key={key}>
@@ -243,11 +258,7 @@ class RegisTa extends React.Component {
             </td>
             <td>
               <div className="testtable-dropdownposition">
-                
                 <TestTableDropdown />
-                {/* <TestTableDropdown onDropdownChange={handleDropdownChange} />
-                <p>Selected Room: {selectedRoom}</p> */}
-                
               </div>
             </td>
             <td> </td>
@@ -311,6 +322,7 @@ class RegisTa extends React.Component {
   };
   
   render() {
+    const { registrationData } = this.state;
     const { lectureCourses, practicalCourses } = this.state;
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -440,106 +452,31 @@ class RegisTa extends React.Component {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <div className="testtable-image-container">
+            {registrationData.map((course, index) => (
+                <tr key={index}>
+                  <td><div className="testtable-image-container">
                     <img
                       src={MyImage}
                       alt=" "
                       className="testtable-centered-image"
-                      onClick={this.handleDeleteRow}
+                      onClick={() => this.handleDeleteRow1(course.id)}
                     />
-                  </div>
-                </td>
-                <td>1</td>
-                <td>Al</td>
-                <td>3</td>
-                <td>l</td>
-                <td>8</td>
-                <td>1</td>
-                <td>2</td>
-                <td>M</td>
-                <td>9</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>
-                  <div className="testtable-image-container">
-                    <img
-                      src={MyImage}
-                      alt=" "
-                      className="testtable-centered-image"
-                      onClick={this.handleDeleteRow}
-                    />
-                  </div>
-                </td>
-                <td>03600390-00</td>
-                <td>Co-operative Education</td>
-                <td>3</td>
-                <td>lec</td>
-                <td>800</td>
-                <td>100</td>
-                <td>3 4 x</td>
-                <td>Tue</td>
-                <td>13-16</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>
-                  <div className="testtable-image-container">
-                    <img
-                      src={MyImage}
-                      alt=" "
-                      className="testtable-centered-image"
-                      onClick={this.handleDeleteRow}
-                    />
-                  </div>
-                </td>
-                <td>03603423-60</td>
-                <td>Network Programming</td>
-                <td>3</td>
-                <td>lec</td>
-                <td>800</td>
-                <td>50</td>
-                <td>3 4 x</td>
-                <td>Thu</td>
-                <td>9-12</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>
-                  <div className="testtable-image-container">
-                    <img
-                      src={MyImage}
-                      alt=" "
-                      className="testtable-centered-image"
-                      onClick={this.handleDeleteRow}
-                    />
-                  </div>
-                </td>
-                <td>01420114-60</td>
-                <td>Laboratory in Physics</td>
-                <td>1</td>
-                <td>lab</td>
-                <td>830</td>
-                <td>30</td>
-                <td>3 4 x</td>
-                <td>Mon</td>
-                <td>13-14</td>
-                <td>lab15</td>
-              </tr>
+                  </div></td>
+                  <td>{course.idsubject}</td>
+                  <td>{course.name}</td>
+                  <td>{course.credit}</td>
+                  <td>{course.lab_lec}</td>
+                  <td>{course.sec}</td>
+                  <td>{course.n_people}</td>
+                  <td>{course.class}</td>
+                  <td>{course.day}</td>
+                  <td>{course.time_start}-{course.time_end}</td>
+                  <td>{course.room}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </header>
-        {/* <div>
-          <div class="testtable-buttonchange">
-            <div class="RegisResultTable-saveButton">
-              <button id="saveButtonSavecourse">
-                <p class="RegisResultTable-saveButtontext">บันทึก</p>
-              </button>
-            </div>
-          </div>
-        </div> */}
       </div>
 
     );

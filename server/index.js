@@ -2,24 +2,18 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql');
 const cors = require('cors');
-const session = require('express-session');
 
-
-app.use(session({
-  secret: 'your-secret-key',
-  resave: false,
-  saveUninitialized: true,
-}));
 
 app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  // host: '127.0.0.1',
-  // user: 'root',
-  // password: '123456',
-  // database: 'databasese',
-  // port: '3306'
+  host: '127.0.0.1',
+  user: 'root',
+  password: '123456',
+  database: 'databasese',
+  port: '3306'
+  
   //pond
   // host: 'localhost',
   // user: 'root',
@@ -36,10 +30,10 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  host: 'localhost',
-  user: 'root',
-  password: '12345678',
-  database: 'project_se',
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
+  // database: 'project_se',
 
   // host: '10.64.79.183',
   // user: 'dbSE',
@@ -1083,7 +1077,7 @@ app.post("/register", (req, res) => {
 
 // GET endpoint for retrieving all registration data
 app.get('/registration-data', (req, res) => {
-  const query = 'SELECT * FROM registration_records';
+  const query = 'SELECT * FROM courset';
   db.query(query, (err, results) => {
     if (err) {
       console.error('Failed to retrieve registration data: ', err);
@@ -1183,6 +1177,17 @@ app.get('/regisTearTerm', (req, res) => {
 app.delete('/delete-course/:id', (req, res) => {
   const { id } = req.params;
   const query = 'DELETE FROM registration_records WHERE id = ?';
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Failed to delete course:', err);
+      return res.status(500).send('Error deleting course');
+    }
+    res.send('Course deleted successfully');
+  });
+});
+app.delete('/delete-courset/:id', (req, res) => {
+  const { id } = req.params;
+  const query = 'DELETE FROM courset WHERE id = ?';
   db.query(query, [id], (err, result) => {
     if (err) {
       console.error('Failed to delete course:', err);
