@@ -357,7 +357,7 @@ function CheckboxOpenCourse() {
         <div className='turnleft-all'>
             <div className='DateAdmin-text'>
                 <h style={{ color: '#8b0000' }}>เลือกรายวิชาที่จะเปิดสอน</h>
-                <br></br><p2 style={{color:'#CD5C5C' , fontSize:'15px'}}>{dateTime} น.</p2>
+                <br></br><p2 style={{color:'#CD5C5C' , fontSize:'15px'}}>{dateTime} </p2>
             </div>
             <div className='CheckboxOpenCourse-box'>
                 <div className='CheckboxOpenCourse-dropdown' >

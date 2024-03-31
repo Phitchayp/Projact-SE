@@ -21,7 +21,7 @@ function handleClick(event) {
 function RoomImport() {
   return (
     <div className='turnleft-all'>
-      <h3 style={{ marginTop:'100px' ,color: '#8C3941' ,fontFamily:'Kanit' }}>ห้องเรียนที่สามารถเปิดสอนได้ในปีการศึกษานี้</h3>
+      <h3 style={{ marginTop:'100px' ,fontFamily:'Kanit' }}>ห้องเรียนที่สามารถเปิดสอนได้ในปีการศึกษานี้</h3>
 
       <div>
         <RoomList/>

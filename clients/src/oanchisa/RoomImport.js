@@ -5,6 +5,7 @@ import { FaFileLines } from "react-icons/fa6";
 import { Link } from 'react-router-dom'; // เพิ่มการนำเข้า Link ที่นี่
 import UploadRoom from '../Wawa/Upload/UploadRoom';
 import RoomList from '../components/getRoom';
+import { ReactComponent as Icon } from '../assets/warning.svg';
 
 function handleClick(event) {
   const button = event.currentTarget;
@@ -23,26 +24,26 @@ function RoomImport() {
   const [selectedValue8, setSelectedValue8] = useState('');
   const [selectedValue9, setSelectedValue9] = useState('');
 
-  
+
   const [dateTime, setDateTime] = useState('');
 
   useEffect(() => {
-      const interval = setInterval(() => {
-        const thaiDateTime = new Date().toLocaleString('th-TH', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric',
-          second: 'numeric',
-         
-        });
-        setDateTime(thaiDateTime);
-      }, 1000);
-  
-      return () => clearInterval(interval);
-    }, []);
+    const interval = setInterval(() => {
+      const thaiDateTime = new Date().toLocaleString('th-TH', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+
+      });
+      setDateTime(thaiDateTime);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
 
   const handleDropdownChange8 = (event) => {
@@ -52,20 +53,92 @@ function RoomImport() {
   const handleDropdownChange9 = (event) => {
     setSelectedValue9(event.target.value);
   };
+
+
+
+
+
+
+
+  /////////// Api ดึงเวลาการใช้งานระบบของฝ่ายการศึกษาา ////////////
+  const [apiResult, setApiResult] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/gettimeeducheck');
+      const data = await response.text();
+      setApiResult(data);
+      console.log(apiResult);
+    } catch (error) {
+      console.error('Error fetching API:', error);
+      setApiResult('error');
+    }
+  };
+
+  useEffect(() => {
+    // เรียก fetchData เมื่อ component โหลดเสร็จ
+    fetchData();
+
+    // เรียก fetchData ทุกๆ 1 นาที
+    const interval = setInterval(fetchData, 30000);
+
+    // ให้ clearInterval เมื่อ component unmount
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className='turnleft-all'>
       <div>
-        <h className='DateAdmin-text'>นำข้อมูลห้องเรียนเข้าสู่ระบบ</h><span style={{ fontFamily: 'kanit', fontSize: '14px', color: '#708090', fontWeight: 'bold' }}> (*ไฟล์นามสกุล .xlsx เท่านั้น)</span>
-        <br></br><p2 style={{color:'#CD5C5C' , fontSize:'15px',fontFamily: 'kanit', fontWeight: 'bold'}}>{dateTime} น.</p2>
-      </div>
-      <div style={{marginTop:'40px'}}>
-        <UploadRoom />
-      </div>
-      <h3 style={{ marginTop: '100px' ,fontFamily: 'kanit'}}>ห้องเรียนที่เปิดสอน</h3>
 
-      <div>
-        <RoomList />
+        <div>
+          {apiResult === "pass" ? (
+
+            <div>
+              <div>
+                <h className='DateAdmin-text'>นำข้อมูลห้องเรียนเข้าสู่ระบบ</h><span style={{ fontFamily: 'kanit', fontSize: '14px', color: '#708090', fontWeight: 'bold' }}> (*ไฟล์นามสกุล .xlsx เท่านั้น)</span>
+                <br></br><p2 style={{ color: '#CD5C5C', fontSize: '15px', fontFamily: 'kanit', fontWeight: 'bold' }}>{dateTime} </p2>
+              </div>
+              <div style={{ marginTop: '40px' }}>
+                <UploadRoom />
+              </div>
+              <div>
+                <h3 style={{ marginTop: '100px', fontFamily: 'kanit' }}>ห้องเรียนที่เปิดสอน</h3>
+                <RoomList />
+              </div>
+
+            </div>
+
+
+          ) : (
+            <div>
+              <div style={{ fontFamily: 'kanit' }}>
+                <div style={{ color: '#CD5C5C', fontSize: '15px' }}>
+                  <p2 style={{ color: '#CD5C5C', fontSize: '15px', fontFamily: 'kanit', fontWeight: 'bold' }}>{dateTime}</p2>
+                </div>
+                <div className='noti-text2'>
+                  <Icon style={{ marginRight: '10px'}} />
+                  <span>ไม่อยู่ในกำหนดการเพิ่มห้องเรียน</span>
+                </div>
+              </div>
+
+
+              <div>
+                <h3 style={{ marginTop: '50px', fontFamily: 'kanit' }}>ห้องเรียนที่เปิดสอน</h3>
+                <RoomList />
+              </div>
+
+            </div>
+
+
+
+          )}
+        </div>
+
+
       </div>
+
+
+
     </div>
   );
 }

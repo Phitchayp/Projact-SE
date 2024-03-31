@@ -234,7 +234,7 @@ function RegisResultTable() {
     <div style={{ fontFamily: 'Kanit' }}>
       <div class="searchBar-texthead">
         <p1>ลงทะเบียนรายวิชา</p1>
-        <br></br><p2 style={{color:'#CD5C5C' , fontSize:'15px'}}>{dateTime} น.</p2>
+        <br></br><p2 style={{color:'#CD5C5C' , fontSize:'15px'}}>{dateTime}</p2>
       </div>
       <div style={{ marginTop: "35px" }}>
         <div class="searchBar-container">
