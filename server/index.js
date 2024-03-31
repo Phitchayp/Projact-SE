@@ -1077,7 +1077,11 @@ app.post("/register", (req, res) => {
 
 // GET endpoint for retrieving all registration data
 app.get('/registration-data', (req, res) => {
-  const query = 'SELECT * FROM courset';
+  const query = `
+    SELECT *
+    FROM courset
+    WHERE (course_year, term) IN (SELECT course_year, term FROM timeteacher)
+  `;
   db.query(query, (err, results) => {
     if (err) {
       console.error('Failed to retrieve registration data: ', err);
@@ -1086,6 +1090,7 @@ app.get('/registration-data', (req, res) => {
     res.json(results);
   });
 });
+
 
 app.get('/registall-data', (req, res) => {
   const myyear2 = req.query.myyear2;
