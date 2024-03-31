@@ -28,16 +28,16 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  // host: 'localhost',
-  // user: 'root',
-  // password: '12345678',
-  // database: 'project_se',
-
-  host: '10.64.79.183',
-  user: 'dbSE',
-  password: 'root123456',
+  host: 'localhost',
+  user: 'root',
+  password: '12345678',
   database: 'project_se',
-  port: '3308',
+
+  // host: '10.64.79.183',
+  // user: 'dbSE',
+  // password: 'root123456',
+  // database: 'project_se',
+  // port: '3308',
 })
 
 db.connect((err) => {
