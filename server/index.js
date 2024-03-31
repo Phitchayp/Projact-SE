@@ -7,11 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  // host: '127.0.0.1',
-  // user: 'root',
-  // password: '123456',
-  // database: 'databasese',
-  // port: '3306'
+  host: '127.0.0.1',
+  user: 'root',
+  password: '123456',
+  database: 'databasese',
+  port: '3306'
   //pond
   // host: 'localhost',
   // user: 'root',
@@ -944,7 +944,7 @@ app.get("/search-courses", (req, res) => {
 
   // If a search query is provided, extend the SQL query to include a search condition.
   if (query) {
-    sqlQuery += ` AND (subject_id LIKE ?) `;
+    sqlQuery += ` AND (subject_id LIKE ? OR subject_name LIKE ?) `;
     queryParams.push(`%${query}%`, `%${query}%`); // Add the search query to the parameters array for both subject_id and subject_name.
   }
 
@@ -961,17 +961,11 @@ app.get("/search-courses", (req, res) => {
   console.log("queryParams:", queryParams);
 });
 
-
-
-
-
-
-
 app.post("/register", (req, res) => {
   const {
     subject_id,
     subject_name,
-    section,
+    section, 
     lectureOrLab,
     branch,
     years,
@@ -979,7 +973,6 @@ app.post("/register", (req, res) => {
     category,
     course_year,
     term,
-
   } = req.body;
 
   // Check for missing data
@@ -1001,65 +994,66 @@ app.post("/register", (req, res) => {
       .send(`Missing required fields: ${missingFields.join(", ")}`);
   }
 
-  const query =
-    "INSERT INTO registration_records (subject_id, subject_name, section, lectureOrLab, branch, years, credit, category,course_year,term) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?)";
-
-  db.query(
-    query,
-    [
-      subject_id,
-      subject_name,
-      section,
-      lectureOrLab,
-      branch,
-      years,
-      credit,
-      category,
-      course_year,
-      term,
-    ],
-    (err, results) => {
-      if (err) {
-        console.error("Failed to insert registration_records:", err);
-        return res
-          .status(500)
-          .send(
-            "Error saving registration_records. Please contact support if this issue persists."
-          );
-      }
-      res
-        .status(201)
-        .send({
-          message: "Registration successful",
-          registrationId: results.insertId,
-        }); // Assuming 'results.insertId' is available and relevant
-    }
-  );
-});
-
-// GET endpoint for retrieving 'ภาคปฏิบัติ' data
-app.get('/practical-courses', (req, res) => {
-  const query = 'SELECT * FROM registration_records WHERE lectureOrLab = "ภาคปฏิบัติ"';
-  db.query(query, (err, results) => {
+  // Find the latest sec_num for the given subject_id and subject_name
+  const latestSecNumQuery = "SELECT MAX(sec_num) AS max_sec_num FROM registration_records WHERE subject_id = ? AND subject_name = ? AND lectureOrLab = ?";
+  db.query(latestSecNumQuery, [subject_id, subject_name,lectureOrLab], (err, results) => {
     if (err) {
-      console.error('Failed to retrieve practical courses: ', err);
-      return res.status(500).send('Error retrieving practical courses');
+      console.error("Error querying latest sec_num:", err);
+      return res.status(500).send("Error querying latest sec_num");
     }
-    res.json(results);
+
+    // let sec_num = results[0].max_sec_num || 799; // หากไม่มีข้อมูลในฐานข้อมูลให้เริ่มต้นที่ 799
+
+    // เริ่มบวกค่า sec_num ตามเงื่อนไขของ lectureOrLab
+    if (lectureOrLab === "ภาคปฏิบัติ") {
+      sec_num = results[0].max_sec_num || 829; // เริ่มต้นที่ 800
+    } else {  
+      sec_num = results[0].max_sec_num || 799; // เริ่มต้นที่ 830
+    } 
+
+    // Loop through each section
+    for (let i = 0; i < section; i++) {
+      sec_num++;
+      const query =
+        "INSERT INTO registration_records (subject_id, subject_name, section, sec_num, lectureOrLab, branch, years, credit, category, course_year, term) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+      db.query(
+        query,
+        [
+          subject_id,
+          subject_name,
+          1,
+          sec_num, // ใช้ค่า sec_num ที่ได้จากการคำนวณ
+          lectureOrLab,
+          branch,
+          years,
+          credit,
+          category,
+          course_year,
+          term,
+        ],
+        (err, results) => {
+          if (err) {
+            console.error("Failed to insert registration_records:", err);
+            return res
+              .status(500)
+              .send(
+                "Error saving registration_records. Please contact support if this issue persists."
+              );
+          }
+          sec_num++; // เพิ่มค่า sec_num ไป 1 สำหรับแต่ละ section
+        }
+      );
+    }
+
+    res
+      .status(201)
+      .send({
+        message: "Registration successful for all sections",
+      });
   });
 });
 
-// GET endpoint for retrieving 'ภาคบรรยาย' data
-app.get('/lecture-courses', (req, res) => {
-  const query = 'SELECT * FROM registration_records WHERE lectureOrLab = "ภาคบรรยาย"';
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error('Failed to retrieve lecture courses: ', err);
-      return res.status(500).send('Error retrieving lecture courses');
-    }
-    res.json(results);
-  });
-});
 
 // GET endpoint for retrieving all registration data
 app.get('/registration-data', (req, res) => {
@@ -1083,6 +1077,29 @@ app.get('/registall-data', (req, res) => {
   });
 });
 
+// GET endpoint for retrieving 'ภาคปฏิบัติ' data
+app.get('/lab-courses', (req, res) => {
+  const query = 'SELECT * FROM registration_records WHERE lectureOrLab = "ภาคปฏิบัติ"';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Failed to retrieve practical courses: ', err);
+      return res.status(500).send('Error retrieving practical courses');
+    }
+    res.json(results);
+  });
+});
+
+// GET endpoint for retrieving 'ภาคบรรยาย' data
+app.get('/lecture-courses', (req, res) => {
+  const query = 'SELECT * FROM registration_records WHERE lectureOrLab = "ภาคบรรยาย"';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Failed to retrieve lecture courses: ', err);
+      return res.status(500).send('Error retrieving lecture courses');
+    }
+    res.json(results);
+  });
+});
 app.get("/course-sections/:courseId", (req, res) => {
   const { courseId } = req.params;
   const query = "SELECT section FROM registration_records WHERE id = ?";
@@ -1094,6 +1111,7 @@ app.get("/course-sections/:courseId", (req, res) => {
     res.json(results);
   });
 });
+
 
 app.delete('/delete-course/:id', (req, res) => {
   const { id } = req.params;
