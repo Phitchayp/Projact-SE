@@ -36,6 +36,9 @@ function DateAdmin() {
     const [selectyear, setSelectyear] = useState("");
     const [selectterm, setSelectterm] = useState("");
 
+    const currentDate = new Date();
+    const currentDateString = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1).toString().padStart(2, '0') + '-' + currentDate.getDate().toString().padStart(2, '0');
+
     const handleDropdownChange5 = (event) => {
         setSelectyear(event.target.value);
     };
@@ -96,11 +99,28 @@ function DateAdmin() {
 
 
     const handleButtonSaveTeacher = () => {
-        if (!dayS || !dayF || !timeS || !timeF || !selectterm || !selectyear) {
+
+        if (!dayS || !dayF || !timeS || !timeF) {
+
             Swal.fire({
                 icon: 'error',
                 title: 'ไม่สามารถบันทึกได้',
                 text: 'โปรดเลือกวันที่และเวลาให้ครบถ้วน',
+                customClass: {
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    popup: 'kanit-font'
+                }
+            });;
+            return;
+        }
+        if ( !selectterm || !selectyear) {
+            Swal.fire({
+                icon: 'error',
+                title: 'ไม่สามารถบันทึกได้',
+                text: 'โปรดเลือกปีการศึกษาและภาคเรียนให้ครบถ้วน',
                 customClass: {
                     title: 'kanit-font',
                     content: 'kanit-font',
@@ -118,7 +138,23 @@ function DateAdmin() {
                 Swal.fire({
                     icon: 'error',
                     title: 'ไม่สามารถบันทึกได้',
-                    text: 'วันที่สิ้นสุดห้ามมาก่อนวันที่เริ่มต้น',
+                    text: 'วันที่เริ่มต้นห้ามมาหลังวันสิ้นสุด',
+                    customClass: {
+                        title: 'kanit-font',
+                        content: 'kanit-font',
+                        confirmButton: 'kanit-font',
+                        cancelButton: 'kanit-font',
+                        popup: 'kanit-font'
+                    }
+                });;
+                return;
+            }
+            
+            if (dayS < currentDateString) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ไม่สามารถบันทึกได้',
+                    text: 'วันที่เริ่มต้นห้ามมาหลังวันสิ้นสุด',
                     customClass: {
                         title: 'kanit-font',
                         content: 'kanit-font',
@@ -170,6 +206,7 @@ function DateAdmin() {
             setDayF("");
             setTimeF("");
 
+            console.log(currentDateString);
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
@@ -233,7 +270,7 @@ function DateAdmin() {
                 Swal.fire({
                     icon: 'error',
                     title: 'ไม่สามารถบันทึกได้',
-                    text: 'วันที่สิ้นสุดห้ามมาก่อนวันที่เริ่มต้น',
+                    text: 'วันที่เริ่มต้นห้ามมาหลังวันสิ้นสุด',
                     customClass: {
                         title: 'kanit-font',
                         content: 'kanit-font',
