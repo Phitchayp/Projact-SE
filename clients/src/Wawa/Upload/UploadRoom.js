@@ -118,7 +118,7 @@ const UploadRoom = ({ selectedValue8, selectedValue9 }) => {
 
 
   return (
-    <div className="Pop ">
+    <div className="Pop " style={{fontFamily:'kanit'}}>
 
       <div className='in-Room'>
 

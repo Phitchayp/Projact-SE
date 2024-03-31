@@ -21,6 +21,7 @@ function handleClick(event) {
     });
 }
 
+
 function BoxImportCourse() {
     // สร้างข้อมูลตาราง
     const tableData = [2569, 2568, 2567, 2566, 2565, 2564, 2563, 2562, 2561, 2560, 2559, 2558, 2557, 2556, 2555, 'วิชาบังคับ', 'วิชาเลือก', 'วิชาแกน', 1, 2, 3, 4];
@@ -57,6 +58,26 @@ function BoxImportCourse() {
     const handleDropdownChange6 = (event) => {
         setselectcourse1(event.target.value);
     };
+
+    const [dateTime, setDateTime] = useState('');
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const thaiDateTime = new Date().toLocaleString('th-TH', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+       
+      });
+      setDateTime(thaiDateTime);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
     const [courses, setCourses] = useState([]);
     useEffect(() => {
@@ -116,6 +137,7 @@ function BoxImportCourse() {
                         <div>
                             <div className='DateAdmin-text'>
                                 <h>นำข้อมูลรายวิชาเข้าสู่ระบบ</h>
+                                <br></br><p2 style={{color:'#CD5C5C' , fontSize:'15px'}}>{dateTime} น.</p2>
                             </div>
                             <div className='container-boximport' style={{ marginTop: '20px' }} >
                                 <div className='backgroung-color22'>
