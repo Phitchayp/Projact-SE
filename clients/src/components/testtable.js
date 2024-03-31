@@ -7,6 +7,7 @@ import TimePickerTa from "./Timepicker";
 import CheckBoxRe from "./Checkbox";
 import TestTableDropdown from "./roomfromdb";
 import Axios from "axios";
+import RegisResultTable from "./RegisResultTable";
 
 class RegisTa extends React.Component {
   state = {
@@ -27,7 +28,7 @@ class RegisTa extends React.Component {
     try {
       // Make sure the URLs match your server's endpoints
       const practicalResponse = await Axios.get(
-        "http://localhost:3001/practical-courses"
+        "http://localhost:3001/lab-courses"
       );
       const lectureResponse = await Axios.get(
         "http://localhost:3001/lecture-courses"
@@ -57,8 +58,9 @@ class RegisTa extends React.Component {
   fetchCourses = async () => {
     try {
       // สมมติมี endpoint แยกสำหรับภาคบรรยายและภาคปฏิบัติ
+      
       const lectureResponse = await Axios.get("http://localhost:3001/lecture-courses");
-      const practicalResponse = await Axios.get("http://localhost:3001/practical-courses");
+      const practicalResponse = await Axios.get("http://localhost:3001/lab-courses");
       this.setState({
         lectureCourses: lectureResponse.data,
         practicalCourses: practicalResponse.data,
@@ -73,19 +75,31 @@ class RegisTa extends React.Component {
       <tr key={index}>
         {/* Your other table cells */}
         <td>{section.section}</td>
+        
         {/* More table cells based on the section data */}
       </tr>
     ));
   };
-  fetchLectureData = async () => {
-    try {
-      const response = await Axios.get("http://localhost:3001/lecture-courses"); // Your backend endpoint
-      this.setState({ lectureData: response.data });
-    } catch (error) {
-      console.error("Failed to fetch lecture data:", error);
-      // Handle error here
-    }
-  };
+
+  // fetchLectureData = async () => {
+  //   try {
+  //     const response = await Axios.get("http://localhost:3001/lecture-courses"); // Your backend endpoint
+  //     this.setState({ lectureData: response.data });
+  //   } catch (error) {
+  //     console.error("Failed to fetch lecture data:", error);
+  //     // Handle error here
+  //   }
+  // };
+
+  // fetchLabData = async () => {
+  //   try {
+  //     const response = await Axios.get("http://localhost:3001/practical-courses"); // Your backend endpoint
+  //     this.setState({ practicalCourse: response.data });
+  //   } catch (error) {
+  //     console.error("Failed to fetch practicalCourse data:", error);
+  //     // Handle error here
+  //   }
+  // };
   handleDeleteRow = (courseId) => {
     Axios.delete(`http://localhost:3001/delete-course/${courseId}`)
       .then(response => {
@@ -104,18 +118,13 @@ class RegisTa extends React.Component {
   };
 
 
+
   renderCoursesLec = (courses) => {
-    // const [selectedDay, setSelectedDay] = useState(""); 
-    // const handleDropdownDay = (event) => {
-    //   const selectedValue = event.target.value; // ค่าที่ถูกเลือกจาก dropdown
-    //   setSelectedDay(selectedValue); // เก็บค่าที่ถูกเลือกไว้ใน state
-    // };
-    
 
     return courses.flatMap((course, index) => (
       Array.from({ length: course.section }, (_, sectionIndex) => {
-        const totalCredits = 800 + sectionIndex; // บวกค่าของ index และ sectionIndex เข้ากับ 800
-        const key = `${index}-${sectionIndex}`; // สร้าง key จากการรวม index และ sectionIndex
+        const totalCredits = 800 + sectionIndex; 
+        const key = `${index}-${sectionIndex}`; 
   
         return (
           <tr key={key}>
@@ -133,8 +142,8 @@ class RegisTa extends React.Component {
             <td>{course.subject_id}</td>
             <td>{course.subject_name}</td>
             <td>{course.credit}</td>
-            <td>1</td> {/* นับเป็น 800 ตลอด */}
-            <td>{totalCredits}</td> {/* แสดงผลรวมของ 800 และค่า index และ sectionIndex */}
+            <td>1</td> 
+            <td>{course.sec_num}</td> {/* แสดงผลรวมของ 800 และค่า index และ sectionIndex */}
             <td>
               <div className="testtable-inputNumNisit">
                 <InputNumNisit></InputNumNisit>
@@ -198,7 +207,7 @@ class RegisTa extends React.Component {
             <td>{course.subject_name}</td>
             <td>{course.credit}</td>
             <td>1</td>
-            <td>{totalCredit}</td>
+            <td>{course.sec_num}</td>
             <td>
               <div className="testtable-inputNumNisit">
                 <InputNumNisit></InputNumNisit>
