@@ -8,11 +8,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '123456',
-  database: 'databasese',
-  port: '3306'
+  // host: '127.0.0.1',
+  // user: 'root',
+  // password: '123456',
+  // database: 'databasese',
+  // port: '3306'
   
   //pond
   // host: 'localhost',
@@ -30,10 +30,10 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  // host: 'localhost',
-  // user: 'root',
-  // password: '12345678',
-  // database: 'project_se',
+  host: 'localhost',
+  user: 'root',
+  password: '12345678',
+  database: 'project_se',
 
   // host: '10.64.79.183',
   // user: 'dbSE',

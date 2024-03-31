@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 
 
 // Define the days of the week
-const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 // Define the time slots
 const timeSlots = [
@@ -449,9 +449,14 @@ function ResultTeacher() {
                     // Add a class 'subject-cell' to the cell that will have a subject
                     return (
                       <td key={`${rowIndex}-${colIndex}`} colSpan={course.span} className="subject-cell">
-                        {course.name}
+                        {course.idsubject} - {course.name}
                         <br />
-                        {course.idsubject}
+                        <div>
+                          <div >room :   {course.room}</div>
+                          
+                          <div >sec :   {course.sec}</div>
+                        </div>
+                        
                       </td>
                     );
                   } else if (!dayCourses.some(c => colIndex >= c.startSlot && colIndex < c.startSlot + c.span)) {
