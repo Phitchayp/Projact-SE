@@ -69,9 +69,11 @@
 
 .HeaderTeacher-text{
     font-family: 'Kanit', sans-serif;
-    font-size: 19px;
+    font-size: 15px;
     align-self: center;
     margin: 10px;
+    font-weight: bolder;
+    color: #3D6B66;
 
 
 }

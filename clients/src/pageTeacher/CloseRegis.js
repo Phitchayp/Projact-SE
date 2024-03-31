@@ -18,14 +18,14 @@ function CloseRegis() {
             });
             setDateTime(thaiDateTime);
         }, 1000);
-        
+
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className='turnleft-all' style={{ fontFamily:'kanit'}}>
-            <div style={{color:'#CD5C5C' , fontSize:'15px'}}>
-            <p2 style={{color:'#CD5C5C' , fontSize:'15px',fontFamily: 'kanit', fontWeight: 'bold'}}>{dateTime}</p2>
+        <div className='turnleft-all' style={{ fontFamily: 'kanit' }}>
+            <div style={{ color: '#CD5C5C', fontSize: '15px' }}>
+                <p2 style={{ color: '#CD5C5C', fontSize: '15px', fontFamily: 'kanit', fontWeight: 'bold' }}>{dateTime}</p2>
             </div>
             <div className='noti-text'>
                 <Icon style={{ marginRight: '10px' }} />
