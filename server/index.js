@@ -2,14 +2,6 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql');
 const cors = require('cors');
-// const session = require('express-session');
-
-
-// app.use(session({
-//   secret: 'your-secret-key',
-//   resave: false,
-//   saveUninitialized: true,
-// }));
 
 app.use(cors());
 app.use(express.json());
@@ -20,6 +12,7 @@ const db = mysql.createConnection({
   // password: '123456',
   // database: 'databasese',
   // port: '3306'
+  
   //pond
   // host: 'localhost',
   // user: 'root',
@@ -1083,7 +1076,11 @@ app.post("/register", (req, res) => {
 
 // GET endpoint for retrieving all registration data
 app.get('/registration-data', (req, res) => {
-  const query = 'SELECT * FROM registration_records';
+  const query = `
+    SELECT *
+    FROM courset
+    WHERE (course_year, term) IN (SELECT course_year, term FROM timeteacher)
+  `;
   db.query(query, (err, results) => {
     if (err) {
       console.error('Failed to retrieve registration data: ', err);
@@ -1092,6 +1089,7 @@ app.get('/registration-data', (req, res) => {
     res.json(results);
   });
 });
+
 
 app.get('/registall-data', (req, res) => {
   const myyear2 = req.query.myyear2;
@@ -1183,6 +1181,17 @@ app.get('/regisTearTerm', (req, res) => {
 app.delete('/delete-course/:id', (req, res) => {
   const { id } = req.params;
   const query = 'DELETE FROM registration_records WHERE id = ?';
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Failed to delete course:', err);
+      return res.status(500).send('Error deleting course');
+    }
+    res.send('Course deleted successfully');
+  });
+});
+app.delete('/delete-courset/:id', (req, res) => {
+  const { id } = req.params;
+  const query = 'DELETE FROM courset WHERE id = ?';
   db.query(query, [id], (err, result) => {
     if (err) {
       console.error('Failed to delete course:', err);
