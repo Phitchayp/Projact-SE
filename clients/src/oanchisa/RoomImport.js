@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './RoomImport.css';
 import axios from 'axios';
 import { FaFileLines } from "react-icons/fa6";
@@ -23,6 +23,28 @@ function RoomImport() {
   const [selectedValue8, setSelectedValue8] = useState('');
   const [selectedValue9, setSelectedValue9] = useState('');
 
+  
+  const [dateTime, setDateTime] = useState('');
+
+  useEffect(() => {
+      const interval = setInterval(() => {
+        const thaiDateTime = new Date().toLocaleString('th-TH', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric',
+         
+        });
+        setDateTime(thaiDateTime);
+      }, 1000);
+  
+      return () => clearInterval(interval);
+    }, []);
+
+
   const handleDropdownChange8 = (event) => {
     setSelectedValue8(event.target.value);
   };
@@ -33,12 +55,13 @@ function RoomImport() {
   return (
     <div className='turnleft-all'>
       <div>
-        <h className='DateAdmin-text'>นำข้อมูลห้องเรียนเข้าสู่ระบบ</h><p className='DateAdmin-Text'>*ไฟล์นามสกุล .xlsx เท่านั้น</p>
+        <h className='DateAdmin-text'>นำข้อมูลห้องเรียนเข้าสู่ระบบ</h><span style={{ fontFamily: 'kanit', fontSize: '14px', color: '#708090', fontWeight: 'bold' }}> (*ไฟล์นามสกุล .xlsx เท่านั้น)</span>
+        <br></br><p2 style={{color:'#CD5C5C' , fontSize:'15px',fontFamily: 'kanit', fontWeight: 'bold'}}>{dateTime} น.</p2>
       </div>
-      <div>
+      <div style={{marginTop:'40px'}}>
         <UploadRoom />
       </div>
-      <h3 style={{ marginTop: '100px', color: '#8C3941' }}>ห้องเรียนที่เปิดสอน</h3>
+      <h3 style={{ marginTop: '100px' ,fontFamily: 'kanit'}}>ห้องเรียนที่เปิดสอน</h3>
 
       <div>
         <RoomList />

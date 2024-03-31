@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import "./RegisResultTable.css"; // Import CSS file for table styling
 import MyImage from "../assets/Vector.png";
 import RegisTa from "./testtable";
@@ -15,6 +15,27 @@ function RegisResultTable() {
 
   const [selectyear, setSelectyear] = useState("");
   const [selectterm, setSelectterm] = useState("");
+
+  const [dateTime, setDateTime] = useState('');
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const thaiDateTime = new Date().toLocaleString('th-TH', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+       
+      });
+      setDateTime(thaiDateTime);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
 
   document.addEventListener("DOMContentLoaded", function () {
     // เพิ่มโค้ดที่ต้องการให้ทำงานหลังจากการโหลดหน้าเว็บเสร็จสมบูรณ์ที่นี่
@@ -213,6 +234,7 @@ function RegisResultTable() {
     <div style={{ fontFamily: 'Kanit' }}>
       <div class="searchBar-texthead">
         <p1>ลงทะเบียนรายวิชา</p1>
+        <br></br><p2 style={{color:'#CD5C5C' , fontSize:'15px'}}>{dateTime} น.</p2>
       </div>
       <div style={{ marginTop: "35px" }}>
         <div class="searchBar-container">

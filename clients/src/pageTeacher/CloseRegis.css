@@ -1,0 +1,28 @@
+.noti-text{
+    display: flex;
+    flex: auto;
+    width: 1100px; 
+    height: 100px; 
+    background-color: white;
+    border-radius: 20px; 
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    justify-content: center; 
+    text-align: center; 
+    
+
+
+}
+
+
+.noti-text {
+    display: flex;
+    align-items: center;
+    margin-top: 20px; /* เพิ่มระยะห่างด้านบน */
+}
+
+.noti-text span {
+    font-size: 18px; /* ปรับขนาดข้อความ */
+    font-weight: bold; /* ทำให้ข้อความหนาขึ้น */
+    color: #333; /* สีข้อความ */
+}

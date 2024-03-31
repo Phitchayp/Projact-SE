@@ -19,6 +19,26 @@ function CheckboxOpenCourse() {
     const [isDataSaved, setDataSaved] = useState(false);
     const [subjects, setsubjects] = useState([]);
 
+    const [dateTime, setDateTime] = useState('');
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+          const thaiDateTime = new Date().toLocaleString('th-TH', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+           
+          });
+          setDateTime(thaiDateTime);
+        }, 1000);
+    
+        return () => clearInterval(interval);
+      }, []);
+
     useEffect(() => {
         axios.get("http://127.0.0.1:3001/getsub")
             .then((response) => {
@@ -337,6 +357,7 @@ function CheckboxOpenCourse() {
         <div className='turnleft-all'>
             <div className='DateAdmin-text'>
                 <h style={{ color: '#8b0000' }}>เลือกรายวิชาที่จะเปิดสอน</h>
+                <br></br><p2 style={{color:'#CD5C5C' , fontSize:'15px'}}>{dateTime} น.</p2>
             </div>
             <div className='CheckboxOpenCourse-box'>
                 <div className='CheckboxOpenCourse-dropdown' >
