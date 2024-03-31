@@ -19,12 +19,14 @@ class ResultTableTeacherRed extends React.Component {
       this.fetchData();
     }
   }
+  
 
   fetchData = async () => {
     this.setState({ isLoading: true, error: null }); // Reset loading state and clear errors
+    const name = sessionStorage.getItem("name")
     try {
       const { myyear2, termsearch } = this.props;
-      const response = await Axios.get(`http://127.0.0.1:3001/registall-data?myyear2=${myyear2}&termsearch=${termsearch}`);
+      const response = await Axios.get(`http://127.0.0.1:3001/registall-data?myyear2=${myyear2}&termsearch=${termsearch}&name=${name}`);
       this.setState({
         registrationData: response.data,
         isLoading: false, // Data fetched, loading done
