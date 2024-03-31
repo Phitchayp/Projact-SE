@@ -99,7 +99,9 @@ function DateAdmin() {
 
 
     const handleButtonSaveTeacher = () => {
+
         if (!dayS || !dayF || !timeS || !timeF) {
+
             Swal.fire({
                 icon: 'error',
                 title: 'ไม่สามารถบันทึกได้',
@@ -423,7 +425,7 @@ function DateAdmin() {
     };
     return (
         <div className='turnleft-all'>
-            <h className='DateAdmin-text' >ตั้งเวลาการใช้งานระบบ</h>
+            <h className='DateAdmin-text' >ตั้งเวลาการใช้งานระบบ ของอาจารย์/ฝ่ายการศึกษา</h>
             <div className='custom-date-picker-all2'>
                 <div className='Down-picker'>
                     <h className='text-header' >ระบบลงทะเบียน</h>
@@ -431,135 +433,153 @@ function DateAdmin() {
                     <div >
                         <p className='DateAdmin-text'>อาจารย์</p>
                         {/* <p className='DateAdmin-text2'>เวลาใช้งานการลงทะเบียน</p> */}
-                        <div style={{ display: 'flex', position: 'relative' }}>
-                            <div>
-                                <a>ปีการศึกษา</a>
-                                <div>
-                                    <select value={selectyear.course_year} onChange={(event) => handleDropdownChange5(event, "course_year")}>
-                                        <option value=""></option>
-                                        <option value="2569">2569</option>
-                                        <option value="2568">2568</option>
-                                        <option value="2567">2567</option>
-                                        <option value="2566">2566</option>
-                                        <option value="2565">2565</option>
-                                        <option value="2564">2564</option>
-                                        <option value="2563">2563</option>
-                                        <option value="2562">2562</option>
-                                        <option value="2561">2561</option>
-                                        <option value="2560">2560</option>
-                                        <option value="2559">2559</option>
-                                        <option value="2558">2558</option>
-                                        <option value="2557">2557</option>
-                                        <option value="2556">2556</option>
-                                        <option value="2555">2555</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div>
-                                <a>ภาคเรียน</a>
-                                <div >
-                                    <select value={selectterm.term} onChange={(event) => handleDropdownChange6(event, "term")}>
-                                        <option value=""></option>
-                                        <option value="ภาคต้น">ภาคต้น</option>
-                                        <option value="ภาคปลาย">ภาคปลาย</option>
-                                    </select>
-                                </div>
-                                {/* </div> */}
-                            </div>
-                        </div>
+
                     </div>
-                    <div className='container-time'>
+                    <div className='container-time2'>
                         <div>
-                            <div>
+                            <div style={{ marginBottom: '30px' }} className="time-slot">
                                 {teacherTime.length > 0 && teacherTime.map((time, index) => (
-                                    <div key={index} className="time-slot">
+                                    <div key={index}>
                                         <div className="time-info" style={{ fontFamily: "kanit" }}>
-                                            <p>ระยะเวลาการใช้งานระบบปัจจุบันของ <span className="teacher">อาจารย์</span></p>
-                                            <p><span className="time-label">เริ่มต้น:</span> วันที่   {new Date(time.dayS).toLocaleDateString()}  , เวลา {time.timeS}  </p>
-                                            <p><span className="time-labe2">สิ้นสุด:</span> วันที่   {new Date(time.dayF).toLocaleDateString()}  , เวลา {time.timeF}  </p>
+                                            <p>ระยะเวลาการใช้งานระบบปัจจุบันของ <span className="teacher">อาจารย์</span><span className='time-labe3' style={{marginLeft:'20px'}}>{time.term}<span style={{marginLeft:'10px'}}>{time.course_year}</span></span></p>
+                                            <p><span className="time-label">เริ่มต้น:</span><span style={{marginLeft:'10px'}}></span>วันที่   {new Date(time.dayS).toLocaleDateString()}  , เวลา {time.timeS}  </p>
+                                            <p><span className="time-labe2">สิ้นสุด:</span><span style={{marginLeft:'6px'}}></span> วันที่   {new Date(time.dayF).toLocaleDateString()}  , เวลา {time.timeF}  </p>
+                                            
                                         </div>
                                     </div>
                                 ))}
                             </div>
 
                         </div>
-                        <div className='column-date'>
+                        <div style={{ marginTop: '45px' }}>
+                            <div style={{ marginBottom: '15px' }}>
+                                {/* ก้อนด้อปดาว */}
+                                <div className='dropdown-boxbox'>
+                                <p3 style={{fontFamily:'kanit', fontSize:'13px',color:'#ab4d5b', fontWeight:'bold' , marginLeft:'20px'}}>*กรุณาเลือกปีการศึกษาและภาคเรียนที่ต้องการเปิดระบบ</p3>
+                                    <div style={{ marginLeft:'48px', marginTop:'5px'}} className='dropdown-containerja'>
+                                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+                                            <div>
+                                                <a style={{ fontSize: '13px' }}>ปีการศึกษา</a>
+                                                <div>
+                                                    <select value={selectyear.course_year} onChange={(event) => handleDropdownChange5(event, "course_year")} style={{ width: '120px', hight: '32px' }}>
+                                                        <option value=""></option>
+                                                        <option value="2569">2569</option>
+                                                        <option value="2568">2568</option>
+                                                        <option value="2567">2567</option>
+                                                        <option value="2566">2566</option>
+                                                        <option value="2565">2565</option>
+                                                        <option value="2564">2564</option>
+                                                        <option value="2563">2563</option>
+                                                        <option value="2562">2562</option>
+                                                        <option value="2561">2561</option>
+                                                        <option value="2560">2560</option>
+                                                        <option value="2559">2559</option>
+                                                        <option value="2558">2558</option>
+                                                        <option value="2557">2557</option>
+                                                        <option value="2556">2556</option>
+                                                        <option value="2555">2555</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <a style={{ fontSize: '13px' }}>ภาคเรียน</a>
+                                                <div >
+                                                    <select value={selectterm.term} onChange={(event) => handleDropdownChange6(event, "term")} style={{ width: '120px', hight: '32px' }}>
+                                                        <option value=""></option>
+                                                        <option value="ภาคต้น">ภาคต้น</option>
+                                                        <option value="ภาคปลาย">ภาคปลาย</option>
+                                                    </select>
+                                                </div>
 
-
-                            <div>
-                                <div className='custom-date-picker-all'>
-                                    <div>
-                                        <p className='DateAdmin-text3'>เริ่มต้น</p>
-                                    </div>
-                                    <div className="custom-date-picker-container">
-                                        <IconDate className="icon-date" />
-                                        <DatePicker
-                                            selected={startDate}
-                                            onChange={handleStartDateChange}
-                                            dateFormat="yyyy-MM-dd"
-                                            showYearDropdown
-                                            showMonthDropdown
-                                            dropdownMode="select"
-                                            placeholderText="เลือกวันที่เริ่มต้น"
-                                            className="custom-date-picker"
-                                        />
-                                    </div>
-                                    <div className='Down-picker'>
-                                        <p className='DateAdmin-text3'>สิ้นสุด</p>
-                                    </div>
-                                    <div className="custom-date-picker-container">
-                                        <IconDate className="icon-date" />
-                                        <DatePicker
-                                            selected={endDate}
-                                            onChange={handleEndDateChange}
-                                            dateFormat="yyyy-MM-dd"
-                                            showYearDropdown
-                                            showMonthDropdown
-                                            dropdownMode="select"
-                                            placeholderText="เลือกวันที่สิ้นสุด"
-                                            className="custom-date-picker"
-                                        />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className='custom-date-picker-all2' >
-                                <p className='DateAdmin-text3'>เริ่มต้น</p>
-                                <div >
-                                    <div className="custom-date-picker-container" >
-                                        <IconTime className="icon-date" />
-                                        <TimePicker
-                                            selected={startTime}
-                                            onChange={handleStartTimeChange}
-                                            value={startTime}
-                                            defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
-                                            showNow={false}
-                                            format="HH:mm:ss"
-                                            use12Hours={false}
-                                            // suffixIcon={<i className="fas fa-wifi" />}
-                                            className="custom-time-picker"
-                                        />
-                                    </div>
-                                    <div className='Down-picker'>
-                                        <p className='DateAdmin-text3'>สิ้นสุด</p>
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <IconTime className="icon-date" />
-                                        <TimePicker
-                                            selected={endTime}
-                                            onChange={handleEndTimeChange}
-                                            value={endTime}
-                                            defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
-                                            showNow={false}
-                                            format="HH:mm:ss"
-                                            use12Hours={false}
-                                            // suffixIcon={<i className="fas fa-wifi" />}
-                                            className="custom-time-picker"
-                                        />
+                            <div className='column-date'>
+
+
+                                <div>
+                                    <div className='custom-date-picker-all'>
+                                        <div>
+                                            <p className='DateAdmin-text3'>เริ่มต้น</p>
+                                        </div>
+                                        <div className="custom-date-picker-container">
+                                            <IconDate className="icon-date" />
+                                            <DatePicker
+                                                selected={startDate}
+                                                onChange={handleStartDateChange}
+                                                dateFormat="yyyy-MM-dd"
+                                                showYearDropdown
+                                                showMonthDropdown
+                                                dropdownMode="select"
+                                                placeholderText="เลือกวันที่เริ่มต้น"
+                                                className="custom-date-picker"
+                                            />
+                                        </div>
+                                        <div className='Down-picker'>
+                                            <p className='DateAdmin-text3'>สิ้นสุด</p>
+                                        </div>
+                                        <div className="custom-date-picker-container">
+                                            <IconDate className="icon-date" />
+                                            <DatePicker
+                                                selected={endDate}
+                                                onChange={handleEndDateChange}
+                                                dateFormat="yyyy-MM-dd"
+                                                showYearDropdown
+                                                showMonthDropdown
+                                                dropdownMode="select"
+                                                placeholderText="เลือกวันที่สิ้นสุด"
+                                                className="custom-date-picker"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
+                                <div className='custom-date-picker-all2' >
+                                    <p className='DateAdmin-text3'>เริ่มต้น</p>
+                                    <div >
+                                        <div className="custom-date-picker-container" >
+                                            <IconTime className="icon-date" />
+                                            <TimePicker
+                                                selected={startTime}
+                                                onChange={handleStartTimeChange}
+                                                value={startTime}
+                                                defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
+                                                showNow={false}
+                                                format="HH:mm:ss"
+                                                use12Hours={false}
+                                                // suffixIcon={<i className="fas fa-wifi" />}
+                                                className="custom-time-picker"
+                                            />
+                                        </div>
+                                        <div className='Down-picker'>
+                                            <p className='DateAdmin-text3'>สิ้นสุด</p>
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                            <IconTime className="icon-date" />
+                                            <TimePicker
+                                                selected={endTime}
+                                                onChange={handleEndTimeChange}
+                                                value={endTime}
+                                                defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')}
+                                                showNow={false}
+                                                format="HH:mm:ss"
+                                                use12Hours={false}
+                                                // suffixIcon={<i className="fas fa-wifi" />}
+                                                className="custom-time-picker"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </div>
-                            <SaveTime onClick={handleButtonSaveTeacher} />
+                            <div style={{ marginLeft: '540px' }}>
+
+                                <SaveTime onClick={handleButtonSaveTeacher} />
+                            </div>
                         </div>
+
                     </div>
                 </div>
                 <div className='line'></div>
@@ -572,13 +592,13 @@ function DateAdmin() {
                         {/* <p className='DateAdmin-text2'>เวลาใช้งานการนำเข้ารายวิชาและเวลาเปิดสอนรายวิชา</p> */}
                     </div>
                     <div className='container-time'>
-                        <div>
+                        <div className="time-slot2">
                             {eduTime.length > 0 && eduTime.map((time2, index) => (
-                                <div key={index} className="time-slot2">
+                                <div key={index}>
                                     <div className="time-info" style={{ fontFamily: "kanit" }}>
                                         <p>ระยะเวลาการใช้งานระบบปัจจุบันของ <span className="teacher">ฝ่ายการศึกษา</span></p>
-                                        <p><span className="time-label">เริ่มต้น:</span> วันที่   {new Date(time2.dayS).toLocaleDateString()}  , เวลา {time2.timeS}  </p>
-                                        <p><span className="time-labe2">สิ้นสุด:</span> วันที่   {new Date(time2.dayF).toLocaleDateString()}  , เวลา {time2.timeF}  </p>
+                                        <p><span className="time-label">เริ่มต้น:</span><span style={{marginLeft:'8px'}}></span> วันที่   {new Date(time2.dayS).toLocaleDateString()}  , เวลา {time2.timeS}  </p>
+                                        <p><span className="time-labe2">สิ้นสุด:</span><span style={{marginLeft:'6px'}}></span> วันที่   {new Date(time2.dayF).toLocaleDateString()}  , เวลา {time2.timeF}  </p>
                                     </div>
                                 </div>
                             ))}
@@ -660,6 +680,9 @@ function DateAdmin() {
                                     </div>
                                 </div>
                             </div>
+
+                        </div>
+                        <div style={{ marginLeft: '540px' }}>
                             <SaveTime onClick={handleButtonSaveEdu} />
                         </div>
                     </div>

@@ -10,6 +10,7 @@
     border-radius: 10px;
     background-color: #ffffff;
     contain: strict;
+    margin-left: 4px
 }
 
 .searchBar-searchBox {
