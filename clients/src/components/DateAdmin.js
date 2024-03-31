@@ -33,7 +33,16 @@ function DateAdmin() {
 
     const [teacherTime, setTeacherTime] = useState([]);
     const [eduTime, seteduTime] = useState([]);
+    const [selectyear, setSelectyear] = useState("");
+    const [selectterm, setSelectterm] = useState("");
 
+    const handleDropdownChange5 = (event) => {
+        setSelectyear(event.target.value);
+    };
+
+    const handleDropdownChange6 = (event) => {
+        setSelectterm(event.target.value);
+    };
 
     useEffect(() => {
         // ดึงข้อมูลเวลาของอาจารย์จากฐานข้อมูล
@@ -87,7 +96,7 @@ function DateAdmin() {
 
 
     const handleButtonSaveTeacher = () => {
-        if (!dayS || !dayF || !timeS || !timeF) {
+        if (!dayS || !dayF || !timeS || !timeF|| !selectterm || !selectyear) {
             Swal.fire({
                 icon: 'error',
                 title: 'ไม่สามารถบันทึกได้',
@@ -147,6 +156,8 @@ function DateAdmin() {
             timeS: timeS,
             dayF: dayF,
             timeF: timeF,
+            selectyear: selectyear,
+            selectterm: selectterm
         }).then(response => {
             console.log(response.data);
             // ทำการรีเซ็ตค่าในฟอร์มหลังจากส่งข้อมูลเรียบร้อย
@@ -381,10 +392,46 @@ function DateAdmin() {
             <div className='custom-date-picker-all2'>
                 <div className='Down-picker'>
                     <h className='text-header' >ระบบลงทะเบียน</h>
-
+                    {/* justifyContent:'flex-start', flexDirection: 'row'  */}
                     <div >
                         <p className='DateAdmin-text'>อาจารย์</p>
                         {/* <p className='DateAdmin-text2'>เวลาใช้งานการลงทะเบียน</p> */}
+                        <div style={{ display: 'flex', position: 'relative' }}>
+                            <div>
+                                <a>ปีการศึกษา</a>
+                                <div>
+                                    <select value={selectyear.course_year} onChange={(event) => handleDropdownChange5(event, "course_year")}>
+                                        <option value=""></option>
+                                        <option value="2569">2569</option>
+                                        <option value="2568">2568</option>
+                                        <option value="2567">2567</option>
+                                        <option value="2566">2566</option>
+                                        <option value="2565">2565</option>
+                                        <option value="2564">2564</option>
+                                        <option value="2563">2563</option>
+                                        <option value="2562">2562</option>
+                                        <option value="2561">2561</option>
+                                        <option value="2560">2560</option>
+                                        <option value="2559">2559</option>
+                                        <option value="2558">2558</option>
+                                        <option value="2557">2557</option>
+                                        <option value="2556">2556</option>
+                                        <option value="2555">2555</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <a>ภาคเรียน</a>
+                                <div >
+                                    <select value={selectterm.term} onChange={(event) => handleDropdownChange6(event, "term")}>
+                                        <option value=""></option>
+                                        <option value="ภาคต้น">ภาคต้น</option>
+                                        <option value="ภาคปลาย">ภาคปลาย</option>
+                                    </select>
+                                </div>
+                                {/* </div> */}
+                            </div>
+                        </div>
                     </div>
                     <div className='container-time'>
                         <div>
@@ -584,7 +631,7 @@ function DateAdmin() {
                 </div>
             </div>
 
-        </div>
+        </div >
     );
 }
 
