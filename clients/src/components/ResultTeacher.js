@@ -37,7 +37,7 @@ const timeSlots = [
   "18:30-19:00",
   "19:00-19:30",
   "19:30-20:00",
-  
+
 ];
 
 // Data for the table (excluding the first column and row)
@@ -255,9 +255,11 @@ function ResultTeacher() {
   const [myyear2, setYear2] = useState("");
   const [termsearch, setTerm] = useState("");
   const [courses2, setCourses2] = useState([]);
+
+
   const search2 = () => {
     if (myyear2 === "" || termsearch === "") {
-      // ถ้า myyear2 หรือ termseach ว่าง ให้แสดงข้อความแจ้งเตือนและไม่ทำอะไรเพิ่ม
+      // ถ้า myyear2 หรือ termsearch ว่าง ให้แสดงข้อความแจ้งเตือนและไม่ทำอะไรเพิ่ม
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -273,18 +275,23 @@ function ResultTeacher() {
         }
       });
     } else {
-      // ถ้า myyear2 และ termseach ไม่ว่าง ให้ส่ง request ไปยัง API ตามปีการศึกษาและเทอมที่เลือก
-      axios.get("http://127.0.0.1:3001/getsubsearch1/" + myyear2 + "/" + termsearch)
+      // ถ้า myyear2 และ termsearch ไม่ว่าง ให้ส่ง request ไปยัง API ตามปีการศึกษาและเทอมที่เลือก
+      axios.get(`http://127.0.0.1:3001/registall-data?myyear2=${myyear2}&termsearch=${termsearch}`) // ส่งค่า myyear2 และ termsearch ผ่าน query string
         .then((response) => {
           setCourses2(response.data);
           console.log("เปิดสอน" + myyear2 + "เทอม" + termsearch); // แสดงปีการศึกษาและเทอมที่เลือก
-        })
+          fetchData();
+          
+        } ,[myyear2, termsearch])
         .catch((error) => {
           console.error('Error fetching course data:', error);
         });
     }
   };
-
+  
+  
+  
+  
 
   // Define the formatTime function above its first use
   const formatTime = (time) => {
@@ -295,7 +302,7 @@ function ResultTeacher() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/registall-data");
+      const response = await axios.get(`http://127.0.0.1:3001/registall-data?myyear2=${myyear2}&termsearch=${termsearch}`);
       // Use the formatTime function here to map over and format your data
       const formattedSchedule = response.data.map(course => ({
         ...course,
@@ -312,7 +319,7 @@ function ResultTeacher() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/registall-data");
+        const response = await axios.get(`http://127.0.0.1:3001/registall-data?myyear2=${myyear2}&termsearch=${termsearch}`);
         // Use the formatTime function here to map over and format your data
         const formattedSchedule = response.data.map(course => ({
           ...course,
@@ -326,9 +333,8 @@ function ResultTeacher() {
       }
     };
 
-    fetchData();
-  }, []);
-
+    
+  }); // ให้ useEffect รันเมื่อ myyear2 หรือ termsearch เปลี่ยนแปลง
 
 
 
@@ -408,13 +414,13 @@ function ResultTeacher() {
 
             </select>
             <div style={{ marginLeft: '80px', marginTop: '-30px' }}>
-            <button onClick={() => { search2() }} className='CheckboxOpenCourse-button'  style={{backgroundColor:'#8C3941'}} >ค้นหา</button>
+              <button onClick={() => { search2() }} className='CheckboxOpenCourse-button' style={{ backgroundColor: '#8C3941' }} >ค้นหา</button>
             </div>
           </div>
-          
-          <p className="ResultTeacher-texthead" style={{marginTop:'30px'}}>
+
+          <p className="ResultTeacher-texthead" style={{ marginTop: '30px' }}>
             ตารางสอนของ อาจารย์  : {" "}
-            <span className="ResultTeacher-nametext" style={{color:'black'}}>{name}</span>
+            <span className="ResultTeacher-nametext" style={{ color: 'black' }}>{name}</span>
           </p>
 
 

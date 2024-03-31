@@ -1072,16 +1072,44 @@ app.get('/registration-data', (req, res) => {
     res.json(results);
   });
 });
+
 app.get('/registall-data', (req, res) => {
-  const query = 'SELECT * FROM courset';
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error('Failed to retrieve registration data: ', err);
-      return res.status(500).send('Error retrieving registration data');
-    }
-    res.json(results);
-  });
+  const myyear2 = req.query.myyear2;
+  const termsearch = req.query.termsearch;
+
+  console.log('SQL Query:', 'SELECT * FROM `courset` WHERE course_year=' + myyear2 + ' AND term=' + termsearch);
+
+  // เพิ่มเงื่อนไขตรวจสอบค่า myyear2 และ termsearch
+  if (!myyear2 || !termsearch) {
+    // ถ้าไม่มีค่า myyear2 หรือ termsearch ให้ส่งข้อความแจ้งเตือนและสิ้นสุดการทำงาน
+    return res.status(400).send("กรุณากรอกข้อมูลให้ครบถ้วน");
+  }
+  else {
+    db.query('SELECT * FROM `courset` WHERE course_year=? AND term=?', [myyear2, termsearch], (err, results) => {
+      if (err) {
+        console.error('Failed to retrieve registration data: ', err);
+        return res.status(500).send('Error retrieving registration data');
+      }
+      res.json(results);
+    });
+  }
 });
+
+
+
+
+
+// app.get('/regisTearTerm', (req, res) => {
+//   const query = 'SELECT * FROM courset';
+//   db.query(query, (err, results) => {
+//     if (err) {
+//       console.error('Failed to retrieve registration data: ', err);
+//       return res.status(500).send('Error retrieving registration data');
+//     }
+//     res.json(results);
+//   });
+// });
+
 
 app.get("/course-sections/:courseId", (req, res) => {
   const { courseId } = req.params;
