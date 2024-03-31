@@ -6,9 +6,11 @@ import searchIconCourse from "../assets/searchbar.svg";
 import newSearchIcon from "../assets/newsearch.png";
 import Axios from "axios";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import Roomsearch from "./roomsearch";
 
 function ResultRegisEdu() {
   const [selectedYear, setSelectedYear] = useState("");
+  const [selectYear, setSelectYear] = useState("");
   const [selectedTerm, setSelectedTerm] = useState("");
   const [selectTerm, setSelectTerm] = useState("");
   const [selectedRoom, setSelectedRoom] = useState("");
@@ -18,6 +20,7 @@ function ResultRegisEdu() {
 
   
   const handleDropdownChangeYear = (event) => {
+    setSelectYear(event.target.value);
     setSelectedYear(event.target.value);
   };
   const handleDropdownChangeTerm = (event) => {
@@ -350,17 +353,9 @@ function ResultRegisEdu() {
           </div>
 
           <div className="dropdown7">
-            <select value={selectedRoom} onChange={handleDropdownChangeRoom}>
-              <option value=""></option>
-              <option value="LabCom1">LabCom1</option>
-              <option value="LabCom2">LabCom2</option>
-              <option value="LabCom23">LabCom23</option>
-              <option value="LabComDat">LabComDat</option>
-              <option value="LabLogic15309">LabLogic15309</option>
-              <option value="LabLogic">LabLogic</option>
-              <option value="1969/1">1969/1</option>
-              <option value="25202">25202</option>
-            </select>
+            <div value={Roomsearch} onChange={handleDropdownChangeRoom}>
+            <Roomsearch/>
+            </div>
 
           </div>
           <div className="dropdownDay">
