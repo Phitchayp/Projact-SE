@@ -682,13 +682,13 @@ app.get('/gettimeteachercheck', (req, res) => {
         }
       } else if (formattedCurrentDate === mysqlDateStart && formattedCurrentTime < mysqlTimeStart) {
         // ระบบยังไม่เปิด
-        res.status(200).send("notpass");
+        res.status(200).send("notpass1"+mysqlDateStart + "ปัจจุบัน"+formattedCurrentDate +"final"+mysqlDateFinal+"Time"+mysqlTimeStart+"ปัจ"+formattedCurrentTime+"สิ้น"+mysqlTimeFinal);
       } else if (formattedCurrentDate === mysqlDateFinal && formattedCurrentTime <= mysqlTimeFinal) {
         // ระบบเปิด
         res.status(200).send("pass");
       } else {
         // ระบบปิด
-        res.status(200).send("notpass");
+        res.status(200).send("notpass2"+mysqlDateStart + "ปัจจุบัน"+formattedCurrentDate +"final"+mysqlDateFinal+"Time"+mysqlTimeStart+"ปัจ"+formattedCurrentTime+"สิ้น"+mysqlTimeFinal);
       }
 
     }
@@ -720,13 +720,13 @@ app.get('/gettimeeducheck', (req, res) => {
         }
       } else if (formattedCurrentDate === mysqlDateStart && formattedCurrentTime < mysqlTimeStart) {
         // ระบบยังไม่เปิด
-        res.status(200).send("notpass");
+        res.status(200).send("notpass1"+mysqlDateStart + "ปัจจุบัน"+formattedCurrentDate +"final"+mysqlDateFinal+"Time"+mysqlTimeStart+"ปัจ"+formattedCurrentTime+"สิ้น"+mysqlTimeFinal);
       } else if (formattedCurrentDate === mysqlDateFinal && formattedCurrentTime <= mysqlTimeFinal) {
         // ระบบเปิด
         res.status(200).send("pass");
       } else {
         // ระบบปิด
-        res.status(200).send("notpass");
+        res.status(200).send("notpass2   วันเริ่ม"+mysqlDateStart + "ปัจจุบัน"+formattedCurrentDate +"สิ้นสุด "+mysqlDateFinal+"เวลาเริ่ม: "+mysqlTimeStart+"ปัจ "+formattedCurrentTime+"สิ้น "+mysqlTimeFinal);
       }
 
     }

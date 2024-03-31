@@ -183,7 +183,7 @@ function BoxImportCourse() {
                                         <div className='container-boximport' style={{ marginTop: '20px' }} >
                                             <div className='backgroung-color22'>
                                                 <r style={{ color: '#8C3941', marginLeft: '15px' }}>นำเข้ารายวิชา </r>
-                                                <g style={{ color: '#838383' }}>  (*ครั้งละ 1 ไฟล์)</g>
+                                                <g style={{ color: '#838383' }}>  (*ครั้งละ 1 ไฟล์และไฟล์นามสกุล .xlsx เท่านั้น)</g>
 
                                                 <div className='container-inside' style={{ marginTop: '5px', marginLeft: '40px' }}>
                                                     <div>

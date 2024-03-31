@@ -269,9 +269,19 @@ function RegisResultTable() {
             {teacherTime.length > 0 && teacherTime.map((time, index) => (
               <div key={index}>
 
-                <div className="time-info2" style={{ fontFamily: "kanit" , marginTop:'10px'}}>
-                  <p2 style={{ color: '#CD5C5C', fontSize: '15px' }}>{dateTime}</p2><span className='time-labe4' style={{ marginLeft: '20px' }}>{time.term}<span style={{ marginLeft: '10px' }}>{time.course_year}</span></span>
+                <div style={{ flexDirection: 'row' }}>
 
+                  <div className="time-info2" style={{ fontFamily: "kanit", marginTop: '10px' }}>
+                    <p className='time-labe4' >{time.term}<span style={{ marginLeft: '10px' }}>{time.course_year}</span></p>
+                    <p2 style={{ color: '#CD5C5C', fontSize: '15px', marginLeft: '10px' }}>{dateTime}</p2>
+
+
+                  </div>
+                  <br></br>
+                  <p2 style={{ color: '#3a4746', fontSize: '14px', marginLeft: '10px', fontWeight: 'normal' }}>
+                    * กรุณาเลือกปีการศึกษา <span style={{ color: '#CD5C5C', fontWeight: 'bold' }}>{time.course_year}</span>
+                     <span style={{marginLeft:'5px'}}>และภาคเรียน</span> <span style={{ color: '#CD5C5C', fontWeight: 'bold' }}>{time.term}</span> ก่อนลงทะเบียน
+                  </p2>
 
                 </div>
               </div>
@@ -281,7 +291,7 @@ function RegisResultTable() {
         </div>
 
       </div>
-      <div style={{ marginTop: "35px" }}>
+      <div >
         <div class="searchBar-container">
           <div>
             <div style={{ marginTop: "35px", marginTop: '20px' }}>
