@@ -18,6 +18,8 @@ function RegisResultTable() {
 
   const [dateTime, setDateTime] = useState('');
 
+  const [teacherTime, setTeacherTime] = useState([]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       const thaiDateTime = new Date().toLocaleString('th-TH', {
@@ -28,13 +30,39 @@ function RegisResultTable() {
         hour: 'numeric',
         minute: 'numeric',
         second: 'numeric',
-       
+
       });
       setDateTime(thaiDateTime);
     }, 1000);
 
     return () => clearInterval(interval);
   }, []);
+
+  /// ดึงค่า ///
+  useEffect(() => {
+    // ดึงข้อมูลเวลาของอาจารย์จากฐานข้อมูล
+    Axios.get("http://localhost:3001/gettimeteacher")
+      .then(response => {
+        // เซ็ตข้อมูลเวลาของอาจารย์ใน state
+        setTeacherTime(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'ไม่สามารถดึงข้อมูลได้',
+          text: 'กรุณาลองใหม่อีกครั้ง',
+          customClass: {
+            title: 'kanit-font',
+            content: 'kanit-font',
+            confirmButton: 'kanit-font',
+            cancelButton: 'kanit-font',
+            popup: 'kanit-font'
+          }
+        });
+      });
+  }, []);
+  ////////
 
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -168,7 +196,7 @@ function RegisResultTable() {
       console.error("Error saving course registration:", error);
       Swal.fire({
         title: "เพิ่มรายวิชาไม่สำเร็จ ",
-        text:'กรุณตรวจสอบข้อมูลให้ถูกต้อง',
+        text: 'กรุณตรวจสอบข้อมูลให้ถูกต้อง',
         confirmButtonColor: "#8C3941",
         customClass: {
           title: 'kanit-font',
@@ -235,7 +263,23 @@ function RegisResultTable() {
     <div style={{ fontFamily: 'Kanit' }}>
       <div class="searchBar-texthead">
         <p1>ลงทะเบียนรายวิชา</p1>
-        <br></br><p2 style={{color:'#CD5C5C' , fontSize:'15px'}}>{dateTime}</p2>
+
+        <div>
+          <div>
+            {teacherTime.length > 0 && teacherTime.map((time, index) => (
+              <div key={index}>
+
+                <div className="time-info2" style={{ fontFamily: "kanit" , marginTop:'10px'}}>
+                  <p2 style={{ color: '#CD5C5C', fontSize: '15px' }}>{dateTime}</p2><span className='time-labe4' style={{ marginLeft: '20px' }}>{time.term}<span style={{ marginLeft: '10px' }}>{time.course_year}</span></span>
+
+
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+
       </div>
       <div style={{ marginTop: "35px" }}>
         <div class="searchBar-container">

@@ -348,3 +348,32 @@ option {
   position: relative;
   z-index: 10; /* ให้มีค่า z-index น้อยกว่า dropdown */
 }
+
+
+.time-slot3 {
+  background-color: #459991;
+  width: 1080px;
+  border-radius: 10px;
+  padding: 10px;
+ 
+
+}
+
+.time-info2 {
+
+  font-family: kanit;
+  font-size: 14px;
+  color: white;
+}
+
+.time-labe4 {
+  display: inline-block;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  padding: 1px 10px;
+  font-family: kanit;
+  background: #994545;
+  color: #ffffff;
+  width: 100px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+}
