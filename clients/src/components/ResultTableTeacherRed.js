@@ -13,17 +13,26 @@ class ResultTableTeacherRed extends React.Component {
     this.fetchData();
   }
 
+  componentDidUpdate(prevProps) {
+    // Check if myyear2 or termsearch props have changed
+    if (this.props.myyear2 !== prevProps.myyear2 || this.props.termsearch !== prevProps.termsearch) {
+      this.fetchData();
+    }
+  }
+  
+
   fetchData = async () => {
     this.setState({ isLoading: true, error: null }); // Reset loading state and clear errors
+    const name = sessionStorage.getItem("name")
     try {
-      const response = await Axios.get("http://localhost:3001/registall-data");
+      const { myyear2, termsearch } = this.props;
+      const response = await Axios.get(`http://127.0.0.1:3001/registall-data?myyear2=${myyear2}&termsearch=${termsearch}&name=${name}`);
       this.setState({
         registrationData: response.data,
         isLoading: false, // Data fetched, loading done
       });
     } catch (error) {
       console.error("Failed to fetch data:", error);
-      this.setState({ error: "Failed to fetch data", isLoading: false }); // Set error message and loading done
     }
   };
 
@@ -34,7 +43,7 @@ class ResultTableTeacherRed extends React.Component {
     if (error) return <div>Error: {error}</div>; // Error handling
 
     return (
-      <div>
+      <div style={{marginBottom:'30px'}}>
         <header className="ResultTableTeacherRed-Texthead">
           <table className="ResultTableTeacherRed-bordered-table">
             <thead>

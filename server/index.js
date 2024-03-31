@@ -2,16 +2,24 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql');
 const cors = require('cors');
+const session = require('express-session');
+
+
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true,
+}));
 
 app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '123456',
-  database: 'databasese',
-  port: '3306'
+  // host: '127.0.0.1',
+  // user: 'root',
+  // password: '123456',
+  // database: 'databasese',
+  // port: '3306'
   //pond
   // host: 'localhost',
   // user: 'root',
@@ -1076,24 +1084,40 @@ app.get('/registration-data', (req, res) => {
 app.get('/registall-data', (req, res) => {
   const myyear2 = req.query.myyear2;
   const termsearch = req.query.termsearch;
+  const name = req.query.name;
+ 
+  // ตรวจสอบว่ามีชื่อที่รับมาในฐานข้อมูลหรือไม่
+  db.query('SELECT * FROM `courset` WHERE teacher=?', [name], (err, results) => {
+    if (err) {
+      console.error('Failed to retrieve teacher data: ', err);
+      return res.status(500).send('Error retrieving teacher data');
+    }
+    // ตรวจสอบข้อมูล myyear2 และ termsearch
+    if (!myyear2 || !termsearch ) {
+      return res.status(400).send("กรุณากรอกข้อมูลให้ครบถ้วน");
+    } else {
+      let sqlQuery = 'SELECT * FROM `courset` WHERE course_year=? AND term=?';
+      let queryParams = [myyear2, termsearch];
 
-  console.log('SQL Query:', 'SELECT * FROM `courset` WHERE course_year=' + myyear2 + ' AND term=' + termsearch);
-
-  // เพิ่มเงื่อนไขตรวจสอบค่า myyear2 และ termsearch
-  if (!myyear2 || !termsearch) {
-    // ถ้าไม่มีค่า myyear2 หรือ termsearch ให้ส่งข้อความแจ้งเตือนและสิ้นสุดการทำงาน
-    return res.status(400).send("กรุณากรอกข้อมูลให้ครบถ้วน");
-  }
-  else {
-    db.query('SELECT * FROM `courset` WHERE course_year=? AND term=?', [myyear2, termsearch], (err, results) => {
-      if (err) {
-        console.error('Failed to retrieve registration data: ', err);
-        return res.status(500).send('Error retrieving registration data');
+      if (name !== undefined) {
+          sqlQuery += ' AND teacher=?';
+          queryParams.push(name);
+          console.log('SQL Query:', sqlQuery);
       }
-      res.json(results);
-    });
-  }
+
+      db.query(sqlQuery, queryParams, (err, results) => {
+          if (err) {
+              console.error('Failed to retrieve registration data: ', err);
+              return res.status(500).send('Error retrieving registration data');
+          }
+          res.json(results);
+      });
+    }
+  });
 });
+
+
+
 
 // GET endpoint for retrieving 'ภาคปฏิบัติ' data
 app.get('/lab-courses', (req, res) => {
@@ -1126,6 +1150,18 @@ app.get("/course-sections/:courseId", (req, res) => {
     if (err) {
       console.error("Failed to retrieve sections:", err);
       return res.status(500).send("Error retrieving sections");
+    }
+    res.json(results);
+  });
+});
+
+
+app.get('/regisTearTerm', (req, res) => {
+  const query = 'SELECT * FROM courset';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Failed to retrieve registration data: ', err);
+      return res.status(500).send('Error retrieving registration data');
     }
     res.json(results);
   });

@@ -258,6 +258,7 @@ function ResultTeacher() {
 
 
   const search2 = () => {
+    
     if (myyear2 === "" || termsearch === "") {
       // ถ้า myyear2 หรือ termsearch ว่าง ให้แสดงข้อความแจ้งเตือนและไม่ทำอะไรเพิ่ม
       Swal.fire({
@@ -276,13 +277,15 @@ function ResultTeacher() {
       });
     } else {
       // ถ้า myyear2 และ termsearch ไม่ว่าง ให้ส่ง request ไปยัง API ตามปีการศึกษาและเทอมที่เลือก
-      axios.get(`http://127.0.0.1:3001/registall-data?myyear2=${myyear2}&termsearch=${termsearch}`) // ส่งค่า myyear2 และ termsearch ผ่าน query string
+      const response = axios.get(`http://127.0.0.1:3001/registall-data?myyear2=${myyear2}&termsearch=${termsearch}&name=${name}`) // ส่งค่า myyear2 และ termsearch ผ่าน query string
         .then((response) => {
+          const name = sessionStorage.getItem("name")
           setCourses2(response.data);
-          console.log("เปิดสอน" + myyear2 + "เทอม" + termsearch); // แสดงปีการศึกษาและเทอมที่เลือก
-          fetchData();
           
-        } ,[myyear2, termsearch])
+          fetchData();
+          return <ResultTableTeacherRed myyear2={myyear2} termsearch={termsearch}/>
+          
+        } ,[myyear2, termsearch,name])
         .catch((error) => {
           console.error('Error fetching course data:', error);
         });
@@ -302,7 +305,7 @@ function ResultTeacher() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:3001/registall-data?myyear2=${myyear2}&termsearch=${termsearch}`);
+      const response = await axios.get(`http://127.0.0.1:3001/registall-data?myyear2=${myyear2}&termsearch=${termsearch}&name=${name}`);
       // Use the formatTime function here to map over and format your data
       const formattedSchedule = response.data.map(course => ({
         ...course,
@@ -319,7 +322,7 @@ function ResultTeacher() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:3001/registall-data?myyear2=${myyear2}&termsearch=${termsearch}`);
+        const response = await axios.get(`http://127.0.0.1:3001/registall-data?myyear2=${myyear2}&termsearch=${termsearch}&name=${name}`);
         // Use the formatTime function here to map over and format your data
         const formattedSchedule = response.data.map(course => ({
           ...course,
@@ -463,7 +466,7 @@ function ResultTeacher() {
         </table>
       </div>
       <div className="ResultTableTeacherRed-left">
-        <ResultTableTeacherRed></ResultTableTeacherRed>
+      <ResultTableTeacherRed myyear2={myyear2} termsearch={termsearch} />
       </div>
     </div>
   );
