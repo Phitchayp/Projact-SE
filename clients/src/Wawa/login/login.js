@@ -27,9 +27,15 @@ const Login = () => {
 
                         <FaUserCircle className='imgUser-login' />
                         <p className='textlogin'>ระบบจัดตารางสอน</p>
-                        <Google/>
+                        <Google />
                     </div>
 
+
+                </div>
+                <div className='center-login'>
+                <div className='boxlogin2'>
+                    <p style={{ fontFamily:'kanit' , color:'white'}}>ติดต่อ : oanchisa.n@ku.th</p>
+                </div>
                 </div>
 
                 <div className='foot'>
