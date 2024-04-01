@@ -260,7 +260,7 @@ function RegisResultTable() {
   };
 
   return (
-    <div style={{ fontFamily: 'Kanit' }}>
+    <div style={{ fontFamily: 'Kanit' , marginLeft: '-60px'} }>
       <div class="searchBar-texthead">
         <p1>ลงทะเบียนรายวิชา</p1>
 

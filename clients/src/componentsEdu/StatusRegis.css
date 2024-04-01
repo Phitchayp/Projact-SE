@@ -1,0 +1,46 @@
+.circle {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    line-height: 50px;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* เพิ่มเงา */
+  }
+  
+  .green {
+    background-color: green;
+    color: white;
+  }
+  
+  .red {
+    background-color: red;
+    color: white;
+  }
+
+
+
+  .button-checkregis {
+    background-color: #DCCCCC; /* สีพื้นหลัง */
+    border: 1px solid #8C3941; /* เพิ่มขอบ */
+    color: #8C3941; /* สีตัวอักษร */
+    width: 55px;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px; /* ความโค้งของมุม */
+    font-family: 'kanit';
+    font-size: 13px;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3); /* เพิ่มเงา */
+    margin-left: 10px;
+    font-weight: bold;
+  }
+  .button-checkregis:hover {
+    background-color: #45a049; /* เปลี่ยนสีพื้นหลังเมื่อโฮเวอร์ */
+    border-color: #e1902c; /* เปลี่ยนสีขอบเมื่อโฮเวอร์ */
+  }
+  

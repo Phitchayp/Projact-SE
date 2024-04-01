@@ -10,6 +10,7 @@ import Axios from "axios";
 import RegisResultTable from "./RegisResultTable";
 import People from "./people";
 import CheckDayRe from "./CheckDayRe";
+import StatusRegis from "../componentsEdu/StatusRegis";
 
 class RegisTa extends React.Component {
   state = {
@@ -197,7 +198,7 @@ class RegisTa extends React.Component {
         return (
           <tr key={key}>
             <td>
-              <div className="testtable-image-container">
+              <div className="testtable-image-container"  style={{width:'20px'}}>
                 <img
                   src={MyImage}
                   alt="Delete"
@@ -208,7 +209,7 @@ class RegisTa extends React.Component {
             </td>
             <td>{course.years}</td> {/* Display the year data here */}
             <td>{course.subject_id}</td>
-            <td>{course.subject_name}</td>
+            <td style={{width:'130px'}}>{course.subject_name}</td>
             <td>{course.credit}</td>
             <td>1</td>
             <td>{course.sec_num}</td>{" "}
@@ -249,7 +250,7 @@ class RegisTa extends React.Component {
               </div> */}
             </td>
             <td>
-              <div>
+              <div  style={{width:'150px'}}>
                 <div>
                   <TimePickerTa // Pass startTime and endTime to TimePickerTa component
                     onStartTimeChange={(time) => this.setState({ startTime: time })}
@@ -259,6 +260,11 @@ class RegisTa extends React.Component {
               </div>
             </td>
             <td> </td>
+            <td> 
+              <StatusRegis/>
+
+
+            </td>
           </tr>
         );
       })
@@ -272,7 +278,7 @@ class RegisTa extends React.Component {
         return (
           <tr key={key}>
             <td>
-              <div className="testtable-image-container">
+              <div className="testtable-image-container" style={{width:'20px'}}>
                 <img
                   src={MyImage}
                   alt="Delete"
@@ -283,7 +289,7 @@ class RegisTa extends React.Component {
             </td>
             <td>{course.years}</td> {/* Display the year data here */}
             <td>{course.subject_id}</td>
-            <td>{course.subject_name}</td>
+            <td style={{width:'130px'}}>{course.subject_name}</td>
             <td>{course.credit}</td>
             <td>1</td>
             <td>{course.sec_num}</td>
@@ -317,7 +323,7 @@ class RegisTa extends React.Component {
             </td>
             <td>
               <div>
-              <div>
+              <div style={{width:'150px'}}>
                 <TimePickerTa // Pass startTime and endTime to TimePickerTa component
                   onStartTimeChange={(time) => this.setState({ startTime: time })}
                   onEndTimeChange={(time) => this.setState({ endTime: time })}
@@ -332,6 +338,7 @@ class RegisTa extends React.Component {
             </div>
             </td>
             <td> </td>
+            <td> <StatusRegis/></td>
           </tr>
         );
       })
@@ -479,6 +486,7 @@ class RegisTa extends React.Component {
                     <th>วัน</th>
                     <th>เวลา</th>
                     <th>หมายเหตุ</th>
+                    <th>เงื่อนไข</th>
                   </tr>
                 </thead>
                 <tbody>{this.renderCoursesLec(lectureCourses)}</tbody>
@@ -516,6 +524,7 @@ class RegisTa extends React.Component {
                     <th>เวลา</th>
                     <th>ห้องlab</th>
                     <th>หมายเหตุ</th>
+                    <th>เงื่อนไข</th>
                   </tr>
                 </thead>
                 <tbody>{this.renderCoursesPrac(practicalCourses)}</tbody>
