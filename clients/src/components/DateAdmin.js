@@ -154,7 +154,7 @@ function DateAdmin() {
                 Swal.fire({
                     icon: 'error',
                     title: 'ไม่สามารถบันทึกได้',
-                    text: 'วันที่เริ่มต้นห้ามมาหลังวันสิ้นสุด',
+                    text: 'วันที่เริ่มต้นห้ามมาก่อนวันปัจจุบัน',
                     customClass: {
                         title: 'kanit-font',
                         content: 'kanit-font',
