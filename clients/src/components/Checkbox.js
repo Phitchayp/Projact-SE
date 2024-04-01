@@ -5,16 +5,18 @@ function CheckBoxRe({ onOptionsChange }) {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   const handleCheckboxChange = (event, option) => {
-    const isChecked = event.target.checked
+    const isChecked = event.target.checked;
     if (isChecked) {
-      setSelectedOptions([...selectedOptions, option]);
+      setSelectedOptions(prevOptions => [...prevOptions, option]); // เพิ่ม option เข้าไปใน selectedOptions
     } else {
-      setSelectedOptions(selectedOptions.filter(selectedOption => selectedOption !== option));
+      setSelectedOptions(prevOptions => prevOptions.filter(selectedOption => selectedOption !== option)); // ลบ option ออกจาก selectedOptions
     }
   };
 
   useEffect(() => {
-    onOptionsChange(selectedOptions);
+    // เรียงลำดับค่าใน selectedOptions ก่อนส่งไปยังฟังก์ชัน onOptionsChange
+    const sortedOptions = [...selectedOptions].sort((a, b) => a.localeCompare(b));
+    onOptionsChange(sortedOptions);
   }, [selectedOptions, onOptionsChange]);
   
   return (
