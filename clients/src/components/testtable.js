@@ -20,9 +20,12 @@ class RegisTa extends React.Component {
     selectDay: "",
     inputValue: "",
     selectedClassYears: [],
+
     selectedOptions: [],
 
+
   };
+
 
   // handleDayChange = (event) => {
   //   this.setState({ selectDay: event.target.value });
@@ -41,6 +44,7 @@ class RegisTa extends React.Component {
     this.setState({ selectedOptions });
     console.log(selectedOptions)
     console.log(this.state)
+
 
   };
 
@@ -69,8 +73,6 @@ class RegisTa extends React.Component {
         registrationData: registrationData.data,
         practicalCourses: practicalResponse.data, // Data for 'ภาคปฏิบัติ'
         lectureData: lectureResponse.data, // Data for 'ภาคบรรยาย' or lecture courses
-
-
       });
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -84,9 +86,15 @@ class RegisTa extends React.Component {
   fetchCourses = async () => {
     try {
       // สมมติมี endpoint แยกสำหรับภาคบรรยายและภาคปฏิบัติ
-      const registrationData = await Axios.get("http://localhost:3001/registration-data");
-      const lectureResponse = await Axios.get("http://localhost:3001/lecture-courses");
-      const practicalResponse = await Axios.get("http://localhost:3001/lab-courses");
+      const registrationData = await Axios.get(
+        "http://localhost:3001/registration-data"
+      );
+      const lectureResponse = await Axios.get(
+        "http://localhost:3001/lecture-courses"
+      );
+      const practicalResponse = await Axios.get(
+        "http://localhost:3001/lab-courses"
+      );
       this.setState({
         registrationData: registrationData.data,
         lectureCourses: lectureResponse.data,
@@ -129,45 +137,52 @@ class RegisTa extends React.Component {
   // };
   handleDeleteRow = (courseId) => {
     Axios.delete(`http://localhost:3001/delete-course/${courseId}`)
-      .then(response => {
+      .then((response) => {
         // Handle the successful deletion
         console.log(response.data);
         // Refresh the data in your component or remove the row from the state
-        this.setState(prevState => ({
-          lectureCourses: prevState.lectureCourses.filter(course => course.id !== courseId),
-          practicalCourses: prevState.practicalCourses.filter(course => course.id !== courseId),
+        this.setState((prevState) => ({
+          lectureCourses: prevState.lectureCourses.filter(
+            (course) => course.id !== courseId
+          ),
+          practicalCourses: prevState.practicalCourses.filter(
+            (course) => course.id !== courseId
+          ),
         }));
       })
-      .catch(error => {
+      .catch((error) => {
         // Handle the error case
-        console.error('There was an error!', error);
+        console.error("There was an error!", error);
       });
   };
   handleDeleteRow1 = (courseId) => {
     Axios.delete(`http://localhost:3001/delete-courset/${courseId}`)
-      .then(response => {
+      .then((response) => {
         // Handle the successful deletion
         console.log(response.data);
         // Refresh the data in your component or remove the row from the state
-        this.setState(prevState => ({
-          registrationData: prevState.registrationData.filter(course => course.id !== courseId),
+        this.setState((prevState) => ({
+          registrationData: prevState.registrationData.filter(
+            (course) => course.id !== courseId
+          ),
         }));
       })
-      .catch(error => {
+      .catch((error) => {
         // Handle the error case
-        console.error('There was an error!', error);
+        console.error("There was an error!", error);
       });
   };
-
 
   renderCoursesLec = (courses) => {
     const { selectDay } = this.state;
     const { inputValue } = this.state;
     const { onOptionsChange } = this.state;
     const { handleCheckboxChange } = this.state;
+    const {startTime} = this.state;
+    const {endTime} = this.state;
 
 
-    return courses.flatMap((course, index) => (
+    return courses.flatMap((course, index) =>
       Array.from({ length: course.section }, (_, sectionIndex) => {
         const key = `${index}-${sectionIndex}`;
         return (
@@ -187,18 +202,23 @@ class RegisTa extends React.Component {
             <td>{course.subject_name}</td>
             <td>{course.credit}</td>
             <td>1</td>
-            <td>{course.sec_num}</td> {/* แสดงผลรวมของ 800 และค่า index และ sectionIndex */}
+            <td>{course.sec_num}</td>{" "}
+            {/* แสดงผลรวมของ 800 และค่า index และ sectionIndex */}
             <td>
+
               <People handleInputChange={this.handleInputChangeInPeople} />
 
             </td>
             <td>
               {course.branch}
               <div>
+
                 <CheckBoxRe onOptionsChange={this.handleOptionsChange} />
+
               </div>
             </td>
             <td>
+
               {/* 2. Dropdown เลือกวัน */}
               <div>
                 <CheckDayRe handleInputChangeDay={this.handleInputDayChange} />
@@ -207,6 +227,7 @@ class RegisTa extends React.Component {
                 <select className="testtable-dropdown"
                   value={selectDay} onChange={(e) => { this.setState({ selectDay: e.target.value }) }}>
                   
+
                   <option value=""></option>
                   <option value="Monday">Monday</option>
                   <option value="Tuesday">Tuesday</option>
@@ -221,20 +242,22 @@ class RegisTa extends React.Component {
             <td>
               <div>
                 <div>
-                  <TimePickerTa />
+                <TimePickerTa // Pass startTime and endTime to TimePickerTa component
+                  onStartTimeChange={(time) => this.setState({ startTime: time })}
+                  onEndTimeChange={(time) => this.setState({ endTime: time })}
+                />
                 </div>
               </div>
             </td>
             <td> </td>
-          </tr >
+          </tr>
         );
       })
-    ));
+    );
   };
 
-
   renderCoursesPrac = (courses) => {
-    return courses.flatMap((course, index) => (
+    return courses.flatMap((course, index) =>
       Array.from({ length: course.section }, (_, sectionIndex) => {
         const key = `${index}-${sectionIndex}`; // สร้าง key จากการรวม index และ sectionIndex
         return (
@@ -296,7 +319,7 @@ class RegisTa extends React.Component {
           </tr>
         );
       })
-    ));
+    );
   };
 
   // handleDeleteRow = (event) => {
@@ -308,28 +331,38 @@ class RegisTa extends React.Component {
   //   }
   // }
   handleSaveButtonLec = async (optionsText) => {
+
     const teacher = sessionStorage.getItem("name")
     const { lectureCourses, selectDay, selectedOptions } = this.state;
+
     try {
       // ดึงข้อมูลจาก lectureCourses
-      const coursesData = this.state.lectureCourses.map(course => ({
+      const coursesData = this.state.lectureCourses.map((course) => ({
         idsubject: course.subject_id,
         name: course.subject_name,
         sec: course.sec_num,
         lab_lec: course.lectureOrLab,
+
         years: course.years,
         class_year: selectedOptions.join(','),
+
         n_people: this.state.inputValue,
         credit: course.credit,
         day: this.state.selectDay, // ใช้ค่า selectDay ที่เก็บไว้ใน state
-        category: course.category,
         course_year: course.course_year,
         term: course.term,
+        time_start: this.state.startTime,
+        time_end: this.state.endTime,
+        room:"-",
         teacher: teacher,
+
       }));
 
       // ส่งข้อมูลไปยังเซิร์ฟเวอร์
-      const response = await Axios.post("http://127.0.0.1:3001/registerlec", coursesData);
+      const response = await Axios.post(
+        "http://127.0.0.1:3001/registerlec",
+        coursesData
+      );
 
       // ดำเนินการต่อเมื่อบันทึกสำเร็จ
       console.log("บันทึกข้อมูลสำเร็จ:", response.data);
@@ -337,6 +370,7 @@ class RegisTa extends React.Component {
       console.error("เกิดข้อผิดพลาดในการบันทึกข้อมูล:", error);
     }
   };
+
 
 
 
@@ -363,7 +397,9 @@ class RegisTa extends React.Component {
       }));
 
       // ส่งข้อมูลไปยังเซิร์ฟเวอร์
+
       const response = await Axios.post("http://127.0.0.1:3001/registerlab", coursesData);
+
 
       // ดำเนินการต่อเมื่อบันทึกสำเร็จ
       console.log("บันทึกข้อมูลสำเร็จ:", response.data);
@@ -405,7 +441,6 @@ class RegisTa extends React.Component {
       }
     });
 
-
     return (
       <div className="testtable-turnleft-all">
         {lectureCourses.length > 0 && (
@@ -429,9 +464,7 @@ class RegisTa extends React.Component {
                     <th>หมายเหตุ</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {this.renderCoursesLec(lectureCourses)}
-                </tbody>
+                <tbody>{this.renderCoursesLec(lectureCourses)}</tbody>
               </table>
             </header>
             <div>
@@ -468,9 +501,7 @@ class RegisTa extends React.Component {
                     <th>หมายเหตุ</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {this.renderCoursesPrac(practicalCourses)}
-                </tbody>
+                <tbody>{this.renderCoursesPrac(practicalCourses)}</tbody>
               </table>
             </header>
             <div>
@@ -506,14 +537,16 @@ class RegisTa extends React.Component {
             <tbody>
               {registrationData.map((course, index) => (
                 <tr key={index}>
-                  <td><div className="testtable-image-container">
-                    <img
-                      src={MyImage}
-                      alt=" "
-                      className="testtable-centered-image"
-                      onClick={() => this.handleDeleteRow1(course.id)}
-                    />
-                  </div></td>
+                  <td>
+                    <div className="testtable-image-container">
+                      <img
+                        src={MyImage}
+                        alt=" "
+                        className="testtable-centered-image"
+                        onClick={() => this.handleDeleteRow1(course.id)}
+                      />
+                    </div>
+                  </td>
                   <td>{course.idsubject}</td>
                   <td>{course.name}</td>
                   <td>{course.credit}</td>
@@ -522,7 +555,9 @@ class RegisTa extends React.Component {
                   <td>{course.n_people}</td>
                   <td>{course.class}</td>
                   <td>{course.day}</td>
-                  <td>{course.time_start}-{course.time_end}</td>
+                  <td>
+                    {course.time_start}-{course.time_end}
+                  </td>
                   <td>{course.room}</td>
                 </tr>
               ))}
@@ -530,7 +565,6 @@ class RegisTa extends React.Component {
           </table>
         </header>
       </div>
-
     );
   }
 }
