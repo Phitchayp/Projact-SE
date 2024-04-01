@@ -348,7 +348,7 @@ function ResultRegisEdu() {
               <option value=""></option>
               <option value="ภาคต้น">ภาคต้น</option>
               <option value="ภาคปลาย">ภาคปลาย</option>
-              <option value="ทั้งหมด">ทั้งหมด</option>
+              
             </select>
           </div>
 

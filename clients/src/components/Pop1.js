@@ -6,6 +6,7 @@ import { FaRegSave } from "react-icons/fa";
 import * as XLSX from 'xlsx';
 import Axios from "axios";
 import Swal from 'sweetalert2';
+import userImport from '../assets/user_import.png';
 
 const Pop = ({ onClose }) => {
   const [email, setEmail] = useState('');
@@ -258,6 +259,30 @@ const saveData = (data) => {
     return emailRegex.test(email);
   };
 
+
+  ////////////// ลิ้งรุป ////////////////////
+const handleLinkClick = () => {
+  Swal.fire({
+    title: 'ตัวอย่างไฟล์นำเข้า',
+    text: 'อีเมล , ชื่อ สกุล',
+    imageUrl: userImport,
+    imageWidth: 1000,
+    imageHeight: 200,
+    imageAlt: 'Example',
+    confirmButtonText: 'ปิด',
+    customClass: {
+      title: 'kanit-font',
+      content: 'kanit-font',
+      confirmButton: 'kanit-font',
+      cancelButton: 'kanit-font',
+      popup: 'kanit-font'
+    }
+  });
+
+};
+
+//////////////////////////////////////////////
+
   return (
     <div className="Pop-addmin" style={{ textAlign: 'left' }}>
 
@@ -270,6 +295,8 @@ const saveData = (data) => {
         <div className='left-addmin' onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
           <h1 style={{ fontFamily: 'Kanit, sans-serif', color: '#838383', fontSize: 'small' }}>
             <span style={{ fontFamily: 'Kanit, sans-serif', color: '#8C3941' }}>นำเข้ารายชื่อผู้ใช้ฝ่ายการศึกษา</span> (*ครั้งละ 1 file)
+            <br></br>
+                <h style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline', fontSize: '13px', fontFamily: 'kanit' }} onClick={handleLinkClick}>ตัวอย่างไฟล์นำเข้า</h>
           </h1>
 
           <div
