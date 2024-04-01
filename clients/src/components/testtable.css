@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@200;400&display=swap');
 .testtable-bordered-table {
   border-collapse: collapse;
-  width: 80%;
+  width: 85%;
   margin-top: 25px;
   background: white;
 }
@@ -41,9 +41,17 @@
   }
 
 
+  .testtable-turnleft-all2{
+    position: relative;
+    left: 100px;
+    margin-top: 110px;
+  }
+
+
+
   .testtable-buttonchange{
     position: absolute; /* ตั้งค่าเป็น absolute เพื่อให้สามารถใช้ right property ได้ */
-    right: 18%;
+    left: 82%;
     margin-top: 20px;
 
   }
