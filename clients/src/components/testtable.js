@@ -8,6 +8,7 @@ import CheckBoxRe from "./Checkbox";
 import TestTableDropdown from "./roomfromdb";
 import Axios from "axios";
 import RegisResultTable from "./RegisResultTable";
+import People from "./people";
 
 class RegisTa extends React.Component {
   state = {
@@ -18,34 +19,24 @@ class RegisTa extends React.Component {
     selectDay: "",
     inputValue: "",
     selectedClassYears: [],
-    
+    selectedOptions: [],
+
   };
 
   handleDayChange = (event) => {
     this.setState({ selectDay: event.target.value });
   }
 
-  handleInputChange = (event) => {
-
+  handleInputChangeInPeople = (event) => {
     this.setState({ inputValue: event.target.value });
   };
 
-  
-  handleCheckboxChange = (event) => {
-    const { value, checked } = event.target;
-    if (checked) {
-      this.setState(prevState => ({
-        selectedClassYears: [...prevState.selectedClassYears, value],
-      }));
-    } else {
-      this.setState(prevState => ({
-        selectedClassYears: prevState.selectedClassYears.filter(year => year !== value),
-      }));
-    }
+  handleOptionsChange = (selectedOptions) => {
+    this.setState({ selectedOptions });
+    console.log(selectedOptions)
+    console.log(this.state)
+    
   };
-  
-
-
 
   componentDidMount() {
     this.fetchData();
@@ -167,8 +158,8 @@ class RegisTa extends React.Component {
     const { selectDay } = this.state;
     const { inputValue } = this.state;
     const { onOptionsChange } = this.state;
-    const {handleCheckboxChange}= this.state;
-    
+    const { handleCheckboxChange } = this.state;
+
 
     return courses.flatMap((course, index) => (
       Array.from({ length: course.section }, (_, sectionIndex) => {
@@ -192,49 +183,13 @@ class RegisTa extends React.Component {
             <td>1</td>
             <td>{course.sec_num}</td> {/* แสดงผลรวมของ 800 และค่า index และ sectionIndex */}
             <td>
-              <div>
-                <div >
-                  <input
-                    value={inputValue}
-                    onChange={this.handleInputChange} // เรียกใช้ setInputValue เพื่ออัปเดตค่า inputValue
-                    style={{ width: '70px' }}
-                  />
-                </div>
-              </div>
+              <People handleInputChange={this.handleInputChangeInPeople} />
+
             </td>
             <td>
               {course.branch}
               <div>
-                <div className="App">
-                  <div className="boxContainer">
-                    <div className="buttonGroup" >
-                      <input type="checkbox" id="option1" name="check" value="1" onChange={handleCheckboxChange} />
-                      <label htmlFor="option1"><span> 1</span></label>
-                    </div>
-
-                    <div className="buttonGroup">
-                      <input type="checkbox" id="option2" name="check" value="2" onChange={handleCheckboxChange} />
-                      <label htmlFor="option2"><span> 2</span></label>
-                    </div>
-
-                    <div className="buttonGroup">
-                      <input type="checkbox" id="option3" name="check" value="3" onChange={handleCheckboxChange} />
-                      <label htmlFor="option3"><span> 3</span></label>
-                    </div>
-
-                    <div className="buttonGroup">
-                      <input type="checkbox" id="option4" name="check" value="4" onChange={handleCheckboxChange} />
-                      <label htmlFor="option4"><span> 4 </span></label>
-                    </div>
-
-                    <div className="buttonGroup">
-                      <input type="checkbox" id="optionX" name="check" value="X" onChange={handleCheckboxChange} />
-                      <label htmlFor="optionX"><span> X</span></label>
-                    </div>
-                  </div>
-
-                </div>
-                
+                <CheckBoxRe onOptionsChange={this.handleOptionsChange} />
               </div>
             </td>
             <td>
@@ -291,14 +246,13 @@ class RegisTa extends React.Component {
             <td>1</td>
             <td>{course.sec_num}</td>
             <td>
-              <div className="testtable-inputNumNisit">
-                <InputNumNisit></InputNumNisit>
-              </div>
+              <People handleInputChange={this.handleInputChangeInPeople} />
+
             </td>
             <td>
               {course.branch}
               <div>
-                <CheckBoxRe />
+                <CheckBoxRe onOptionsChange={this.handleOptionsChange} />
               </div>
             </td>
             <td>
@@ -344,7 +298,8 @@ class RegisTa extends React.Component {
   //   }
   // }
   handleSaveButtonLec = async (optionsText) => {
-    const { lectureCourses, selectDay, onOptionsChange } = this.state;
+    const teacher = sessionStorage.getItem("name")
+    const { lectureCourses, selectDay, selectedOptions } = this.state;
     try {
       // ดึงข้อมูลจาก lectureCourses
       const coursesData = this.state.lectureCourses.map(course => ({
@@ -353,13 +308,14 @@ class RegisTa extends React.Component {
         sec: course.sec_num,
         lab_lec: course.lectureOrLab,
         years: course.years,
-        class_year: course.branch,
+        class_year: selectedOptions.join(','),
         n_people: this.state.inputValue,
         credit: course.credit,
         day: this.state.selectDay, // ใช้ค่า selectDay ที่เก็บไว้ใน state
         category: course.category,
         course_year: course.course_year,
         term: course.term,
+        teacher: teacher,
       }));
 
       // ส่งข้อมูลไปยังเซิร์ฟเวอร์
@@ -375,27 +331,37 @@ class RegisTa extends React.Component {
 
 
 
-  handleSaveButtonLab = async () => {
+  handleSaveButtonLab = async (optionsText) => {
+    const teacher = sessionStorage.getItem("name")
+    const { lectureCourses, selectDay, selectedOptions } = this.state;
     try {
-      // ดึงข้อมูลจาก practicalCourses
+      // ดึงข้อมูลจาก lectureCourses
       const coursesData = this.state.practicalCourses.map(course => ({
+        idsubject: course.subject_id,
+        name: course.subject_name,
+        sec: course.sec_num,
+        lab_lec: course.lectureOrLab,
         years: course.years,
-        subject_id: course.subject_id,
-        subject_name: course.subject_name,
+        class_year: selectedOptions.join(','),
+        n_people: this.state.inputValue,
         credit: course.credit,
-        // รายละเอียดอื่น ๆ ที่ต้องการบันทึก
+        day: this.state.selectDay, // ใช้ค่า selectDay ที่เก็บไว้ใน state
+        category: course.category,
+        course_year: course.course_year,
+        term: course.term,
+        teacher: teacher,
       }));
 
       // ส่งข้อมูลไปยังเซิร์ฟเวอร์
-      const response = await Axios.post("URL_TO_YOUR_API_ENDPOINT", coursesData);
+      const response = await Axios.post("http://127.0.0.1:3001/registerlab", coursesData);
 
       // ดำเนินการต่อเมื่อบันทึกสำเร็จ
       console.log("บันทึกข้อมูลสำเร็จ:", response.data);
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการบันทึกข้อมูล:", error);
-      // จัดการข้อผิดพลาดที่นี่
     }
   };
+
 
   render() {
     const { registrationData } = this.state;

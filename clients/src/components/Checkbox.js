@@ -1,53 +1,71 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Checkbox.css';
 
 function CheckBoxRe({ onOptionsChange }) {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
-  const handleCheckboxChange = (e) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setSelectedOptions([...selectedOptions, value]);
+  const handleCheckboxChange = (event, option) => {
+    const isChecked = event.target.checked
+    if (isChecked) {
+      setSelectedOptions([...selectedOptions, option]);
     } else {
-      setSelectedOptions(selectedOptions.filter(option => option !== value));
+      setSelectedOptions(selectedOptions.filter(selectedOption => selectedOption !== option));
     }
   };
 
-  // Call the onOptionsChange function with updated optionsText
-  React.useEffect(() => {
-    const optionsText = selectedOptions.join(', ');
-    onOptionsChange(optionsText);
+  useEffect(() => {
+    onOptionsChange(selectedOptions);
   }, [selectedOptions, onOptionsChange]);
-
+  
   return (
     <div className="App">
       <div className="boxContainer">
-        <div className="buttonGroup" >
-          <input type="checkbox" id="option1" name="check" value="1" onChange={handleCheckboxChange} />
+        <div className="buttonGroup">
+          <input 
+            type="checkbox" 
+            id="option1" 
+            checked={selectedOptions.includes("1")}
+            onChange={(e) => handleCheckboxChange(e, "1")} />
           <label htmlFor="option1"><span> 1</span></label>
         </div>
 
         <div className="buttonGroup">
-          <input type="checkbox" id="option2" name="check" value="2" onChange={handleCheckboxChange} />
+          <input 
+            type="checkbox" 
+            id="option2" 
+            checked={selectedOptions.includes("2")}
+            onChange={(e) => handleCheckboxChange(e, "2")} />
           <label htmlFor="option2"><span> 2</span></label>
         </div>
 
         <div className="buttonGroup">
-          <input type="checkbox" id="option3" name="check" value="3" onChange={handleCheckboxChange} />
+          <input 
+            type="checkbox" 
+            id="option3" 
+            checked={selectedOptions.includes("3")}
+            onChange={(e) => handleCheckboxChange(e, "3")} />
           <label htmlFor="option3"><span> 3</span></label>
         </div>
 
         <div className="buttonGroup">
-          <input type="checkbox" id="option4" name="check" value="4" onChange={handleCheckboxChange} />
+          <input 
+            type="checkbox" 
+            id="option4" 
+            checked={selectedOptions.includes("4")}
+            onChange={(e) => handleCheckboxChange(e, "4")} />
           <label htmlFor="option4"><span> 4 </span></label>
         </div>
 
         <div className="buttonGroup">
-          <input type="checkbox" id="optionX" name="check" value="X" onChange={handleCheckboxChange} />
+          <input 
+            type="checkbox" 
+            id="option5" 
+            checked={selectedOptions.includes("x")}
+            onChange={(e) => handleCheckboxChange(e, "x")} />
           <label htmlFor="optionX"><span> X</span></label>
         </div>
       </div>
-      
+      <div>ปี: {selectedOptions.join(', ')}</div> {/* แสดงค่าที่เลือกทั้งหมด */}
     </div>
   );
 }

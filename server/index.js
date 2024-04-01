@@ -1086,6 +1086,7 @@ app.post("/registerlec", (req, res) => {
     category,
     course_year,
     term,
+    teacher
 
   } = req.body;
 
@@ -1120,6 +1121,37 @@ app.get('/registration-data', (req, res) => {
   });
 });
 
+app.post("/registerlab", (req, res) => {
+  const {
+    idsubject,
+    name,
+    sec,
+    lab_lec,
+    years,
+    class_year,
+    n_people,
+    credit,
+    day, // เปลี่ยนจาก day เป็น selectDay
+    category,
+    course_year,
+    term,
+    teacher
+
+  } = req.body;
+
+  const query = "INSERT INTO courset SET ?";
+  db.query(query, req.body, (err, results) => {
+    if (err) {
+      console.error("Failed to insert registration_records:", err);
+      return res
+        .status(500)
+        .send(
+          "Error saving registration_records. Please contact support if this issue persists."
+        );
+    }
+  });
+
+});
 
 
 
