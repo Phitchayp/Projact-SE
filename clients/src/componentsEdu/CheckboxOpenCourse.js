@@ -286,7 +286,14 @@ function CheckboxOpenCourse() {
             }
         } catch (error) {
             console.error('Error deleting data:', error);
-            alert(`ลบข้อมูล ${courses} ไม่สำเร็จ`);
+            await Swal.fire({
+                title: "Deleted!",
+                text: "ลบรายวิชาไม่สำเร็จ",
+                icon: "error"
+            }).then(() => {
+                // หากยืนยันการลบ ทำการรีโหลดหน้าเว็บ
+                window.location.reload();
+            });
         }
         console.log(courses);
     };
@@ -302,7 +309,14 @@ function CheckboxOpenCourse() {
 
         } catch (error) {
             console.error('Error deleting data:', error);
-            alert(`ลบข้อมูล ${courses} ไม่สำเร็จ`);
+            await Swal.fire({
+                title: "Deleted!",
+                text: "ลบรายวิชาไม่สำเร็จ",
+                icon: "error"
+            }).then(() => {
+                // หากยืนยันการลบ ทำการรีโหลดหน้าเว็บ
+                window.location.reload();
+            });
         }
         console.log(courses)
     };
@@ -338,13 +352,28 @@ function CheckboxOpenCourse() {
                         });
                     }).catch((error) => {
                         console.error('Error deleting data:', error);
-                        alert(`ลบข้อมูล ${courses} ไม่สำเร็จ`);
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "ลบรายวิชาไม่สำเร็จ",
+                            icon: "error"
+                        }).then(() => {
+                            // หากยืนยันการลบ ทำการรีโหลดหน้าเว็บ
+                            window.location.reload();
+                        });
                     });
+                    
                 }
             });
         } catch (error) {
             console.error('Error deleting data:', error);
-            alert(`ลบข้อมูล ${courses} ไม่สำเร็จ`);
+            await Swal.fire({
+                title: "Deleted!",
+                text: "ลบรายวิชาไม่สำเร็จ",
+                icon: "error"
+            }).then(() => {
+                // หากยืนยันการลบ ทำการรีโหลดหน้าเว็บ
+                window.location.reload();
+            });
         }
         console.log(courses);
     };
