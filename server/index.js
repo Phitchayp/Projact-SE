@@ -30,16 +30,16 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  host: 'localhost',
-  user: 'root',
-  password: '12345678',
-  database: 'project_se',
-
-  // host: '10.64.79.183',
-  // user: 'dbSE',
-  // password: 'root123456',
+  // host: 'localhost',
+  // user: 'root',
+  // password: '12345678',
   // database: 'project_se',
-  // port: '3308',
+
+  host: '10.64.79.183',
+  user: 'dbSE',
+  password: 'root123456',
+  database: 'project_se',
+  port: '3308',
 })
 
 db.connect((err) => {
@@ -700,7 +700,6 @@ app.get('/gettimeteachercheck', (req, res) => {
     // ใช้โซนเวลาไทย
     const thaiTimeZone = 'Asia/Bangkok';
 
-
     // สร้าง Object เวลาปัจจุบันโดยใช้โซนเวลาไทย
     const currentDate = moment().tz(thaiTimeZone);
 
@@ -737,9 +736,7 @@ app.get('/gettimeteachercheck', (req, res) => {
         (formattedCurrentTime > mysqlTimeStart && formattedCurrentTime >= mysqlTimeFinal)) {
         res.send("notpass4 ");
       } else {
-
         res.send("pass");
-
       }
     } else if (formattedCurrentDate > mysqlDateStart && formattedCurrentDate > mysqlDateFinal) {
       res.send("notpass5 ");
@@ -805,45 +802,6 @@ app.get('/gettimeeducheck', (req, res) => {
   });
 });
 
-
-
-app.get('/gettimeeducheck', (req, res) => {
-
-  db.query("SELECT * FROM timeedu ORDER BY id", (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      const currentDate = new Date();
-      const mysqlDateStart = result[0].dayS.toLocaleString("th-th").split(' ')[0]; // แปลงให้เป็นรูปแบบ YYYY-MM-DD
-      const mysqlDateFinal = result[0].dayF.toLocaleString("th-th").split(' ')[0];
-      const formattedCurrentDate = currentDate.toLocaleString("th-th").split(' ')[0];  //วันที่ปัจจุบันเรา
-
-      const mysqlTimeStart = result[0].timeS;
-      const mysqlTimeFinal = result[0].timeF;
-      const formattedCurrentTime = currentDate.toLocaleTimeString("th-th").split(' ')[0]; // เวลาปัจจุบันของเครื่อง
-
-      if (formattedCurrentDate >= mysqlDateStart && formattedCurrentDate <= mysqlDateFinal) {
-        if (formattedCurrentTime >= mysqlTimeStart && formattedCurrentTime <= mysqlTimeFinal) {
-          // ระบบเปิด
-          res.status(200).send("pass");
-        } else {
-          // ระบบปิด
-          res.status(200).send("notpass");
-        }
-      } else if (formattedCurrentDate === mysqlDateStart && formattedCurrentTime < mysqlTimeStart) {
-        // ระบบยังไม่เปิด
-        res.status(200).send("notpass1" + mysqlDateStart + "ปัจจุบัน" + formattedCurrentDate + "final" + mysqlDateFinal + "Time" + mysqlTimeStart + "ปัจ" + formattedCurrentTime + "สิ้น" + mysqlTimeFinal);
-      } else if (formattedCurrentDate === mysqlDateFinal && formattedCurrentTime <= mysqlTimeFinal) {
-        // ระบบเปิด
-        res.status(200).send("pass");
-      } else {
-        // ระบบปิด
-        res.status(200).send("notpass2   วันเริ่ม" + mysqlDateStart + "ปัจจุบัน" + formattedCurrentDate + "สิ้นสุด " + mysqlDateFinal + "เวลาเริ่ม: " + mysqlTimeStart + "ปัจ " + formattedCurrentTime + "สิ้น " + mysqlTimeFinal);
-      }
-
-    }
-  });
-});
 
 
 
