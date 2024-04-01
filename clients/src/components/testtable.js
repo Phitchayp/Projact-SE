@@ -34,7 +34,7 @@ class RegisTa extends React.Component {
   handleInputDayChange = (selectedDay) => {
     this.setState({ selectedDay });
     console.log(selectedDay)
-};
+  };
 
   handleInputChangeInPeople = (event) => {
     this.setState({ inputValue: event.target.value });
@@ -178,8 +178,8 @@ class RegisTa extends React.Component {
     const { inputValue } = this.state;
     const { onOptionsChange } = this.state;
     const { handleCheckboxChange } = this.state;
-    const {startTime} = this.state;
-    const {endTime} = this.state;
+    const { startTime } = this.state;
+    const { endTime } = this.state;
 
 
     return courses.flatMap((course, index) =>
@@ -242,10 +242,10 @@ class RegisTa extends React.Component {
             <td>
               <div>
                 <div>
-                <TimePickerTa // Pass startTime and endTime to TimePickerTa component
-                  onStartTimeChange={(time) => this.setState({ startTime: time })}
-                  onEndTimeChange={(time) => this.setState({ endTime: time })}
-                />
+                  <TimePickerTa // Pass startTime and endTime to TimePickerTa component
+                    onStartTimeChange={(time) => this.setState({ startTime: time })}
+                    onEndTimeChange={(time) => this.setState({ endTime: time })}
+                  />
                 </div>
               </div>
             </td>
@@ -289,9 +289,12 @@ class RegisTa extends React.Component {
               </div>
             </td>
             <td>
-              <div className="testtable-dropdownposition">
+              <div>
+                <CheckDayRe handleInputChangeDay={this.handleInputDayChange} />
+              </div>
+              {/* <div className="testtable-dropdownposition">
                 <select className="testtable-dropdown">
-                  {/* 2. Dropdown เลือกวัน */}
+                  
                   <option value=""></option>
                   <option value="Monday">Monday</option>
                   <option value="Tuesday">Tuesday</option>
@@ -301,7 +304,7 @@ class RegisTa extends React.Component {
                   <option value="Saturday">Saturday</option>
                   <option value="Sunday">Sunday</option>
                 </select>
-              </div>
+              </div> */}
             </td>
             <td>
               <div>
@@ -330,46 +333,43 @@ class RegisTa extends React.Component {
   //     document.querySelector('.bordered-table').deleteRow(rowIndex);
   //   }
   // }
-  handleSaveButtonLec = async (optionsText) => {
 
-    const teacher = sessionStorage.getItem("name")
-    const { lectureCourses, selectDay, selectedOptions } = this.state;
 
+  handleSaveButtonLec = async () => {
+    const teacher = sessionStorage.getItem("name");
+    const { lectureCourses, selectedDay, selectedOptions, inputValue, startTime, endTime } = this.state;
+  
     try {
-      // ดึงข้อมูลจาก lectureCourses
-      const coursesData = this.state.lectureCourses.map((course) => ({
+      // สร้างข้อมูลสำหรับแต่ละคอร์สใน lectureCourses
+      const coursesData = lectureCourses.map((course) => ({
         idsubject: course.subject_id,
         name: course.subject_name,
         sec: course.sec_num,
         lab_lec: course.lectureOrLab,
-
         years: course.years,
         class_year: selectedOptions.join(','),
-
-        n_people: this.state.inputValue,
+        n_people: inputValue,
         credit: course.credit,
-        day: this.state.selectDay, // ใช้ค่า selectDay ที่เก็บไว้ใน state
+        day: selectedDay,
         course_year: course.course_year,
         term: course.term,
-        time_start: this.state.startTime,
-        time_end: this.state.endTime,
-        room:"-",
+        category: course.category,
+        time_start: startTime,
+        time_end: endTime,
+        room: "-",
         teacher: teacher,
-
       }));
-
+  
       // ส่งข้อมูลไปยังเซิร์ฟเวอร์
-      const response = await Axios.post(
-        "http://127.0.0.1:3001/registerlec",
-        coursesData
-      );
-
+      const response = await Axios.post("http://127.0.0.1:3001/registerlec", coursesData);
+  
       // ดำเนินการต่อเมื่อบันทึกสำเร็จ
       console.log("บันทึกข้อมูลสำเร็จ:", response.data);
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการบันทึกข้อมูล:", error);
     }
   };
+  
 
 
 
@@ -377,7 +377,7 @@ class RegisTa extends React.Component {
 
   handleSaveButtonLab = async (optionsText) => {
     const teacher = sessionStorage.getItem("name")
-    const { lectureCourses, selectDay, selectedOptions } = this.state;
+    const { lectureCourses, selectedDay, selectedOptions } = this.state;
     try {
       // ดึงข้อมูลจาก lectureCourses
       const coursesData = this.state.practicalCourses.map(course => ({
@@ -389,7 +389,7 @@ class RegisTa extends React.Component {
         class_year: selectedOptions.join(','),
         n_people: this.state.inputValue,
         credit: course.credit,
-        day: this.state.selectDay, // ใช้ค่า selectDay ที่เก็บไว้ใน state
+        day: selectedDay, // ใช้ค่า selectDay ที่เก็บไว้ใน state
         category: course.category,
         course_year: course.course_year,
         term: course.term,
@@ -553,7 +553,7 @@ class RegisTa extends React.Component {
                   <td>{course.lab_lec}</td>
                   <td>{course.sec}</td>
                   <td>{course.n_people}</td>
-                  <td>{course.class}</td>
+                  <td>{course.class_year}</td>
                   <td>{course.day}</td>
                   <td>
                     {course.time_start}-{course.time_end}

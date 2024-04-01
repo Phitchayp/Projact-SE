@@ -30,16 +30,16 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  // host: 'localhost',
-  // user: 'root',
-  // password: '12345678',
-  // database: 'project_se',
-
-  host: '192.168.43.237',
-  user: 'dbSE',
-  password: 'root123456',
+  host: 'localhost',
+  user: 'root',
+  password: '12345678',
   database: 'project_se',
-  port: '3308',
+
+  // host: '192.168.43.237',
+  // user: 'dbSE',
+  // password: 'root123456',
+  // database: 'project_se',
+  // port: '3308',
 })
 
 db.connect((err) => {
@@ -1348,10 +1348,9 @@ app.get('/regisTearTerm', (req, res) => {
   });
 });
 
-
-app.delete('/delete-course/:id', (req, res) => {
+app.delete('/save-course/:id', (req, res) => {
   const { id } = req.params;
-  const query = 'DELETE FROM registration_records WHERE id = ?';
+  const query = 'INSERT FROM courset WHERE id = ?';
   db.query(query, [id], (err, result) => {
     if (err) {
       console.error('Failed to delete course:', err);
@@ -1360,6 +1359,7 @@ app.delete('/delete-course/:id', (req, res) => {
     res.send('Course deleted successfully');
   });
 });
+
 app.delete('/delete-courset/:id', (req, res) => {
   const { id } = req.params;
   const query = 'DELETE FROM courset WHERE id = ?';
