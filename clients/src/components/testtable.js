@@ -20,7 +20,8 @@ class RegisTa extends React.Component {
     selectDay: "",
     inputValue: "",
     selectedClassYears: [],
-
+    startTime: null,
+    endTime: null,
     selectedOptions: [],
 
 
@@ -47,6 +48,14 @@ class RegisTa extends React.Component {
 
 
   };
+
+  handleRoomOptions = (selectedRoom) => {
+    this.setState({ selectedRoom });
+    console.log(selectedRoom)
+    console.log(this.state)
+
+
+};
 
   componentDidMount() {
     this.fetchData();
@@ -308,15 +317,19 @@ class RegisTa extends React.Component {
             </td>
             <td>
               <div>
-                <div>
-                  <TimePickerTa />
+              <div>
+                <TimePickerTa // Pass startTime and endTime to TimePickerTa component
+                  onStartTimeChange={(time) => this.setState({ startTime: time })}
+                  onEndTimeChange={(time) => this.setState({ endTime: time })}
+                />
                 </div>
+
               </div>
             </td>
             <td>
-              <div className="testtable-dropdownposition">
-                <TestTableDropdown />
-              </div>
+            <div className="testtable-dropdownposition">
+                <TestTableDropdown onDropdownChange={this.handleRoomOptions} />
+            </div>
             </td>
             <td> </td>
           </tr>
@@ -348,9 +361,9 @@ class RegisTa extends React.Component {
         lab_lec: course.lectureOrLab,
         years: course.years,
         class_year: selectedOptions.join(','),
-        n_people: inputValue,
         credit: course.credit,
         day: selectedDay,
+        n_people: this.state.inputValue,
         course_year: course.course_year,
         term: course.term,
         category: course.category,
@@ -377,7 +390,9 @@ class RegisTa extends React.Component {
 
   handleSaveButtonLab = async (optionsText) => {
     const teacher = sessionStorage.getItem("name")
+
     const { lectureCourses, selectedDay, selectedOptions } = this.state;
+
     try {
       // ดึงข้อมูลจาก lectureCourses
       const coursesData = this.state.practicalCourses.map(course => ({
@@ -385,8 +400,7 @@ class RegisTa extends React.Component {
         name: course.subject_name,
         sec: course.sec_num,
         lab_lec: course.lectureOrLab,
-        years: course.years,
-        class_year: selectedOptions.join(','),
+        class: `${course.branch}(${selectedOptions.join(', ')})`,
         n_people: this.state.inputValue,
         credit: course.credit,
         day: selectedDay, // ใช้ค่า selectDay ที่เก็บไว้ใน state
@@ -394,6 +408,9 @@ class RegisTa extends React.Component {
         course_year: course.course_year,
         term: course.term,
         teacher: teacher,
+        time_start: this.state.startTime,
+        time_end: this.state.endTime,
+        room: selectedRoom,
       }));
 
       // ส่งข้อมูลไปยังเซิร์ฟเวอร์
