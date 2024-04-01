@@ -5,9 +5,10 @@ import { CgFileDocument } from "react-icons/cg";
 import { FaRegSave } from "react-icons/fa";
 import * as XLSX from 'xlsx';
 import Axios from "axios";
+import Swal from 'sweetalert2';
 
 
-const InputEdu = ({ selectcourse1,selectedValue2, selectedValue3, selectedValue4, reloadPage }) => {
+const InputEdu = ({ selectcourse1, selectedValue2, selectedValue3, selectedValue4, reloadPage }) => {
     const [idSubject, setIdSubject] = useState('');
     const [subjectName, setSubjectName] = useState('');
     const [subjectList, setsubjectList] = useState([]);
@@ -15,19 +16,45 @@ const InputEdu = ({ selectcourse1,selectedValue2, selectedValue3, selectedValue4
 
     const handleButtonAdd = () => {
         if (!selectedValue2 || !idSubject || !subjectName || !selectedValue3 || !selectedValue4 || !selectcourse1) {
-            window.alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+            Swal.fire({
+                title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+                icon: 'warning',
+                customClass: {
+                    popup: 'kanit-font',
+                    header: 'kanit-font',
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    footer: 'kanit-font'
+                }
+            });
             return; // ไม่ทำงานต่อไปหากข้อมูลในตัวแปรใดตัวหนึ่งว่าง
         }
         if (!/^\d{8}$/.test(idSubject)) {
-            window.alert('กรุณากรอกรหัสวิชาเป็นตัวเลขให้ครบ 8 ตัว');
+            Swal.fire({
+                title: 'รหัสวิชา',
+                text: 'กรุณากรอกรหัสวิชาเป็นตัวเลขให้ครบ 8 ตัว',
+                icon: 'warning',
+                customClass: {
+                    popup: 'kanit-font',
+                    header: 'kanit-font',
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    footer: 'kanit-font'
+                }
+            });
+
             return; // ไม่ทำงานต่อไปหากค่า idSubject ไม่เป็นจำนวนเต็มหรือเกิน 8 ตัว
         }
         if (!/^[\wก-๙- ]+$/.test(subjectName)) {
             window.alert('กรุณากรอกชื่อวิชาให้ถูกต้อง');
             return; // ไม่ทำงานต่อไปหาก subjectName ไม่ถูกต้อง
         }
-        
-    
+
+
         Axios.post("http://127.0.0.1:3001/addsub", {
             selectcourse1: selectcourse1,
             selectedValue2: selectedValue2,
@@ -37,9 +64,40 @@ const InputEdu = ({ selectcourse1,selectedValue2, selectedValue3, selectedValue4
             selectedValue3: selectedValue3,
         }).then(response => {
             if (response.data === "Data already exists, not inserted") {
-                window.alert('พบข้อมูลรายวิชานี้ในระบบอยู่แล้ว');
+                Swal.fire({
+                    title: 'พบข้อมูลรายวิชานี้ในระบบอยู่แล้ว',
+                    icon: 'warning',
+                    customClass: {
+                        popup: 'kanit-font',
+                        header: 'kanit-font',
+                        title: 'kanit-font',
+                        content: 'kanit-font',
+                        confirmButton: 'kanit-font',
+                        cancelButton: 'kanit-font',
+                        footer: 'kanit-font'
+                    }
+                });
             } else {
-                window.alert('เพิ่มข้อมูลรายวิชาสำเร็จ');
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "เพิ่มข้อมูลรายวิชาสำเร็จ",
+                    showConfirmButton: false,
+                    timer: 2000,   
+                customClass: {
+                        popup: 'kanit-font',
+                        header: 'kanit-font',
+                        title: 'kanit-font',
+                        content: 'kanit-font',
+                        confirmButton: 'kanit-font',
+                        cancelButton: 'kanit-font',
+                        footer: 'kanit-font'
+                    }
+                });
+
+
+
+
                 setsubjectList([
                     ...subjectList,
                     {
@@ -60,7 +118,7 @@ const InputEdu = ({ selectcourse1,selectedValue2, selectedValue3, selectedValue4
             window.alert('เกิดข้อผิดพลาดในการเพิ่มวิชา');
         });
     };
-    
+
 
     useEffect(() => {
         // ทำสั่งการที่คุณต้องการที่นี่ เช่น อัพเดต UI
@@ -108,7 +166,7 @@ const InputEdu = ({ selectcourse1,selectedValue2, selectedValue3, selectedValue4
                             }}
                         />
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'end', marginTop: 'auto' , marginRight: '30px'}}>
+                    <div style={{ display: 'flex', justifyContent: 'end', marginTop: 'auto', marginRight: '30px' }}>
                         <button onClick={handleButtonAdd} className='btn'>
                             <IoIosAddCircleOutline style={{ fontFamily: 'Kanit', fontSize: '15px', marginRight: '3px', paddingTop: '5px' }} />
                             ADD

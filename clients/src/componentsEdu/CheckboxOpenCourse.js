@@ -260,7 +260,16 @@ function CheckboxOpenCourse() {
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
+                confirmButtonText: "ยืนยัน",
+                cancelButtonText: "ยกเลิก",
+                customClass: {
+                    popup: 'kanit-font',
+                    header: 'kanit-font',
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    footer: 'kanit-font'
+                  }
             });
     
             // ถ้าผู้ใช้กดปุ่ม Confirm
@@ -276,7 +285,16 @@ function CheckboxOpenCourse() {
                 await Swal.fire({
                     title: "Deleted!",
                     text: "ลบรายวิชาออกทั้งหมดแล้ว",
-                    icon: "success"
+                    icon: "success",
+                    customClass: {
+                        popup: 'kanit-font',
+                        header: 'kanit-font',
+                        title: 'kanit-font',
+                        content: 'kanit-font',
+                        confirmButton: 'kanit-font',
+                        cancelButton: 'kanit-font',
+                        footer: 'kanit-font'
+                    }
                 }).then(() => {
                     // หากยืนยันการลบ ทำการรีโหลดหน้าเว็บ
                     window.location.reload();
@@ -289,7 +307,16 @@ function CheckboxOpenCourse() {
             await Swal.fire({
                 title: "Deleted!",
                 text: "ลบรายวิชาไม่สำเร็จ",
-                icon: "error"
+                icon: "error",
+                customClass: {
+                    popup: 'kanit-font',
+                    header: 'kanit-font',
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    footer: 'kanit-font'
+                }
             }).then(() => {
                 // หากยืนยันการลบ ทำการรีโหลดหน้าเว็บ
                 window.location.reload();
@@ -312,7 +339,16 @@ function CheckboxOpenCourse() {
             await Swal.fire({
                 title: "Deleted!",
                 text: "ลบรายวิชาไม่สำเร็จ",
-                icon: "error"
+                icon: "error",
+                customClass: {
+                    popup: 'kanit-font',
+                    header: 'kanit-font',
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    footer: 'kanit-font'
+                }
             }).then(() => {
                 // หากยืนยันการลบ ทำการรีโหลดหน้าเว็บ
                 window.location.reload();
@@ -331,7 +367,16 @@ function CheckboxOpenCourse() {
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
+                confirmButtonText: "ยืนยัน",
+                cancelButtonText: "ยกเลิก",
+                customClass: {
+                    popup: 'kanit-font',
+                    header: 'kanit-font',
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    footer: 'kanit-font'
+                  }
             }).then((result) => {
                 if (result.isConfirmed) {
                     // ลบข้อมูลโดยส่งค่า myyear2 และ termsearch ไปยังเซิร์ฟเวอร์
@@ -345,7 +390,16 @@ function CheckboxOpenCourse() {
                         Swal.fire({
                             title: "Deleted!",
                             text: "ลบรายวิชาออกทั้งหมดแล้ว",
-                            icon: "success"
+                            icon: "success",
+                            customClass: {
+                                popup: 'kanit-font',
+                                header: 'kanit-font',
+                                title: 'kanit-font',
+                                content: 'kanit-font',
+                                confirmButton: 'kanit-font',
+                                cancelButton: 'kanit-font',
+                                footer: 'kanit-font'
+                            }
                         }).then(() => {
                             // หากยืนยันการลบ ทำการรีโหลดหน้าเว็บ
                             window.location.reload();
@@ -355,7 +409,16 @@ function CheckboxOpenCourse() {
                         Swal.fire({
                             title: "Deleted!",
                             text: "ลบรายวิชาไม่สำเร็จ",
-                            icon: "error"
+                            icon: "error",
+                            customClass: {
+                                popup: 'kanit-font',
+                                header: 'kanit-font',
+                                title: 'kanit-font',
+                                content: 'kanit-font',
+                                confirmButton: 'kanit-font',
+                                cancelButton: 'kanit-font',
+                                footer: 'kanit-font'
+                            }
                         }).then(() => {
                             // หากยืนยันการลบ ทำการรีโหลดหน้าเว็บ
                             window.location.reload();
@@ -369,7 +432,16 @@ function CheckboxOpenCourse() {
             await Swal.fire({
                 title: "Deleted!",
                 text: "ลบรายวิชาไม่สำเร็จ",
-                icon: "error"
+                icon: "error",
+                customClass: {
+                    popup: 'kanit-font',
+                    header: 'kanit-font',
+                    title: 'kanit-font',
+                    content: 'kanit-font',
+                    confirmButton: 'kanit-font',
+                    cancelButton: 'kanit-font',
+                    footer: 'kanit-font'
+                }
             }).then(() => {
                 // หากยืนยันการลบ ทำการรีโหลดหน้าเว็บ
                 window.location.reload();
@@ -479,9 +551,29 @@ function CheckboxOpenCourse() {
                                             <div style={{ marginRight: '20px' }}>{`${course.category}`}</div>
                                             <LuDelete style={{ fontSize: '24px' }}
                                                 onClick={() => {
-                                                    if (window.confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลรายวิชา : ${course.subject_name} ออกจากระบบ?`)) {
+                                                    Swal.fire({
+                                                      title: "ลบข้อมูลรายวิชา",
+                                                      text: `คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลรายวิชา : ${course.subject_name} ออกจากระบบ?`,
+                                                      icon: "warning",
+                                                      showCancelButton: true,
+                                                      confirmButtonColor: "#3085d6",
+                                                      cancelButtonColor: "#d33",
+                                                      confirmButtonText: "ยืนยัน",
+                                                      cancelButtonText: "ยกเลิก",
+                                                      customClass: {
+                                                        popup: 'kanit-font',
+                                                        header: 'kanit-font',
+                                                        title: 'kanit-font',
+                                                        content: 'kanit-font',
+                                                        confirmButton: 'kanit-font',
+                                                        cancelButton: 'kanit-font',
+                                                        footer: 'kanit-font'
+                                                      }
+                                                    }).then((result) => {
+                                                      if (result.isConfirmed) {
                                                         handleDeleteCourse(course.courseid);
-                                                    }
+                                                      }
+                                                    });
                                                 }} />
 
                                             {/* <div className='CheckboxOpenCourse-status'>สถานะ:</div> */}
