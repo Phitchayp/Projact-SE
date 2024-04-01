@@ -96,9 +96,7 @@ const UploadRoom = ({ selectedValue8, selectedValue9 }) => {
         icon: 'error',
         title: 'บันทึกไม่สำเร็จ',
         text: 'ข้อมูลไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่',
-      }).then(() => {
-        window.location.reload();
-      }); // รีโหลดหน้าหลังจากบันทึกเสร็จสิ้น// รีโหลดหน้าหลังจากบันทึกไม่สำเร็จ
+      })
     });
   };
 
