@@ -603,7 +603,7 @@ function ResultTeach() {
                         
                         .map((filterName, index) => (
                             <tr key={index}>
-                                <td>{`${filterName.No}`}</td>
+                                <td>{`${index+1}`}</td>
                                 <td>{`${filterName.idsubject}`}</td>
                                 <td>{`${filterName.name}`}</td>
                                 <td>{`${filterName.credit}`}</td>
@@ -642,7 +642,7 @@ function ResultTeach() {
 
                         .map((getcon, index) => (
                             <tr key={index}>
-                                <td>{`${getcon.No}`}</td>
+                                <td>{`${index+1}`}</td>
                                 <td>{`${getcon.idsubject}`}</td>
                                 <td>{`${getcon.name}`}</td>
                                 <td>{`${getcon.credit}`}</td>
