@@ -35,7 +35,7 @@ const db = mysql.createConnection({
   // password: '12345678',
   // database: 'project_se',
 
-  host: '10.64.79.183',
+  host: '192.168.43.237',
   user: 'dbSE',
   password: 'root123456',
   database: 'project_se',

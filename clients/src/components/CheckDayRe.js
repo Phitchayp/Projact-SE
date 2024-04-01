@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './Checkbox.css';
 
 function CheckDayRe({ handleInputChangeDay }) {
     const [inputDay, setInputDay] = useState("");

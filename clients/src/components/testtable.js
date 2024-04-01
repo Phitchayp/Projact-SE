@@ -9,6 +9,7 @@ import TestTableDropdown from "./roomfromdb";
 import Axios from "axios";
 import RegisResultTable from "./RegisResultTable";
 import People from "./people";
+import CheckDayRe from "./CheckDayRe";
 
 class RegisTa extends React.Component {
   state = {
@@ -25,19 +26,24 @@ class RegisTa extends React.Component {
 
   };
 
-  handleDayChange = (event) => {
-    this.setState({ selectDay: event.target.value });
+
+  // handleDayChange = (event) => {
+  //   this.setState({ selectDay: event.target.value });
+  // }
+
+  handleInputDayChange = (selectedDay) => {
+    this.setState({ selectedDay });
+    console.log(selectedDay)
+};
+
+  handleInputChangeInPeople = (event) => {
+    this.setState({ inputValue: event.target.value });
   };
 
-
-    handleInputChangeInPeople = (event) => {
-      this.setState({ inputValue: event.target.value });
-    };
-
-    handleOptionsChange = (selectedOptions) => {
-      this.setState({ selectedOptions });
-      console.log(selectedOptions)
-      console.log(this.state)
+  handleOptionsChange = (selectedOptions) => {
+    this.setState({ selectedOptions });
+    console.log(selectedOptions)
+    console.log(this.state)
 
 
   };
@@ -212,15 +218,16 @@ class RegisTa extends React.Component {
               </div>
             </td>
             <td>
-              <div className="testtable-dropdownposition">
-                <select
-                  className="testtable-dropdown"
-                  value={selectDay}
-                  onChange={(e) => {
-                    this.setState({ selectDay: e.target.value });
-                  }}
-                >
-                  {/* 2. Dropdown เลือกวัน */}
+
+              {/* 2. Dropdown เลือกวัน */}
+              <div>
+                <CheckDayRe handleInputChangeDay={this.handleInputDayChange} />
+              </div>
+              {/* <div className="testtable-dropdownposition">
+                <select className="testtable-dropdown"
+                  value={selectDay} onChange={(e) => { this.setState({ selectDay: e.target.value }) }}>
+                  
+
                   <option value=""></option>
                   <option value="Monday">Monday</option>
                   <option value="Tuesday">Tuesday</option>
@@ -230,7 +237,7 @@ class RegisTa extends React.Component {
                   <option value="Saturday">Saturday</option>
                   <option value="Sunday">Sunday</option>
                 </select>
-              </div>
+              </div> */}
             </td>
             <td>
               <div>
