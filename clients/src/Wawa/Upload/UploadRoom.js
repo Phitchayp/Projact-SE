@@ -124,9 +124,7 @@ const UploadRoom = ({ selectedValue8, selectedValue9 }) => {
           cancelButton: 'kanit-font',
           footer: 'kanit-font'
         }
-      }).then(() => {
-        window.location.reload();
-      }); // รีโหลดหน้าหลังจากบันทึกเสร็จสิ้น// รีโหลดหน้าหลังจากบันทึกไม่สำเร็จ
+      });
     });
   };
 
@@ -146,7 +144,7 @@ const UploadRoom = ({ selectedValue8, selectedValue9 }) => {
 
 
   return (
-    <div className="Pop " style={{fontFamily:'kanit'}}>
+    <div className="Pop " style={{ fontFamily: 'kanit' }}>
 
       <div className='in-Room'>
 

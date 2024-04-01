@@ -50,56 +50,58 @@ db.connect((err) => {
   console.log('MySQL successfully')
 })
 
-app.post("/create", (req, res) => {
-  const fullName = req.body.fullName;
-  const email = req.body.email;
+// app.post("/upload", (req, res) => {
+//   const excelData = req.body.excelData;
 
-  // ตรวจสอบว่ามีอีเมลล์นี้ในฐานข้อมูลหรือไม่
-  db.query(
-    "SELECT * FROM allusers WHERE email = ?",
-    [email],
-    (err, result) => {
-      if (err) {
-        console.error('เกิดข้อผิดพลาดในการทำคำสั่ง SQL:', err);
-        return res.status(500).send('Internal Server Error');
-      } else if (result.length > 0) {
-        // หากมีอีเมลล์นี้ในฐานข้อมูล
-        return res.status(409).send('Email already exists');
-      } else {
-        // หากไม่มีอีเมลล์นี้ในฐานข้อมูล ให้ทำการเพิ่มข้อมูล
-        db.query(
-          "INSERT INTO allusers (id,email, fullname) VALUES (2,?, ?)",
-          [email, fullName],
-          (err, result) => {
-            if (err) {
-              console.error('เกิดข้อผิดพลาดในการเพิ่มข้อมูล:', err);
-              return res.status(500).send('Failed to insert data');
-            } else {
-              return res.status(200).send('Values Inserted');
-            }
-          }
-        );
-      }
-    }
-  );
-});
+//   const values = excelData.map(() => "(2, ?)").join(", ");
 
+//   const sql = `INSERT INTO allusers (id,email, fullname) VALUES ${values}`;
+
+//   db.query(sql, excelData, (err, result) => {
+//     if (err) {
+//       console.log(err);
+//       res.status(500).send("Error inserting values");
+//     } else {
+//       res.send("Values Inserted");
+//     }
+//   });
+// });
 app.post("/upload", (req, res) => {
   const excelData = req.body.excelData;
 
-  const values = excelData.map(() => "(2, ?)").join(", ");
-
-  const sql = `INSERT INTO allusers (id,email, fullname) VALUES ${values}`;
-
-  db.query(sql, excelData, (err, result) => {
+  // ตรวจสอบว่าข้อมูลในคอลัมภ์แรกของ excelData ทุกแถวมี email ในฐานข้อมูลแล้วหรือไม่
+  const checkDuplicateEmailQuery = `SELECT email FROM allusers WHERE email IN (?)`;
+  db.query(checkDuplicateEmailQuery, [excelData.map(row => row[0])], (err, result) => {
     if (err) {
       console.log(err);
-      res.status(500).send("Error inserting values");
-    } else {
-      res.send("Values Inserted");
+      res.status(500).send("Error checking duplicate emails");
+      return;
     }
+
+    const emailsInDatabase = result.map(row => row.email);
+    
+    // กรองข้อมูลที่มีอีเมลล์ซ้ำแล้วออก
+    const uniqueExcelData = excelData.filter(row => !emailsInDatabase.includes(row[0]));
+
+    if (uniqueExcelData.length === 0) {
+      res.status(400).send("All emails are duplicate");
+      return;
+    }
+
+    // ส่งข้อมูลไปยังเซิร์ฟเวอร์เพื่อบันทึก
+    const values = uniqueExcelData.map(row => "(2, ?, ?)").join(", ");
+    const sql = `INSERT INTO allusers (id, email, fullname) VALUES ${values}`;
+    db.query(sql, uniqueExcelData.flat(), (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error inserting values");
+      } else {
+        res.send("Values Inserted");
+      }
+    });
   });
 });
+
 
 app.post("/creates", (req, res) => {
   const fullName = req.body.fullName;
@@ -135,24 +137,59 @@ app.post("/creates", (req, res) => {
   );
 });
 
-
-
 app.post("/uploads", (req, res) => {
   const excelData = req.body.excelData;
 
-  const values = excelData.map(() => "(3, ?)").join(", ");
-
-  const sql = `INSERT INTO allusers (id,email, fullname) VALUES ${values}`;
-
-  db.query(sql, excelData, (err, result) => {
+  // ตรวจสอบว่าข้อมูลในคอลัมภ์แรกของ excelData ทุกแถวมี email ในฐานข้อมูลแล้วหรือไม่
+  const checkDuplicateEmailQuery = `SELECT email FROM allusers WHERE email IN (?)`;
+  db.query(checkDuplicateEmailQuery, [excelData.map(row => row[0])], (err, result) => {
     if (err) {
       console.log(err);
-      res.status(500).send("Error inserting values");
-    } else {
-      res.send("Values Inserted");
+      res.status(500).send("Error checking duplicate emails");
+      return;
     }
+
+    const emailsInDatabase = result.map(row => row.email);
+    
+    // กรองข้อมูลที่มีอีเมลล์ซ้ำแล้วออก
+    const uniqueExcelData = excelData.filter(row => !emailsInDatabase.includes(row[0]));
+
+    if (uniqueExcelData.length === 0) {
+      res.status(400).send("All emails are duplicate");
+      return;
+    }
+
+    // ส่งข้อมูลไปยังเซิร์ฟเวอร์เพื่อบันทึก
+    const values = uniqueExcelData.map(row => "(3, ?, ?)").join(", ");
+    const sql = `INSERT INTO allusers (id, email, fullname) VALUES ${values}`;
+    db.query(sql, uniqueExcelData.flat(), (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error inserting values");
+      } else {
+        res.send("Values Inserted");
+      }
+    });
   });
 });
+
+
+// app.post("/uploads", (req, res) => {
+//   const excelData = req.body.excelData;
+
+//   const values = excelData.map(() => "(3, ?)").join(", ");
+
+//   const sql = `INSERT INTO allusers (id,email, fullname) VALUES ${values}`;
+
+//   db.query(sql, excelData, (err, result) => {
+//     if (err) {
+//       console.log(err);
+//       res.status(500).send("Error inserting values");
+//     } else {
+//       res.send("Values Inserted");
+//     }
+//   });
+// });
 
 
 

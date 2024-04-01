@@ -221,23 +221,14 @@ const handleLinkClick = () => {
             showDenyButton: true,
             confirmButtonText: "Save",
             denyButtonText: `cancle`,
-            footer: "หากยืนยัน email ที่เกิดปัญหาจะไม่ได้รับการบันทึกลงระบบ",
-            customClass: {
-              popup: 'kanit-font',
-              header: 'kanit-font',
-              title: 'kanit-font',
-              content: 'kanit-font',
-              confirmButton: 'kanit-font',
-              cancelButton: 'kanit-font',
-              footer: 'kanit-font'
-            }
+            footer: "หากยืนยัน email ที่เกิดปัญหาจะไม่ได้รับการบันทึกลงระบบ"
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 // ทำการบันทึกเฉพาะข้อมูลที่มีอีเมลที่ไม่ซ้ำกับฐานข้อมูลและมีรูปแบบอีเมลถูกต้อง
                 const filteredExcelData = excelData.filter(row => {
                     const email = row[0];
-                    return /^[^\s@]+@ku\.th$/.test(email); // ตรวจสอบรูปแบบอีเมล
+                    return /^[^\s@]+@ku.th/.test(email); // ตรวจสอบรูปแบบอีเมล
                 });
                 // ตรวจสอบว่าข้อมูลในคอลัมน์ที่สองของ excelData มีแถวที่ไม่มีข้อมูลหรือไม่
                 const hasEmptyDataInColumn2 = filteredExcelData.some(row => !row[1]);
