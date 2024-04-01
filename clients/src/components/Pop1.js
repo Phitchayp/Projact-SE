@@ -30,6 +30,15 @@ const Pop = ({ onClose }) => {
         icon: 'error',
         title: 'รูปแบบไฟล์ไม่ถูกต้อง',
         text: 'โปรดเลือกไฟล์นามสกุล .xlsx เท่านั้น',
+        customClass: {
+          popup: 'kanit-font',
+          header: 'kanit-font',
+          title: 'kanit-font',
+          content: 'kanit-font',
+          confirmButton: 'kanit-font',
+          cancelButton: 'kanit-font',
+          footer: 'kanit-font'
+        }
       });
       return;
     }
@@ -59,6 +68,15 @@ const Pop = ({ onClose }) => {
             icon: 'error',
             title: 'บันทึกไม่สำเร็จ',
             text: 'โปรดเลือกไฟล์นามสกุล .xlsx เท่านั้น',
+            customClass: {
+              popup: 'kanit-font',
+              header: 'kanit-font',
+              title: 'kanit-font',
+              content: 'kanit-font',
+              confirmButton: 'kanit-font',
+              cancelButton: 'kanit-font',
+              footer: 'kanit-font'
+            }
         });
         return; // ไม่ดำเนินการต่อไปหากไม่มีข้อมูล excel หรือไฟล์ไม่ใช่ .xlsx
     }
@@ -71,6 +89,15 @@ const Pop = ({ onClose }) => {
             icon: 'error',
             title: 'บันทึกไม่สำเร็จ',
             text: `รูปแบบข้อมูลใน Excel ไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่`,
+            customClass: {
+              popup: 'kanit-font',
+              header: 'kanit-font',
+              title: 'kanit-font',
+              content: 'kanit-font',
+              confirmButton: 'kanit-font',
+              cancelButton: 'kanit-font',
+              footer: 'kanit-font'
+            }
         });
         return; // ไม่ดำเนินการต่อไปหากจำนวนคอลัมน์ไม่ถูกต้อง
     }
@@ -89,7 +116,16 @@ const Pop = ({ onClose }) => {
             showDenyButton: true,
             confirmButtonText: "Save",
             denyButtonText: `cancle`,
-            footer: "หากยืนยัน email ที่เกิดปัญหาจะไม่ได้รับการบันทึกลงระบบ"
+            footer: "หากยืนยัน email ที่เกิดปัญหาจะไม่ได้รับการบันทึกลงระบบ",
+            customClass: {
+              popup: 'kanit-font',
+              header: 'kanit-font',
+              title: 'kanit-font',
+              content: 'kanit-font',
+              confirmButton: 'kanit-font',
+              cancelButton: 'kanit-font',
+              footer: 'kanit-font'
+            }
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
@@ -105,6 +141,15 @@ const Pop = ({ onClose }) => {
                         icon: 'warning',
                         title: 'ข้อมูลไม่ถูกต้อง',
                         text: 'กรุณาเลือกไฟล์ใหม่',
+                        customClass: {
+                          popup: 'kanit-font',
+                          header: 'kanit-font',
+                          title: 'kanit-font',
+                          content: 'kanit-font',
+                          confirmButton: 'kanit-font',
+                          cancelButton: 'kanit-font',
+                          footer: 'kanit-font'
+                        }
                     });
                     return;
                 }
@@ -137,6 +182,15 @@ const saveData = (data) => {
                 popup: 'swal-font',
                 title: 'swal-font',
                 text: 'swal-font',
+                customClass: {
+                  popup: 'kanit-font',
+                  header: 'kanit-font',
+                  title: 'kanit-font',
+                  content: 'kanit-font',
+                  confirmButton: 'kanit-font',
+                  cancelButton: 'kanit-font',
+                  footer: 'kanit-font'
+                }
             }
         }).then(() => {
             window.location.reload();
@@ -150,6 +204,15 @@ const saveData = (data) => {
                     popup: 'swal-font',
                     title: 'swal-font',
                     text: 'swal-font',
+                    customClass: {
+                      popup: 'kanit-font',
+                      header: 'kanit-font',
+                      title: 'kanit-font',
+                      content: 'kanit-font',
+                      confirmButton: 'kanit-font',
+                      cancelButton: 'kanit-font',
+                      footer: 'kanit-font'
+                    }
                 }
             });
         } else {
@@ -161,6 +224,15 @@ const saveData = (data) => {
                     popup: 'swal-font',
                     title: 'swal-font',
                     text: 'swal-font',
+                    customClass: {
+                      popup: 'kanit-font',
+                      header: 'kanit-font',
+                      title: 'kanit-font',
+                      content: 'kanit-font',
+                      confirmButton: 'kanit-font',
+                      cancelButton: 'kanit-font',
+                      footer: 'kanit-font'
+                    }
                 }
             });
         }
@@ -176,6 +248,15 @@ const saveData = (data) => {
           popup: 'swal-font',
           title: 'swal-font',
           text: 'swal-font',
+          customClass: {
+            popup: 'kanit-font',
+            header: 'kanit-font',
+            title: 'kanit-font',
+            content: 'kanit-font',
+            confirmButton: 'kanit-font',
+            cancelButton: 'kanit-font',
+            footer: 'kanit-font'
+          }
         }
       });
       return; // หยุดการทำงานถ้าอีเมลไม่ถูกต้อง
@@ -187,6 +268,15 @@ const saveData = (data) => {
           popup: 'swal-font',
           title: 'swal-font',
           text: 'swal-font',
+          customClass: {
+            popup: 'kanit-font',
+            header: 'kanit-font',
+            title: 'kanit-font',
+            content: 'kanit-font',
+            confirmButton: 'kanit-font',
+            cancelButton: 'kanit-font',
+            footer: 'kanit-font'
+          }
         }
       });
 

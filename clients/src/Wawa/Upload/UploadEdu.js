@@ -78,6 +78,15 @@ const UploadEdu = ({selectcourse,selectedValue1}) => {
         icon: 'error',
         title: 'บันทึกไม่สำเร็จ',
         text: 'โปรดเลือกไฟล์นามสกุล .xlsx เท่านั้น',
+        customClass: {
+          popup: 'kanit-font',
+          header: 'kanit-font',
+          title: 'kanit-font',
+          content: 'kanit-font',
+          confirmButton: 'kanit-font',
+          cancelButton: 'kanit-font',
+          footer: 'kanit-font'
+        }
       });
       return; // ไม่ดำเนินการต่อไปหากไม่มีข้อมูล excel หรือไฟล์ไม่ใช่ .xlsx
     }
@@ -90,6 +99,15 @@ const UploadEdu = ({selectcourse,selectedValue1}) => {
         icon: 'error',
         title: 'บันทึกไม่สำเร็จ',
         text: `รูปแบบข้อมูลใน Excel ไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่`,
+        customClass: {
+          popup: 'kanit-font',
+          header: 'kanit-font',
+          title: 'kanit-font',
+          content: 'kanit-font',
+          confirmButton: 'kanit-font',
+          cancelButton: 'kanit-font',
+          footer: 'kanit-font'
+        }
       });
       return; // ไม่ดำเนินการต่อไปหากจำนวนคอลัมน์ไม่ถูกต้อง
     }
@@ -118,7 +136,19 @@ const UploadEdu = ({selectcourse,selectedValue1}) => {
         icon: 'error',
         title: 'บันทึกไม่สำเร็จ',
         text: 'ข้อมูลไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่',
-      })
+
+        customClass: {
+          popup: 'kanit-font',
+          header: 'kanit-font',
+          title: 'kanit-font',
+          content: 'kanit-font',
+          confirmButton: 'kanit-font',
+          cancelButton: 'kanit-font',
+          footer: 'kanit-font'
+        }
+      }).then(() => {
+        window.location.reload();
+      }); // รีโหลดหน้าหลังจากบันทึกเสร็จสิ้น// รีโหลดหน้าหลังจากบันทึกไม่สำเร็จ
     });
 };
 

@@ -444,7 +444,7 @@ function ResultTeach() {
             </div>      
           </div>
           <div style={{ width: "450px" ,marginTop:'10px'}}>
-            <div class="ResultTech-Text">รหัสวิชา/ชื่อวิชา</div>
+            <div class="ResultTech-Text">ชื่อวิชา</div>
             <div
               class="ResultTechsearchBar-searchBoxSub"
               style={{ display: "flex", alignItems: "center" }}
@@ -453,7 +453,7 @@ function ResultTeach() {
                       value={searchText1}
                       onChange={handleSearchChangeCourse}
                       type="text"
-                      placeholder="รหัสวิชา, ชื่อวิชา"
+                      placeholder="ชื่อวิชา"
                     />
                     <button onClick={searchCourses}>
                       <img src={searchIconCourse} alt="Search Icon" />
@@ -588,6 +588,9 @@ function ResultTeach() {
                           searchText1 ? filterName.name.includes(searchText1) : true
                         ))
                         .filter(filterName => (
+                          searchText2 ? filterName.teacher.includes(searchText2) : true
+                        ))
+                        .filter(filterName => (
                           selectedDay ? filterName.day.includes(selectedDay): true
                         ))  
                         .filter(filterName => (
@@ -621,6 +624,10 @@ function ResultTeach() {
                     allname
                         .filter(getcon => (
                           searchText1 ? getcon.name.includes(searchText1) : true
+                            
+                        ))
+                        .filter(getcon => (
+                          searchText2 ? getcon.teacher.includes(searchText2) : true
                             
                         ))
                         .filter(getcon => (

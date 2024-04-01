@@ -157,6 +157,15 @@ function RegisResultTable() {
         title: "warning",
         text: "กรุณากรอกข้อมูลให้ครบถ้วน",
         icon: "warning",
+        customClass: {
+          popup: 'kanit-font',
+          header: 'kanit-font',
+          title: 'kanit-font',
+          content: 'kanit-font',
+          confirmButton: 'kanit-font',
+          cancelButton: 'kanit-font',
+          footer: 'kanit-font'
+        }
       })
       return; // ยกเลิกการทำงานหากข้อมูลไม่ครบถ้วน
     }

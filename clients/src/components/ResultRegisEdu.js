@@ -447,7 +447,7 @@ function ResultRegisEdu() {
           </div>
 
           <div style={{ width: "450px" ,marginTop:'10px'}}>
-            <div class="ResultTech-Text">รหัสวิชา/ชื่อวิชา</div>
+            <div class="ResultTech-Text">ชื่อวิชา</div>
             <div
               class="ResultTechsearchBar-searchBoxSub"
               style={{ display: "flex", alignItems: "center" }}
@@ -456,7 +456,7 @@ function ResultRegisEdu() {
                       value={searchText1}
                       onChange={handleSearchChangeCourse}
                       type="text"
-                      placeholder="รหัสวิชา, ชื่อวิชา"
+                      placeholder="ชื่อวิชา"
                     />
                     <button onClick={searchCourses}>
                       <img src={searchIconCourse} alt="Search Icon" />
@@ -591,6 +591,9 @@ function ResultRegisEdu() {
                           searchText1 ? filterName.name.includes(searchText1) : true
                         ))
                         .filter(filterName => (
+                          searchText2 ? filterName.teacher.includes(searchText2) : true
+                        ))
+                        .filter(filterName => (
                           selectedDay ? filterName.day.includes(selectedDay): true
                         ))  
                         .filter(filterName => (
@@ -606,7 +609,7 @@ function ResultRegisEdu() {
                         
                         .map((filterName, index) => (
                             <tr key={index}>
-                                <td>{`${filterName.No}`}</td>
+                                <td>{`${index+1}`}</td>
                                 <td>{`${filterName.idsubject}`}</td>
                                 <td>{`${filterName.name}`}</td>
                                 <td>{`${filterName.credit}`}</td>
@@ -624,6 +627,10 @@ function ResultRegisEdu() {
                     allname
                         .filter(getcon => (
                           searchText1 ? getcon.name.includes(searchText1) : true
+                            
+                        ))
+                        .filter(getcon => (
+                          searchText2 ? getcon.teacher.includes(searchText2) : true
                             
                         ))
                         .filter(getcon => (
@@ -645,7 +652,7 @@ function ResultRegisEdu() {
 
                         .map((getcon, index) => (
                             <tr key={index}>
-                                <td>{`${getcon.No}`}</td>
+                                <td>{`${index+1}`}</td>
                                 <td>{`${getcon.idsubject}`}</td>
                                 <td>{`${getcon.name}`}</td>
                                 <td>{`${getcon.credit}`}</td>
