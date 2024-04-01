@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom'; // เพิ่มการนำเข
 import UploadRoom from '../Wawa/Upload/UploadRoom';
 import RoomList from '../components/getRoom';
 import { ReactComponent as Icon } from '../assets/warning.svg';
+import roomImport from '../assets/room_import.png';
+import Swal from 'sweetalert2';
 
 function handleClick(event) {
   const button = event.currentTarget;
@@ -86,6 +88,32 @@ function RoomImport() {
     return () => clearInterval(interval);
   }, []);
 
+  ////////////// ลิ้งรุป ////////////////////
+  const handleLinkClick = () => {
+    Swal.fire({
+      title: 'ตัวอย่างไฟล์นำเข้า',
+      text: 'ตึก , ห้อง , จำนวนคน',
+      imageUrl: roomImport,
+      imageWidth: 2000,
+      imageHeight: 100,
+      imageAlt: 'Example',
+      confirmButtonText: 'ปิด',
+      customClass: {
+        title: 'kanit-font',
+        content: 'kanit-font',
+        confirmButton: 'kanit-font',
+        cancelButton: 'kanit-font',
+        popup: 'kanit-font'
+      }
+    });
+
+  };
+
+  //////////////////////////////////////////////
+
+
+
+
   return (
     <div className='turnleft-all'>
       <div>
@@ -95,11 +123,18 @@ function RoomImport() {
 
             <div>
               <div>
-                <h className='DateAdmin-text'>นำข้อมูลห้องเรียนเข้าสู่ระบบ</h><span style={{ fontFamily: 'kanit', fontSize: '14px', color: '#708090', fontWeight: 'bold' }}> (*ไฟล์นามสกุล .xlsx เท่านั้น)</span>
+                <h className='DateAdmin-text'>นำข้อมูลห้องเรียนเข้าสู่ระบบ</h>
                 <br></br><p2 style={{ color: '#CD5C5C', fontSize: '15px', fontFamily: 'kanit', fontWeight: 'bold' }}>{dateTime} </p2>
               </div>
-              <div style={{ marginTop: '40px' }}>
-                <UploadRoom />
+              <div className='container-boximport23'>
+
+                <br></br>
+                <h style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline', fontSize: '15px', fontFamily: 'kanit', marginLeft: '20px'  }} onClick={handleLinkClick}>ตัวอย่างไฟล์นำเข้า</h>
+                <span style={{ fontFamily: 'kanit', fontSize: '14px', color: '#708090', fontWeight: 'bold', marginLeft: '5px' }}> (*ไฟล์นามสกุล .xlsx เท่านั้น)</span>
+                <div style={{ marginTop: '40px' , marginLeft: '90px' }}>
+                  <UploadRoom />
+                </div>
+
               </div>
               <div>
                 <h3 style={{ marginTop: '100px', fontFamily: 'kanit' }}>ห้องเรียนที่เปิดสอน</h3>
@@ -116,7 +151,7 @@ function RoomImport() {
                   <p2 style={{ color: '#CD5C5C', fontSize: '15px', fontFamily: 'kanit', fontWeight: 'bold' }}>{dateTime}</p2>
                 </div>
                 <div className='noti-text2'>
-                  <Icon style={{ marginRight: '10px'}} />
+                  <Icon style={{ marginRight: '10px' }} />
                   <span>ไม่อยู่ในกำหนดการเพิ่มห้องเรียน</span>
                 </div>
               </div>
