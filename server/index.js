@@ -1360,6 +1360,18 @@ app.delete('/save-course/:id', (req, res) => {
   });
 });
 
+app.delete('/delete-course/:id', (req, res) => {
+  const { id } = req.params;
+  const query = 'DELETE FROM registration_records WHERE id = ?';
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Failed to delete course:', err);
+      return res.status(500).send('Error deleting course');
+    }
+    res.send('Course deleted successfully');
+  });
+});
+
 app.delete('/delete-courset/:id', (req, res) => {
   const { id } = req.params;
   const query = 'DELETE FROM courset WHERE id = ?';

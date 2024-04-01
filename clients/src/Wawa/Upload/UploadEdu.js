@@ -136,6 +136,7 @@ const UploadEdu = ({selectcourse,selectedValue1}) => {
         icon: 'error',
         title: 'บันทึกไม่สำเร็จ',
         text: 'ข้อมูลไม่ถูกต้อง กรุณาเลือกไฟล์ใหม่',
+
         customClass: {
           popup: 'kanit-font',
           header: 'kanit-font',
