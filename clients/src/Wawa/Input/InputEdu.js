@@ -22,10 +22,11 @@ const InputEdu = ({ selectcourse1,selectedValue2, selectedValue3, selectedValue4
             window.alert('กรุณากรอกรหัสวิชาเป็นตัวเลขให้ครบ 8 ตัว');
             return; // ไม่ทำงานต่อไปหากค่า idSubject ไม่เป็นจำนวนเต็มหรือเกิน 8 ตัว
         }
-        if (!/^[\wก-๙-]+$/.test(subjectName)) {
+        if (!/^[\wก-๙- ]+$/.test(subjectName)) {
             window.alert('กรุณากรอกชื่อวิชาให้ถูกต้อง');
             return; // ไม่ทำงานต่อไปหาก subjectName ไม่ถูกต้อง
         }
+        
     
         Axios.post("http://127.0.0.1:3001/addsub", {
             selectcourse1: selectcourse1,
