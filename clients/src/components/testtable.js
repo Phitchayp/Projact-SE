@@ -391,7 +391,7 @@ class RegisTa extends React.Component {
   handleSaveButtonLab = async (optionsText) => {
     const teacher = sessionStorage.getItem("name")
 
-    const { lectureCourses, selectedDay, selectedOptions } = this.state;
+    const { lectureCourses, selectedDay, selectedOptions,selectedRoom } = this.state;
 
     try {
       // ดึงข้อมูลจาก lectureCourses
