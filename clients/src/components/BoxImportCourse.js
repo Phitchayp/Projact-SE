@@ -4,11 +4,14 @@ import { FaFileLines } from "react-icons/fa6";
 import { Link } from 'react-router-dom'; // เพิ่มการนำเข้า Link ที่นี่
 import UploadEdu from '../Wawa/Upload/UploadEdu';
 import InputEdu from '../Wawa/Input/InputEdu';
+
 import CourseList from './getopencourse';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import '../pageTeacher/CloseRegis';
 import { ReactComponent as Icon } from '../assets/warning.svg';
+import courseImport from '../assets/course_import.png';
+
 
 
 
@@ -124,7 +127,28 @@ function BoxImportCourse() {
         }
     };
 
+    ////////////// ลิ้งรุป ////////////////////
+    const handleLinkClick = () => {
+        Swal.fire({
+            title: 'ตัวอย่างไฟล์นำเข้า',
+            text: 'รหัสวิชา , ชื่อวิชา , หน่วยกิต , หมวดวิชา',
+            imageUrl: courseImport,
+            imageWidth: 2000,
+            imageHeight: 100,
+            imageAlt: 'Example',
+            confirmButtonText: 'ปิด',
+            customClass: {
+                title: 'kanit-font',
+                content: 'kanit-font',
+                confirmButton: 'kanit-font',
+                cancelButton: 'kanit-font',
+                popup: 'kanit-font'
+              }
+        });
 
+    };
+
+    //////////////////////////////////////////////
 
 
 
@@ -182,8 +206,16 @@ function BoxImportCourse() {
                                         </div>
                                         <div className='container-boximport' style={{ marginTop: '20px' }} >
                                             <div className='backgroung-color22'>
-                                                <r style={{ color: '#8C3941', marginLeft: '15px' }}>นำเข้ารายวิชา </r>
+                                                <r style={{ color: '#8C3941', marginLeft: '15px', fontWeight: 'bold' }}>นำเข้ารายวิชา </r>
                                                 <g style={{ color: '#838383' }}>  (*ครั้งละ 1 ไฟล์และไฟล์นามสกุล .xlsx เท่านั้น)</g>
+
+
+
+                                                <br></br>
+                                                <h style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' , fontSize:'15px' , marginLeft: '15px'}} onClick={handleLinkClick}>ตัวอย่างไฟล์นำเข้า</h>
+
+
+
 
                                                 <div className='container-inside' style={{ marginTop: '5px', marginLeft: '40px' }}>
                                                     <div>
@@ -231,9 +263,9 @@ function BoxImportCourse() {
 
                                             </div>
                                             <div className='backgroung-color23'>
-                                                <r style={{ color: '#8C3941', marginLeft: '15px' }}>เพิ่มรายวิชา </r>
+                                                <r style={{ color: '#8C3941', marginLeft: '15px', fontWeight: 'bold' }}>เพิ่มรายวิชา </r>
                                                 <g style={{ color: '#838383' }}>  (*ครั้งละ 1 วิชา)</g>
-                                                <div className='container-inside' style={{ marginTop: '5px' }}>
+                                                <div className='container-inside' style={{ marginTop: '30px' }}>
                                                     <div style={{ marginLeft: '40px' }}>
                                                         <b style={{ color: '#000000', fontSize: '14px' }}>ปีการศึกษา</b>
                                                         <br />

@@ -1,6 +1,6 @@
 .CheckboxOpenCourse-box{
     width: 1100px; /* กำหนดความกว้างของกล่อง */
-    height: 580px; /* กำหนดความสูงของกล่อง */
+    height: 600px; /* กำหนดความสูงของกล่อง */
     background-color: white; /* ตั้งสีพื้นหลังของกล่องเป็นสีขาว */
     border-radius: 20px; /* เพิ่มมุมโค้งให้กับขอบของกล่อง */
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
@@ -292,7 +292,7 @@ input[type="checkbox"]:checked ~ .CheckboxOpenCourse-status::after {
     transition: transform 0.2s;
     /* เพิ่ม transition เพื่อทำให้การเปลี่ยนแปลงเกิดขึ้นเรื่อยๆ */
     cursor: pointer;
-    margin-top:-120%;
+    margin-top:-105%;
     margin-left: 40px;
     justify-content: flex-start;
   }

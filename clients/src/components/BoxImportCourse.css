@@ -528,7 +528,7 @@ option {
     display: flex; /* เพื่อให้กล่องซ้ายและขวาเรียงตัวในแนวนอน */
     position: relative;
     width: 1050px;
-    height: 300px;
+    height: 325px;
     background-color: rgb(255, 255, 255);
     margin-top: 50px;
     border: 2px solid #8C3941;

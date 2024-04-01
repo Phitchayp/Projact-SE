@@ -113,3 +113,18 @@ margin-left: 90px; /* Adjust left margin */
 margin-top: 5px;
 display: inline-block; /* Change to block to move below text */
 }
+
+.container-boximport23 {
+
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 500px;
+  height: 300px;
+  background-color: rgb(255, 255, 255);
+  margin-top: 50px;
+  border: 2px solid #8C3941;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
