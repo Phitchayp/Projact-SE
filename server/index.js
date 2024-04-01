@@ -12,7 +12,7 @@ const db = mysql.createConnection({
   // password: '123456',
   // database: 'databasese',
   // port: '3306'
-  
+
   //pond
   // host: 'localhost',
   // user: 'root',
@@ -29,16 +29,16 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  // host: 'localhost',
-  // user: 'root',
-  // password: '12345678',
-  // database: 'project_se',
-
-  host: '10.64.79.183',
-  user: 'dbSE',
-  password: 'root123456',
+  host: 'localhost',
+  user: 'root',
+  password: '12345678',
   database: 'project_se',
-  port: '3308',
+
+  // host: '10.64.79.183',
+  // user: 'dbSE',
+  // password: 'root123456',
+  // database: 'project_se',
+  // port: '3308',
 })
 
 db.connect((err) => {
@@ -614,7 +614,7 @@ app.get('/time', (req, res) => {
 });
 
 app.post('/timeT', (req, res) => {
-  const { dayS, timeS, dayF, timeF ,selectyear,selectterm} = req.body;
+  const { dayS, timeS, dayF, timeF, selectyear, selectterm } = req.body;
 
   if (!dayS || !timeS || !dayF || !timeF || !selectterm || !selectyear) {
     return res.status(400).json({ error: 'error' });
@@ -627,7 +627,7 @@ app.post('/timeT', (req, res) => {
     } else {
       console.log("Deleted records successfully");
       // หลังจากลบข้อมูลแล้ว ทำการแทรกข้อมูลใหม่
-      db.query("INSERT INTO timeteacher (`id`, `dayS`, `timeS`, `dayF`, `timeF`,course_year,`term`,`state`) VALUES (NULL, ? , ? ,? ,? ,?, ? ,1 )", [dayS, timeS, dayF, timeF,selectyear,selectterm], (insertErr, insertResult) => {
+      db.query("INSERT INTO timeteacher (`id`, `dayS`, `timeS`, `dayF`, `timeF`,course_year,`term`,`state`) VALUES (NULL, ? , ? ,? ,? ,?, ? ,1 )", [dayS, timeS, dayF, timeF, selectyear, selectterm], (insertErr, insertResult) => {
         if (insertErr) {
           console.log(insertErr);
           return res.status(500).json({ error: 'Internal Server Error (Insert)' });
@@ -651,7 +651,7 @@ app.get('/gettimeteacher', (req, res) => {
 });
 
 app.get('/gettimeteachercheck', (req, res) => {
-  
+
   db.query("SELECT * FROM timeteacher ORDER BY id", (err, result) => {
     if (err) {
       console.log(err);
@@ -675,13 +675,13 @@ app.get('/gettimeteachercheck', (req, res) => {
         }
       } else if (formattedCurrentDate === mysqlDateStart && formattedCurrentTime < mysqlTimeStart) {
         // ระบบยังไม่เปิด
-        res.status(200).send("notpass1"+mysqlDateStart + "ปัจจุบัน"+formattedCurrentDate +"final"+mysqlDateFinal+"Time"+mysqlTimeStart+"ปัจ"+formattedCurrentTime+"สิ้น"+mysqlTimeFinal);
+        res.status(200).send("notpass1" + mysqlDateStart + "ปัจจุบัน" + formattedCurrentDate + "final" + mysqlDateFinal + "Time" + mysqlTimeStart + "ปัจ" + formattedCurrentTime + "สิ้น" + mysqlTimeFinal);
       } else if (formattedCurrentDate === mysqlDateFinal && formattedCurrentTime <= mysqlTimeFinal) {
         // ระบบเปิด
         res.status(200).send("pass");
       } else {
         // ระบบปิด
-        res.status(200).send("notpass2"+mysqlDateStart + "ปัจจุบัน"+formattedCurrentDate +"final"+mysqlDateFinal+"Time"+mysqlTimeStart+"ปัจ"+formattedCurrentTime+"สิ้น"+mysqlTimeFinal);
+        res.status(200).send("notpass2" + mysqlDateStart + "ปัจจุบัน" + formattedCurrentDate + "final" + mysqlDateFinal + "Time" + mysqlTimeStart + "ปัจ" + formattedCurrentTime + "สิ้น" + mysqlTimeFinal);
       }
 
     }
@@ -689,7 +689,7 @@ app.get('/gettimeteachercheck', (req, res) => {
 });
 
 app.get('/gettimeeducheck', (req, res) => {
-  
+
   db.query("SELECT * FROM timeedu ORDER BY id", (err, result) => {
     if (err) {
       console.log(err);
@@ -713,13 +713,13 @@ app.get('/gettimeeducheck', (req, res) => {
         }
       } else if (formattedCurrentDate === mysqlDateStart && formattedCurrentTime < mysqlTimeStart) {
         // ระบบยังไม่เปิด
-        res.status(200).send("notpass1"+mysqlDateStart + "ปัจจุบัน"+formattedCurrentDate +"final"+mysqlDateFinal+"Time"+mysqlTimeStart+"ปัจ"+formattedCurrentTime+"สิ้น"+mysqlTimeFinal);
+        res.status(200).send("notpass1" + mysqlDateStart + "ปัจจุบัน" + formattedCurrentDate + "final" + mysqlDateFinal + "Time" + mysqlTimeStart + "ปัจ" + formattedCurrentTime + "สิ้น" + mysqlTimeFinal);
       } else if (formattedCurrentDate === mysqlDateFinal && formattedCurrentTime <= mysqlTimeFinal) {
         // ระบบเปิด
         res.status(200).send("pass");
       } else {
         // ระบบปิด
-        res.status(200).send("notpass2   วันเริ่ม"+mysqlDateStart + "ปัจจุบัน"+formattedCurrentDate +"สิ้นสุด "+mysqlDateFinal+"เวลาเริ่ม: "+mysqlTimeStart+"ปัจ "+formattedCurrentTime+"สิ้น "+mysqlTimeFinal);
+        res.status(200).send("notpass2   วันเริ่ม" + mysqlDateStart + "ปัจจุบัน" + formattedCurrentDate + "สิ้นสุด " + mysqlDateFinal + "เวลาเริ่ม: " + mysqlTimeStart + "ปัจ " + formattedCurrentTime + "สิ้น " + mysqlTimeFinal);
       }
 
     }
@@ -972,7 +972,7 @@ app.post("/register", (req, res) => {
   const {
     subject_id,
     subject_name,
-    section, 
+    section,
     lectureOrLab,
     branch,
     years,
@@ -1024,9 +1024,9 @@ app.post("/register", (req, res) => {
       let sec_num;
       if (lectureOrLab === "ภาคปฏิบัติ") {
         sec_num = results[0].max_sec_num || 829; // เริ่มต้นที่ 800
-      } else {  
+      } else {
         sec_num = results[0].max_sec_num || 799; // เริ่มต้นที่ 830
-      } 
+      }
 
       // Loop through each section
       for (let i = 0; i < section; i++) {
@@ -1072,6 +1072,36 @@ app.post("/register", (req, res) => {
   });
 });
 
+app.post("/registerlec", (req, res) => {
+  const {
+    idsubject,
+    name,
+    sec,
+    lab_lec,
+    years,
+    class_year,
+    n_people,
+    credit,
+    day, // เปลี่ยนจาก day เป็น selectDay
+    category,
+    course_year,
+    term,
+
+  } = req.body;
+
+  const query = "INSERT INTO courset SET ?";
+  db.query(query, req.body, (err, results) => {
+    if (err) {
+      console.error("Failed to insert registration_records:", err);
+      return res
+        .status(500)
+        .send(
+          "Error saving registration_records. Please contact support if this issue persists."
+        );
+    }
+  });
+
+});
 
 
 // GET endpoint for retrieving all registration data
@@ -1091,11 +1121,13 @@ app.get('/registration-data', (req, res) => {
 });
 
 
+
+
 app.get('/registall-data', (req, res) => {
   const myyear2 = req.query.myyear2;
   const termsearch = req.query.termsearch;
   const name = req.query.name;
- 
+
   // ตรวจสอบว่ามีชื่อที่รับมาในฐานข้อมูลหรือไม่
   db.query('SELECT * FROM `courset` WHERE teacher=?', [name], (err, results) => {
     if (err) {
@@ -1103,24 +1135,24 @@ app.get('/registall-data', (req, res) => {
       return res.status(500).send('Error retrieving teacher data');
     }
     // ตรวจสอบข้อมูล myyear2 และ termsearch
-    if (!myyear2 || !termsearch ) {
+    if (!myyear2 || !termsearch) {
       return res.status(400).send("กรุณากรอกข้อมูลให้ครบถ้วน");
     } else {
       let sqlQuery = 'SELECT * FROM `courset` WHERE course_year=? AND term=?';
       let queryParams = [myyear2, termsearch];
 
       if (name !== undefined) {
-          sqlQuery += ' AND teacher=?';
-          queryParams.push(name);
-          console.log('SQL Query:', sqlQuery);
+        sqlQuery += ' AND teacher=?';
+        queryParams.push(name);
+        console.log('SQL Query:', sqlQuery);
       }
 
       db.query(sqlQuery, queryParams, (err, results) => {
-          if (err) {
-              console.error('Failed to retrieve registration data: ', err);
-              return res.status(500).send('Error retrieving registration data');
-          }
-          res.json(results);
+        if (err) {
+          console.error('Failed to retrieve registration data: ', err);
+          return res.status(500).send('Error retrieving registration data');
+        }
+        res.json(results);
       });
     }
   });
