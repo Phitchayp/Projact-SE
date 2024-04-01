@@ -11,6 +11,7 @@ import RegisResultTable from "./RegisResultTable";
 import People from "./people";
 import CheckDayRe from "./CheckDayRe";
 import StatusRegis from "../componentsEdu/StatusRegis";
+import StatusRegisLab from "../componentsEdu/StatusRegisLab";
 
 class RegisTa extends React.Component {
   state = {
@@ -338,7 +339,7 @@ class RegisTa extends React.Component {
             </div>
             </td>
             <td> </td>
-            <td> <StatusRegis/></td>
+            <td> <StatusRegisLab/></td>
           </tr>
         );
       })
