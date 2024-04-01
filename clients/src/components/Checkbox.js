@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Checkbox.css';
 
-function CheckBoxRe() {
+function CheckBoxRe({ onOptionsChange }) {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   const handleCheckboxChange = (e) => {
@@ -13,10 +13,16 @@ function CheckBoxRe() {
     }
   };
 
+  // Call the onOptionsChange function with updated optionsText
+  React.useEffect(() => {
+    const optionsText = selectedOptions.join(', ');
+    onOptionsChange(optionsText);
+  }, [selectedOptions, onOptionsChange]);
+
   return (
     <div className="App">
       <div className="boxContainer">
-        <div className="buttonGroup">
+        <div className="buttonGroup" >
           <input type="checkbox" id="option1" name="check" value="1" onChange={handleCheckboxChange} />
           <label htmlFor="option1"><span> 1</span></label>
         </div>
@@ -41,6 +47,7 @@ function CheckBoxRe() {
           <label htmlFor="optionX"><span> X</span></label>
         </div>
       </div>
+      
     </div>
   );
 }

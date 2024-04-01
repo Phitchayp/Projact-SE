@@ -30,16 +30,16 @@ const db = mysql.createConnection({
   // password: '',
   // database: 'tarangsorn',
 
-  // host: 'localhost',
-  // user: 'root',
-  // password: '12345678',
-  // database: 'project_se',
-
-  host: '10.64.79.183',
-  user: 'dbSE',
-  password: 'root123456',
+  host: 'localhost',
+  user: 'root',
+  password: '12345678',
   database: 'project_se',
-  port: '3308',
+
+  // host: '10.64.79.183',
+  // user: 'dbSE',
+  // password: 'root123456',
+  // database: 'project_se',
+  // port: '3308',
 })
 
 db.connect((err) => {
@@ -700,6 +700,7 @@ app.get('/gettimeteachercheck', (req, res) => {
     // ใช้โซนเวลาไทย
     const thaiTimeZone = 'Asia/Bangkok';
 
+
     // สร้าง Object เวลาปัจจุบันโดยใช้โซนเวลาไทย
     const currentDate = moment().tz(thaiTimeZone);
 
@@ -736,7 +737,9 @@ app.get('/gettimeteachercheck', (req, res) => {
         (formattedCurrentTime > mysqlTimeStart && formattedCurrentTime >= mysqlTimeFinal)) {
         res.send("notpass4 ");
       } else {
+
         res.send("pass");
+
       }
     } else if (formattedCurrentDate > mysqlDateStart && formattedCurrentDate > mysqlDateFinal) {
       res.send("notpass5 ");
@@ -829,13 +832,13 @@ app.get('/gettimeeducheck', (req, res) => {
         }
       } else if (formattedCurrentDate === mysqlDateStart && formattedCurrentTime < mysqlTimeStart) {
         // ระบบยังไม่เปิด
-        res.status(200).send("notpass1"+mysqlDateStart + "ปัจจุบัน"+formattedCurrentDate +"final"+mysqlDateFinal+"Time"+mysqlTimeStart+"ปัจ"+formattedCurrentTime+"สิ้น"+mysqlTimeFinal);
+        res.status(200).send("notpass1" + mysqlDateStart + "ปัจจุบัน" + formattedCurrentDate + "final" + mysqlDateFinal + "Time" + mysqlTimeStart + "ปัจ" + formattedCurrentTime + "สิ้น" + mysqlTimeFinal);
       } else if (formattedCurrentDate === mysqlDateFinal && formattedCurrentTime <= mysqlTimeFinal) {
         // ระบบเปิด
         res.status(200).send("pass");
       } else {
         // ระบบปิด
-        res.status(200).send("notpass2   วันเริ่ม"+mysqlDateStart + "ปัจจุบัน"+formattedCurrentDate +"สิ้นสุด "+mysqlDateFinal+"เวลาเริ่ม: "+mysqlTimeStart+"ปัจ "+formattedCurrentTime+"สิ้น "+mysqlTimeFinal);
+        res.status(200).send("notpass2   วันเริ่ม" + mysqlDateStart + "ปัจจุบัน" + formattedCurrentDate + "สิ้นสุด " + mysqlDateFinal + "เวลาเริ่ม: " + mysqlTimeStart + "ปัจ " + formattedCurrentTime + "สิ้น " + mysqlTimeFinal);
       }
 
     }
@@ -1218,6 +1221,36 @@ app.post("/register", (req, res) => {
   });
 });
 
+app.post("/registerlec", (req, res) => {
+  const {
+    idsubject,
+    name,
+    sec,
+    lab_lec,
+    years,
+    class_year,
+    n_people,
+    credit,
+    day, // เปลี่ยนจาก day เป็น selectDay
+    category,
+    course_year,
+    term,
+
+  } = req.body;
+
+  const query = "INSERT INTO courset SET ?";
+  db.query(query, req.body, (err, results) => {
+    if (err) {
+      console.error("Failed to insert registration_records:", err);
+      return res
+        .status(500)
+        .send(
+          "Error saving registration_records. Please contact support if this issue persists."
+        );
+    }
+  });
+
+});
 
 
 // GET endpoint for retrieving all registration data
@@ -1235,6 +1268,8 @@ app.get('/registration-data', (req, res) => {
     res.json(results);
   });
 });
+
+
 
 
 app.get('/registall-data', (req, res) => {
