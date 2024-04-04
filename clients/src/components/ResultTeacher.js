@@ -258,7 +258,7 @@ function ResultTeacher() {
 
 
   const search2 = () => {
-    
+
     if (myyear2 === "" || termsearch === "") {
       // ถ้า myyear2 หรือ termsearch ว่าง ให้แสดงข้อความแจ้งเตือนและไม่ทำอะไรเพิ่ม
       Swal.fire({
@@ -281,20 +281,20 @@ function ResultTeacher() {
         .then((response) => {
           const name = sessionStorage.getItem("name")
           setCourses2(response.data);
-          
+
           fetchData();
-          return <ResultTableTeacherRed myyear2={myyear2} termsearch={termsearch}/>
-          
-        } ,[myyear2, termsearch,name])
+          return <ResultTableTeacherRed myyear2={myyear2} termsearch={termsearch} />
+
+        }, [myyear2, termsearch, name])
         .catch((error) => {
           console.error('Error fetching course data:', error);
         });
     }
   };
-  
-  
-  
-  
+
+
+
+
 
   // Define the formatTime function above its first use
   const formatTime = (time) => {
@@ -336,7 +336,7 @@ function ResultTeacher() {
       }
     };
 
-    
+
   }); // ให้ useEffect รันเมื่อ myyear2 หรือ termsearch เปลี่ยนแปลง
 
 
@@ -388,6 +388,11 @@ function ResultTeacher() {
             <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>ปีการศึกษา</p>
             <select value={myyear2} onChange={(e) => { setYear2(e.target.value) }}>
               <option value=""></option>
+              <option value="2574">2574</option>
+              <option value="2573">2573</option>
+              <option value="2572">2572</option>
+              <option value="2571">2571</option>
+              <option value="2570">2570</option>
               <option value="2569">2569</option>
               <option value="2568">2568</option>
               <option value="2567">2567</option>
@@ -453,10 +458,10 @@ function ResultTeacher() {
                         <br />
                         <div>
                           <div >room :   {course.room}</div>
-                          
+
                           <div >sec :   {course.sec}</div>
                         </div>
-                        
+
                       </td>
                     );
                   } else if (!dayCourses.some(c => colIndex >= c.startSlot && colIndex < c.startSlot + c.span)) {
@@ -471,7 +476,7 @@ function ResultTeacher() {
         </table>
       </div>
       <div className="ResultTableTeacherRed-left">
-      <ResultTableTeacherRed myyear2={myyear2} termsearch={termsearch} />
+        <ResultTableTeacherRed myyear2={myyear2} termsearch={termsearch} />
       </div>
     </div>
   );

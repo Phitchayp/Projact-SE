@@ -54,7 +54,7 @@ const ListCoruse = () => {
                 <td>{`${course.sec}`}</td>
                 <td className="CheckRegisCoruse-blue-text">{`${course.teacher}`}</td>
                 <td>{`${course.n_people}`}</td>
-                <td>{course.class}</td>
+                <td>{course.class_year}</td>
                 <td className="CheckRegisCoruse-blue-text">{`${course.day}`}</td>
                 <td>{`${course.time_start}`}-{`${course.time_end}`}</td>
                 <td>{`${course.room}`}</td>

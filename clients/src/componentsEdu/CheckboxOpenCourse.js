@@ -23,21 +23,21 @@ function CheckboxOpenCourse() {
 
     useEffect(() => {
         const interval = setInterval(() => {
-          const thaiDateTime = new Date().toLocaleString('th-TH', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric',
-           
-          });
-          setDateTime(thaiDateTime);
+            const thaiDateTime = new Date().toLocaleString('th-TH', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+
+            });
+            setDateTime(thaiDateTime);
         }, 1000);
-    
+
         return () => clearInterval(interval);
-      }, []);
+    }, []);
 
     useEffect(() => {
         axios.get("http://127.0.0.1:3001/getsub")
@@ -69,7 +69,7 @@ function CheckboxOpenCourse() {
         if (isChecked) {
             // เพิ่มข้อมูลของทุกตัวในรายการ courses เข้าไปใน listCheck
             const selectedCourses = courses.map(course => ({
-                courses:course.courses,
+                courses: course.courses,
                 course_year: course.course_year,
                 id: course.subject_id,
                 subjectName: course.subject_name,
@@ -167,9 +167,9 @@ function CheckboxOpenCourse() {
 
 
     const handleCheckboxChange = (coursedata) => {
-        const { courses,course_year, id, checked, subjectName, credit, category } = coursedata;
+        const { courses, course_year, id, checked, subjectName, credit, category } = coursedata;
         if (checked) {
-            setListCheck(prevList => [...prevList, { courses,course_year, id, subjectName, credit, category }]);
+            setListCheck(prevList => [...prevList, { courses, course_year, id, subjectName, credit, category }]);
         } else {
             setListCheck(prevList => prevList.filter(item => item.id !== id));
         }
@@ -227,9 +227,9 @@ function CheckboxOpenCourse() {
                     listCheck: listCheck,
                     termChecked: termChecked
                 });
-    
+
                 console.log("Data posted successfully");
-    
+
                 Swal.fire({
                     title: "บันทึกข้อมูลสำเร็จ!",
                     text: "บันทึกรายวิชาที่สามารถเปิดสอน",
@@ -248,8 +248,8 @@ function CheckboxOpenCourse() {
             console.error("Error posting data:", error);
         }
     };
-    
-    
+
+
     const handleDeleteOpenCourse = async () => {
         try {
             // แสดงป๊อปอัพยืนยันการลบ
@@ -269,9 +269,9 @@ function CheckboxOpenCourse() {
                     content: 'kanit-font',
                     confirmButton: 'kanit-font',
                     footer: 'kanit-font'
-                  }
+                }
             });
-    
+
             // ถ้าผู้ใช้กดปุ่ม Confirm
             if (confirmation.isConfirmed) {
                 // ลบข้อมูลในฐานข้อมูล
@@ -280,7 +280,7 @@ function CheckboxOpenCourse() {
                         listCheck: listCheck
                     }
                 });
-    
+
                 // แสดงป๊อปอัพแจ้งลบสำเร็จ
                 await Swal.fire({
                     title: "Deleted!",
@@ -299,7 +299,7 @@ function CheckboxOpenCourse() {
                     // หากยืนยันการลบ ทำการรีโหลดหน้าเว็บ
                     window.location.reload();
                 });
-            }else{
+            } else {
                 window.location.reload();
             }
         } catch (error) {
@@ -324,8 +324,8 @@ function CheckboxOpenCourse() {
         }
         console.log(courses);
     };
-    
-    
+
+
 
 
     const handleDeleteCourse = async (courses) => {
@@ -376,7 +376,7 @@ function CheckboxOpenCourse() {
                     content: 'kanit-font',
                     confirmButton: 'kanit-font',
                     footer: 'kanit-font'
-                  }
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     // ลบข้อมูลโดยส่งค่า myyear2 และ termsearch ไปยังเซิร์ฟเวอร์
@@ -424,7 +424,7 @@ function CheckboxOpenCourse() {
                             window.location.reload();
                         });
                     });
-                    
+
                 }
             });
         } catch (error) {
@@ -449,22 +449,27 @@ function CheckboxOpenCourse() {
         }
         console.log(courses);
     };
-    
-    
-   
+
+
+
 
 
     return (
         <div className='turnleft-all'>
             <div className='DateAdmin-text'>
                 <h style={{ color: '#8b0000' }}>เลือกรายวิชาที่จะเปิดสอน</h>
-                <br></br><p2 style={{color:'#CD5C5C' , fontSize:'15px'}}>{dateTime} </p2>
+                <br></br><p2 style={{ color: '#CD5C5C', fontSize: '15px' }}>{dateTime} </p2>
             </div>
             <div className='CheckboxOpenCourse-box'>
                 <div className='CheckboxOpenCourse-dropdown' >
                     <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>ปีการศึกษา</p>
                     <select value={myyear} onChange={(e) => { setYear(e.target.value) }}>
                         <option value=""></option>
+                        <option value="2574">2574</option>
+                        <option value="2573">2573</option>
+                        <option value="2572">2572</option>
+                        <option value="2571">2571</option>
+                        <option value="2570">2570</option>
                         <option value="2569">2569</option>
                         <option value="2568">2568</option>
                         <option value="2567">2567</option>
@@ -505,8 +510,8 @@ function CheckboxOpenCourse() {
                             <div className='leftleft'>
                                 <input
                                     type="radio"
-                                    
-                                    checked={termChecked==='ภาคต้น'}
+
+                                    checked={termChecked === 'ภาคต้น'}
                                     onChange={() => handleCheckterm1('ภาคต้น')}
                                 />
                                 <label htmlFor="selectAllCourses" className="CheckboxOpenCourse-checkbox-text" style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginButton: '10px' }}>ภาคต้น</label>
@@ -514,8 +519,8 @@ function CheckboxOpenCourse() {
                                 <input
                                     style={{ marginLeft: '20px' }}
                                     type="radio"
-                                  
-                                    checked={termChecked==='ภาคปลาย'}
+
+                                    checked={termChecked === 'ภาคปลาย'}
                                     onChange={() => handleCheckterm1('ภาคปลาย')}
                                 />
                                 <label htmlFor="selectOpenedCourses" className="CheckboxOpenCourse-checkbox-text" style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginButton: '10px' }}>ภาคปลาย</label>
@@ -552,27 +557,27 @@ function CheckboxOpenCourse() {
                                             <LuDelete style={{ fontSize: '24px' }}
                                                 onClick={() => {
                                                     Swal.fire({
-                                                      title: "ลบข้อมูลรายวิชา",
-                                                      text: `คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลรายวิชา : ${course.subject_name} ออกจากระบบ?`,
-                                                      icon: "warning",
-                                                      showCancelButton: true,
-                                                      confirmButtonColor: "#3085d6",
-                                                      cancelButtonColor: "#d33",
-                                                      confirmButtonText: "ยืนยัน",
-                                                      cancelButtonText: "ยกเลิก",
-                                                      customClass: {
-                                                        popup: 'kanit-font',
-                                                        header: 'kanit-font',
-                                                        title: 'kanit-font',
-                                                        content: 'kanit-font',
-                                                        confirmButton: 'kanit-font',
-                                                        cancelButton: 'kanit-font',
-                                                        footer: 'kanit-font'
-                                                      }
+                                                        title: "ลบข้อมูลรายวิชา",
+                                                        text: `คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลรายวิชา : ${course.subject_name} ออกจากระบบ?`,
+                                                        icon: "warning",
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: "#3085d6",
+                                                        cancelButtonColor: "#d33",
+                                                        confirmButtonText: "ยืนยัน",
+                                                        cancelButtonText: "ยกเลิก",
+                                                        customClass: {
+                                                            popup: 'kanit-font',
+                                                            header: 'kanit-font',
+                                                            title: 'kanit-font',
+                                                            content: 'kanit-font',
+                                                            confirmButton: 'kanit-font',
+                                                            cancelButton: 'kanit-font',
+                                                            footer: 'kanit-font'
+                                                        }
                                                     }).then((result) => {
-                                                      if (result.isConfirmed) {
-                                                        handleDeleteCourse(course.courseid);
-                                                      }
+                                                        if (result.isConfirmed) {
+                                                            handleDeleteCourse(course.courseid);
+                                                        }
                                                     });
                                                 }} />
 
@@ -626,6 +631,11 @@ function CheckboxOpenCourse() {
                                     <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>ปีการศึกษา</p>
                                     <select value={myyear2} onChange={(e) => { setYear2(e.target.value) }}>
                                         <option value=""></option>
+                                        <option value="2574">2574</option>
+                                        <option value="2573">2573</option>
+                                        <option value="2572">2572</option>
+                                        <option value="2571">2571</option>
+                                        <option value="2570">2570</option>
                                         <option value="2569">2569</option>
                                         <option value="2568">2568</option>
                                         <option value="2567">2567</option>
@@ -652,19 +662,19 @@ function CheckboxOpenCourse() {
                                         <option value="ภาคปลาย">ภาคปลาย</option>
                                         <option value="ทั้งหมด">ทั้งหมด</option>
 
-                            
+
                                     </select>
                                 </div>
 
-                                <button onClick={() => { search2() }} className='CheckboxOpenCourse-button' style={{ marginLeft: '20px', marginTop:'55px'}}>เลือก</button>
+                                <button onClick={() => { search2() }} className='CheckboxOpenCourse-button' style={{ marginLeft: '20px', marginTop: '55px' }}>เลือก</button>
 
-                                
+
 
                             </div>
                             <div>
-                                    <p style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginBottom: '30px' }}>รายวิชาที่อาจารย์สามารถลงทะเบียน</p>
+                                <p style={{ fontFamily: 'Kanit, sans-serif', fontWeight: 'bold', marginBottom: '30px' }}>รายวิชาที่อาจารย์สามารถลงทะเบียน</p>
 
-                                </div>
+                            </div>
 
                             <div className="CheckboxOpenCourse-NewBox" style={{ marginTop: '35px' }}>
                                 <OpenCourseList A={courses2} />

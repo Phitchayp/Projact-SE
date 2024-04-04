@@ -12,6 +12,7 @@ import People from "./people";
 import CheckDayRe from "./CheckDayRe";
 import StatusRegis from "../componentsEdu/StatusRegis";
 import StatusRegisLab from "../componentsEdu/StatusRegisLab";
+import Swal from "sweetalert2";
 
 class RegisTa extends React.Component {
   state = {
@@ -262,9 +263,7 @@ class RegisTa extends React.Component {
             </td>
             <td> </td>
             <td> 
-              <StatusRegis/>
-
-
+              {/* <StatusRegis oonChange={this.handleSaveButtonLec} /> */}
             </td>
           </tr>
         );
@@ -339,7 +338,7 @@ class RegisTa extends React.Component {
             </div>
             </td>
             <td> </td>
-            <td> <StatusRegisLab/></td>
+            {/* <td> <StatusRegisLab/></td> */}
           </tr>
         );
       })
@@ -368,7 +367,7 @@ class RegisTa extends React.Component {
         sec: course.sec_num,
         lab_lec: course.lectureOrLab,
         years: course.years,
-        class_year: selectedOptions.join(','),
+        class_year:`${course.branch}(${selectedOptions.join(', ')})`,
         credit: course.credit,
         day: selectedDay,
         n_people: this.state.inputValue,
@@ -382,12 +381,25 @@ class RegisTa extends React.Component {
       }));
   
       // ส่งข้อมูลไปยังเซิร์ฟเวอร์
-      const response = await Axios.post("http://127.0.0.1:3001/registerlec", coursesData);
+      const response = await Axios.post("http://127.0.0.1:3001/registerlec", {coursesData:coursesData});
+      Swal.fire({
+        icon: "success",
+        title: "บันทึกข้อมูลสำเร็จ",
+        
+    }).then(() => {
+      // หลังจาก Swal.fire() แสดงแล้ว ให้รีเฟรชหน้า
+      window.location.reload();
+  });
   
       // ดำเนินการต่อเมื่อบันทึกสำเร็จ
       console.log("บันทึกข้อมูลสำเร็จ:", response.data);
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการบันทึกข้อมูล:", error);
+      Swal.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
+        
+    });
     }
   };
   
@@ -397,41 +409,53 @@ class RegisTa extends React.Component {
 
 
   handleSaveButtonLab = async (optionsText) => {
-    const teacher = sessionStorage.getItem("name")
-
-    const { lectureCourses, selectedDay, selectedOptions,selectedRoom } = this.state;
-
+    const teacher = sessionStorage.getItem("name");
+    const { practicalCourses, selectedDay,selectedRoom, selectedOptions, inputValue, startTime, endTime } = this.state;
+  
     try {
-      // ดึงข้อมูลจาก lectureCourses
-      const coursesData = this.state.practicalCourses.map(course => ({
+      // สร้างข้อมูลสำหรับแต่ละคอร์สใน lectureCourses
+      const coursesData = practicalCourses.map((course) => ({
         idsubject: course.subject_id,
         name: course.subject_name,
         sec: course.sec_num,
         lab_lec: course.lectureOrLab,
-        class: `${course.branch}(${selectedOptions.join(', ')})`,
-        n_people: this.state.inputValue,
+        years: course.years,
+        class_year:`${course.branch}(${selectedOptions.join(', ')})`,
         credit: course.credit,
-        day: selectedDay, // ใช้ค่า selectDay ที่เก็บไว้ใน state
-        category: course.category,
+        day: selectedDay,
+        n_people: this.state.inputValue,
         course_year: course.course_year,
         term: course.term,
-        teacher: teacher,
-        time_start: this.state.startTime,
-        time_end: this.state.endTime,
+        category: course.category,
+        time_start: startTime,
+        time_end: endTime,
         room: selectedRoom,
+        teacher: teacher,
       }));
-
+  
       // ส่งข้อมูลไปยังเซิร์ฟเวอร์
-
-      const response = await Axios.post("http://127.0.0.1:3001/registerlab", coursesData);
-
-
+      const response = await Axios.post("http://127.0.0.1:3001/registerlab", {coursesData:coursesData});
+      Swal.fire({
+        icon: "success",
+        title: "บันทึกข้อมูลสำเร็จ",
+        
+    }).then(() => {
+      // หลังจาก Swal.fire() แสดงแล้ว ให้รีเฟรชหน้า
+      window.location.reload();
+  });
+  
       // ดำเนินการต่อเมื่อบันทึกสำเร็จ
       console.log("บันทึกข้อมูลสำเร็จ:", response.data);
     } catch (error) {
       console.error("เกิดข้อผิดพลาดในการบันทึกข้อมูล:", error);
+      Swal.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
+        
+    });
     }
   };
+  
 
 
   render() {
@@ -497,7 +521,7 @@ class RegisTa extends React.Component {
               <div class="testtable-buttonchange">
                 <div class="RegisResultTable-saveButton">
                   <button id="saveButtonLec" onClick={this.handleSaveButtonLec}>
-                    <p class="RegisResultTable-saveButtontext">บันทึก1</p>
+                    <p class="RegisResultTable-saveButtontext">บันทึก</p>
                   </button>
                 </div>
               </div>
@@ -535,7 +559,7 @@ class RegisTa extends React.Component {
               <div class="testtable-buttonchange">
                 <div class="RegisResultTable-saveButton">
                   <button id="saveButtonLab" onClick={this.handleSaveButtonLab}>
-                    <p class="RegisResultTable-saveButtontext">บันทึก2</p>
+                    <p class="RegisResultTable-saveButtontext">บันทึก</p>
                   </button>
                 </div>
               </div>
