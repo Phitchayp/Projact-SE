@@ -143,7 +143,7 @@ function BoxImportCourse() {
                 confirmButton: 'kanit-font',
                 cancelButton: 'kanit-font',
                 popup: 'kanit-font'
-              }
+            }
         });
 
     };
@@ -212,7 +212,7 @@ function BoxImportCourse() {
 
 
                                                 <br></br>
-                                                <h style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' , fontSize:'15px' , marginLeft: '15px'}} onClick={handleLinkClick}>ตัวอย่างไฟล์นำเข้า</h>
+                                                <h style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline', fontSize: '15px', marginLeft: '15px' }} onClick={handleLinkClick}>ตัวอย่างไฟล์นำเข้า</h>
 
 
 
@@ -223,6 +223,11 @@ function BoxImportCourse() {
                                                         <br />
                                                         <select value={selectedValue1} onChange={handleDropdownChange1}>
                                                             <option value=""></option>
+                                                            <option value="2574">2574</option>
+                                                            <option value="2573">2573</option>
+                                                            <option value="2572">2572</option>
+                                                            <option value="2571">2571</option>
+                                                            <option value="2570">2570</option>
                                                             <option value="2569">2569</option>
                                                             <option value="2568">2568</option>
                                                             <option value="2567">2567</option>
@@ -358,6 +363,11 @@ function BoxImportCourse() {
                                                     <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>ปีการศึกษา</p>
                                                     <select value={myyear} onChange={(e) => { setYear(e.target.value) }}>
                                                         <option value=""></option>
+                                                        <option value="2574">2574</option>
+                                                        <option value="2573">2573</option>
+                                                        <option value="2572">2572</option>
+                                                        <option value="2571">2571</option>
+                                                        <option value="2570">2570</option>
                                                         <option value="2569">2569</option>
                                                         <option value="2568">2568</option>
                                                         <option value="2567">2567</option>
@@ -441,6 +451,11 @@ function BoxImportCourse() {
                                                 <p style={{ fontFamily: 'kanit', fontWeight: 'bold' }}>ปีการศึกษา</p>
                                                 <select value={myyear} onChange={(e) => { setYear(e.target.value) }}>
                                                     <option value=""></option>
+                                                    <option value="2574">2574</option>
+                                                    <option value="2573">2573</option>
+                                                    <option value="2572">2572</option>
+                                                    <option value="2571">2571</option>
+                                                    <option value="2570">2570</option>
                                                     <option value="2569">2569</option>
                                                     <option value="2568">2568</option>
                                                     <option value="2567">2567</option>

@@ -269,7 +269,7 @@ function RegisResultTable() {
   };
 
   return (
-    <div style={{ fontFamily: 'Kanit' , marginLeft: '-60px'} }>
+    <div style={{ fontFamily: 'Kanit', marginLeft: '-60px' }}>
       <div class="searchBar-texthead">
         <p1>ลงทะเบียนรายวิชา</p1>
 
@@ -289,7 +289,7 @@ function RegisResultTable() {
                   <br></br>
                   <p2 style={{ color: '#3a4746', fontSize: '14px', marginLeft: '10px', fontWeight: 'normal' }}>
                     * กรุณาเลือกปีการศึกษา <span style={{ color: '#CD5C5C', fontWeight: 'bold' }}>{time.course_year}</span>
-                     <span style={{marginLeft:'5px'}}>และภาคเรียน</span> <span style={{ color: '#CD5C5C', fontWeight: 'bold' }}>{time.term}</span> ก่อนลงทะเบียน
+                    <span style={{ marginLeft: '5px' }}>และภาคเรียน</span> <span style={{ color: '#CD5C5C', fontWeight: 'bold' }}>{time.term}</span> ก่อนลงทะเบียน
                   </p2>
 
                 </div>
@@ -355,6 +355,11 @@ function RegisResultTable() {
                   <div className="dropdown5" style={{ marginLeft: '1px', marginRight: '5px' }}>
                     <select value={selectyear.course_year} onChange={(event) => handleDropdownChange5(event, "course_year")}>
                       <option value=""></option>
+                      <option value="2574">2574</option>
+                      <option value="2573">2573</option>
+                      <option value="2572">2572</option>
+                      <option value="2571">2571</option>
+                      <option value="2570">2570</option>
                       <option value="2569">2569</option>
                       <option value="2568">2568</option>
                       <option value="2567">2567</option>

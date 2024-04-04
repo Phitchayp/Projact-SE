@@ -73,7 +73,7 @@ class ResultTableTeacherRed extends React.Component {
                   <td>{course.sec}</td>
                   <td>{course.teacher}</td>
                   <td>{course.n_people}</td>
-                  <td>{course.class}</td>
+                  <td>{course.class_year}</td>
                   <td>{course.day}</td>
                   <td>{course.time_start}-{course.time_end}</td>
                   <td>{course.room}</td>

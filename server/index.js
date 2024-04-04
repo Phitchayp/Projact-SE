@@ -102,6 +102,39 @@ app.post("/upload", (req, res) => {
   });
 });
 
+app.post("/create", (req, res) => {
+  const fullName = req.body.fullName;
+  const email = req.body.email;
+
+  // ตรวจสอบว่ามีอีเมลล์นี้ในฐานข้อมูลหรือไม่
+  db.query(
+    "SELECT * FROM allusers WHERE email = ?",
+    [email],
+    (err, result) => {
+      if (err) {
+        console.error('เกิดข้อผิดพลาดในการทำคำสั่ง SQL:', err);
+        return res.status(500).send('Internal Server Error');
+      } else if (result.length > 0) {
+        // หากมีอีเมลล์นี้ในฐานข้อมูล
+        return res.status(409).send('Email already exists');
+      } else {
+        // หากไม่มีอีเมลล์นี้ในฐานข้อมูล ให้ทำการเพิ่มข้อมูล
+        db.query(
+          "INSERT INTO allusers (id,email, fullname) VALUES (2,?, ?)",
+          [email, fullName],
+          (err, result) => {
+            if (err) {
+              console.error('เกิดข้อผิดพลาดในการเพิ่มข้อมูล:', err);
+              return res.status(500).send('Failed to insert data');
+            } else {
+              return res.status(200).send('Values Inserted');
+            }
+          }
+        );
+      }
+    }
+  );
+});
 
 app.post("/creates", (req, res) => {
   const fullName = req.body.fullName;
@@ -785,7 +818,7 @@ app.get('/gettimeteachercheck', (req, res) => {
 
 app.get('/gettimeeducheck', (req, res) => {
 
-  db.query("SELECT * FROM timeteacher ORDER BY id", (err, result) => {
+  db.query("SELECT * FROM timeedu ORDER BY id", (err, result) => {
     if (err) {
       console.log(err);
       return res.status(500).send("Internal Server Error");
@@ -1217,36 +1250,211 @@ app.post("/register", (req, res) => {
 });
 
 app.post("/registerlec", (req, res) => {
-  const {
-    idsubject,
-    name,
-    sec,
-    lab_lec,
-    years,
-    class_year,
-    n_people,
-    credit,
-    day, // เปลี่ยนจาก day เป็น selectDay
-    category,
-    course_year,
-    term,
-    teacher
+  const insertQuery = "INSERT INTO courset SET ?";
+  const coursesData = req.body.coursesData;
 
-  } = req.body;
+  // ตรวจสอบว่ามีข้อมูลหรือไม่
+  if (!coursesData || !Array.isArray(coursesData) || coursesData.length === 0) {
+    return res.status(400).send('Invalid or missing coursesData in request body');
+  }
 
-  const query = "INSERT INTO courset SET ?";
-  db.query(query, req.body, (err, results) => {
-    if (err) {
-      console.error("Failed to insert registration_records:", err);
-      return res
-        .status(500)
-        .send(
-          "Error saving registration_records. Please contact support if this issue persists."
-        );
-    }
+  const promises = coursesData.map(item => {
+    return new Promise((resolve, reject) => {
+      const { teacher, day, time_start, time_end } = item;
+
+      const checkQuery = "SELECT COUNT(*) AS count FROM courset WHERE teacher = ? AND day = ? AND ((time_start BETWEEN ? AND ?) OR (time_end BETWEEN ? AND ?))";
+      db.query(checkQuery, [teacher, day, time_start, time_end, time_start, time_end], (err, result) => {
+        if (err) {
+          console.error("Error checking existing data:", err);
+          reject(err);
+        } else {
+          const count = result[0].count;
+          if (count > 0) {
+            console.log("Duplicate data found for teacher, day, and time");
+            reject("Duplicate data found for teacher, day, and time");
+          } else {
+            if (item.category === "วิชาบังคับ") {
+              const checkCompulsoryQuery = "SELECT COUNT(*) AS count FROM courset WHERE category = ? AND day = ? AND ((time_start BETWEEN ? AND ?) OR (time_end BETWEEN ? AND ?))";
+              db.query(checkCompulsoryQuery, [item.category, day, time_start, time_end, time_start, time_end], (err, result) => {
+                if (err) {
+                  console.error("Error checking existing compulsory data:", err);
+                  reject(err);
+                } else {
+                  const countCompulsory = result[0].count;
+                  if (countCompulsory > 0) {
+                    console.log("Duplicate data found for compulsory course, day, and time");
+                    reject("Duplicate data found for compulsory course, day, and time");
+                  } else {
+                    insertData(item, resolve, reject);
+                  }
+                }
+              });
+            } else {
+              // ไม่ใช่วิชาบังคับ จึงทำการแทรกข้อมูลเลย
+              insertData(item, resolve, reject);
+            }
+          }
+        }
+      });
+    });
   });
 
+  Promise.all(promises)
+    .then(() => {
+      // ลบ registration_records ที่ค่า sec_num เท่ากับ sec เมื่อข้อมูลถูกแทรกเข้าในฐานข้อมูลโดยสำเร็จ
+      db.query("DELETE FROM registration_records WHERE sec_num = ?", [coursesData[0].sec], (err, result) => {
+        if (err) {
+          console.error("Error deleting registration_records:", err);
+          res.status(500).send("Error deleting registration_records");
+        } else {
+          console.log("Registration records deleted successfully");
+          res.status(200).send("All values inserted successfully");
+        }
+      });
+    })
+    .catch(error => {
+      console.error("Error inserting values:", error);
+      res.status(500).send("Error inserting values");
+    });
 });
+
+function insertData(item, resolve, reject) {
+  const insertQuery = "INSERT INTO courset SET ?";
+  const values = {
+    idsubject: item.idsubject,
+    name: item.name,
+    sec: item.sec,
+    lab_lec: item.lab_lec,
+    class_year: item.class_year,
+    n_people: item.n_people,
+    credit: item.credit,
+    day: item.day,
+    category: item.category,
+    course_year: item.course_year,
+    term: item.term,
+    teacher: item.teacher,
+    years: item.years,
+    room: item.room,
+    time_start: item.time_start,
+    time_end: item.time_end
+  };
+
+  db.query(insertQuery, [values], (err, result) => {
+    if (err) {
+      console.error("Error inserting values:", err);
+      reject(err);
+    } else {
+      console.log("Values inserted successfully");
+      resolve(result);
+    }
+  });
+}
+
+
+
+app.post("/registerlab", (req, res) => {
+  const insertQuery = "INSERT INTO courset SET ?";
+  const coursesData = req.body.coursesData;
+
+  // ตรวจสอบว่ามีข้อมูลหรือไม่
+  if (!coursesData || !Array.isArray(coursesData) || coursesData.length === 0) {
+    return res.status(400).send('Invalid or missing coursesData in request body');
+  }
+
+  const promises = coursesData.map(item => {
+    return new Promise((resolve, reject) => {
+      const { teacher, day, time_start, time_end, room } = item;
+
+      // ตรวจสอบว่าข้อมูลที่จะแทรกมีอยู่ในฐานข้อมูลแล้วหรือไม่
+      const checkQuery = "SELECT COUNT(*) AS count FROM courset WHERE teacher = ? AND day = ? AND ((time_start BETWEEN ? AND ?) OR (time_end BETWEEN ? AND ?) OR (room = ? AND day = ? AND ((time_start BETWEEN ? AND ?) OR (time_end BETWEEN ? AND ?))))";
+      db.query(checkQuery, [teacher, day, time_start, time_end, time_start, time_end, room, day, time_start, time_end, time_start, time_end], (err, result) => {
+        if (err) {
+          console.error("Error checking existing data:", err);
+          reject(err);
+        } else {
+          const count = result[0].count;
+          if (count > 0) {
+            console.log("Duplicate data found for teacher, day, time, and room");
+            reject("Duplicate data found for teacher, day, time, and room");
+          } else {
+            // เพิ่มเงื่อนไขว่า category เป็น "วิชาบังคับ"
+            if (item.category === "วิชาบังคับ") {
+              const checkCompulsoryQuery = "SELECT COUNT(*) AS count FROM courset WHERE category = ? AND day = ? AND ((time_start BETWEEN ? AND ?) OR (time_end BETWEEN ? AND ?))";
+              db.query(checkCompulsoryQuery, [item.category, day, time_start, time_end, time_start, time_end], (err, result) => {
+                if (err) {
+                  console.error("Error checking existing compulsory data:", err);
+                  reject(err);
+                } else {
+                  const countCompulsory = result[0].count;
+                  if (countCompulsory > 0) {
+                    console.log("Duplicate data found for compulsory course, day, and time");
+                    reject("Duplicate data found for compulsory course, day, and time");
+                  } else {
+                    // ไม่มีข้อมูลซ้ำสำหรับวิชาบังคับ และเวลา จึงทำการแทรกข้อมูล
+                    insertData(item, resolve, reject);
+                  }
+                }
+              });
+            } else {
+              // ไม่ใช่วิชาบังคับ จึงทำการแทรกข้อมูลเลย
+              insertData(item, resolve, reject);
+            }
+          }
+        }
+      });
+    });
+  });
+
+  Promise.all(promises)
+    .then(() => {
+      // ลบ registration_records ที่ค่า sec_num เท่ากับ sec เมื่อข้อมูลถูกแทรกเข้าในฐานข้อมูลโดยสำเร็จ
+      db.query("DELETE FROM registration_records WHERE sec_num = ?", [coursesData[0].sec], (err, result) => {
+        if (err) {
+          console.error("Error deleting registration_records:", err);
+          res.status(500).send("Error deleting registration_records");
+        } else {
+          console.log("Registration records deleted successfully");
+          res.status(200).send("All values inserted successfully");
+        }
+      });
+    })
+    .catch(error => {
+      console.error("Error inserting values:", error);
+      res.status(500).send("Error inserting values");
+    });
+});
+
+function insertData(item, resolve, reject) {
+  const insertQuery = "INSERT INTO courset SET ?";
+  const values = {
+    idsubject: item.idsubject,
+    name: item.name,
+    sec: item.sec,
+    lab_lec: item.lab_lec,
+    class_year: item.class_year,
+    n_people: item.n_people,
+    credit: item.credit,
+    day: item.day,
+    category: item.category,
+    course_year: item.course_year,
+    term: item.term,
+    teacher: item.teacher,
+    years: item.years,
+    room: item.room,
+    time_start: item.time_start,
+    time_end: item.time_end
+  };
+
+  db.query(insertQuery, [values], (err, result) => {
+    if (err) {
+      console.error("Error inserting values:", err);
+      reject(err);
+    } else {
+      console.log("Values inserted successfully");
+      resolve(result);
+    }
+  });
+}
 
 
 // GET endpoint for retrieving all registration data
@@ -1264,39 +1472,6 @@ app.get('/registration-data', (req, res) => {
     res.json(results);
   });
 });
-
-app.post("/registerlab", (req, res) => {
-  const {
-    idsubject,
-    name,
-    sec,
-    lab_lec,
-    years,
-    class_year,
-    n_people,
-    credit,
-    day, // เปลี่ยนจาก day เป็น selectDay
-    category,
-    course_year,
-    term,
-    teacher
-
-  } = req.body;
-
-  const query = "INSERT INTO courset SET ?";
-  db.query(query, req.body, (err, results) => {
-    if (err) {
-      console.error("Failed to insert registration_records:", err);
-      return res
-        .status(500)
-        .send(
-          "Error saving registration_records. Please contact support if this issue persists."
-        );
-    }
-  });
-
-});
-
 
 
 app.get('/registall-data', (req, res) => {
